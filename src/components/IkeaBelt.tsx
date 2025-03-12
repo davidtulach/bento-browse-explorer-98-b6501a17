@@ -1,3 +1,4 @@
+
 import { useRef } from 'react';
 import { cn } from '@/lib/utils';
 import AnimatedImage from './AnimatedImage';
@@ -131,7 +132,7 @@ const IkeaBelt = () => {
           {smallSections.items.map((item) => (
             <div
               key={item.id}
-              className="flex-shrink-0 snap-start rounded-xl overflow-hidden shadow-sm hover-scale w-[120px]"
+              className="flex-shrink-0 snap-start overflow-hidden shadow-sm hover-scale w-[120px]"
             >
               <div className="relative">
                 <AnimatedImage
@@ -140,7 +141,7 @@ const IkeaBelt = () => {
                   className="w-full"
                   aspectRatio="aspect-[3/4]"
                 />
-                <div className="absolute inset-0 bg-gradient-to-b from-black/5 to-black/60"></div>
+                <div className="absolute inset-0 bg-gradient-to-b from-black/20 to-black/80"></div>
                 <div className="absolute bottom-0 left-0 right-0 p-2 text-white font-medium text-sm text-center">
                   {item.title}
                 </div>
