@@ -120,7 +120,6 @@ const IkeaBelt = () => {
           </div>
           <button className="text-sm font-medium text-primary flex items-center">
             {smallSections.cta}
-            <ChevronRight className="w-4 h-4 ml-0.5" />
           </button>
         </div>
         
