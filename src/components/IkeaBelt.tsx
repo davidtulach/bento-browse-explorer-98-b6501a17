@@ -1,7 +1,7 @@
-
 import { useRef } from 'react';
 import { cn } from '@/lib/utils';
 import AnimatedImage from './AnimatedImage';
+import { Tag, PackageOpen, Flame, ShoppingBag } from 'lucide-react';
 
 // Weekly offers sections
 const weeklyOffers = {
@@ -35,38 +35,41 @@ const weeklyOffers = {
   ]
 };
 
-// Small format sections
-const smallSections = {
+// Price hits section
+const priceHits = {
   id: 2,
-  title: "Our Best Offers",
-  cta: "View all",
+  title: "Price Hits",
   items: [
     {
       id: 201,
-      title: "BIO",
-      image: "/lovable-uploads/f6afccdb-a1d0-4123-9b27-53eba8f72c50.png",
+      title: "Today's Deals",
+      icon: Tag,
+      color: "bg-orange-100 text-orange-700",
     },
     {
       id: 202,
-      title: "Shopping lists",
-      image: "/lovable-uploads/21973ef3-313c-4b5a-b26d-abf6db0d5d62.png",
+      title: "Fresh Offers",
+      icon: PackageOpen,
+      color: "bg-green-100 text-green-700",
     },
     {
       id: 203,
-      title: "Bulk buy",
-      image: "https://images.unsplash.com/photo-1542838132-92c53300491e?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&h=400&q=80",
+      title: "Hot Deals",
+      icon: Flame,
+      color: "bg-red-100 text-red-700",
     },
     {
       id: 204,
-      title: "New Arrivals",
-      image: "/lovable-uploads/5cb0fd3c-bc04-49aa-bc80-6aa2d3c36550.png",
+      title: "Bundle Savings",
+      icon: ShoppingBag,
+      color: "bg-blue-100 text-blue-700",
     },
   ]
 };
 
 const IkeaBelt = () => {
   const weeklyScrollRef = useRef<HTMLDivElement>(null);
-  const smallScrollRef = useRef<HTMLDivElement>(null);
+  const priceHitsScrollRef = useRef<HTMLDivElement>(null);
 
   const scroll = (ref: React.RefObject<HTMLDivElement>, direction: 'left' | 'right') => {
     if (ref.current) {
@@ -113,40 +116,29 @@ const IkeaBelt = () => {
         </div>
       </div>
 
-      {/* Small tiles section */}
+      {/* Price Hits section */}
       <div className="mb-6">
-        <div className="px-4 flex justify-between items-center mb-3">
-          <div>
-            <h2 className="text-lg font-medium">{smallSections.title}</h2>
-          </div>
-          <button className="text-sm font-medium text-primary flex items-center">
-            {smallSections.cta}
-          </button>
+        <div className="px-4 mb-4">
+          <h2 className="text-lg font-medium text-gray-900">{priceHits.title}</h2>
         </div>
         
         <div
-          ref={smallScrollRef}
-          className="flex overflow-x-auto snap-x snap-mandatory gap-3 pb-3 scrollbar-hide pl-4"
+          ref={priceHitsScrollRef}
+          className="flex gap-3 px-4 pb-2 overflow-x-auto scrollbar-hide"
           style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
         >
-          {smallSections.items.map((item) => (
-            <div
+          {priceHits.items.map((item) => (
+            <button
               key={item.id}
-              className="flex-shrink-0 snap-start overflow-hidden shadow-sm hover-scale w-[120px]"
+              className={cn(
+                "flex flex-col items-center justify-center p-4 rounded-xl transition-transform hover:scale-105",
+                "min-w-[120px] h-[120px]",
+                item.color
+              )}
             >
-              <div className="relative">
-                <AnimatedImage
-                  src={item.image}
-                  alt={item.title}
-                  className="w-full"
-                  aspectRatio="aspect-[3/4]"
-                />
-                <div className="absolute inset-0 bg-gradient-to-b from-black/20 to-black/80"></div>
-                <div className="absolute bottom-0 left-0 right-0 p-2 text-white font-medium text-sm text-center">
-                  {item.title}
-                </div>
-              </div>
-            </div>
+              <item.icon className="w-6 h-6 mb-2" />
+              <span className="text-sm font-medium text-center">{item.title}</span>
+            </button>
           ))}
         </div>
       </div>
