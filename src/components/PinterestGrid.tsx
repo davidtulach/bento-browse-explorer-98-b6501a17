@@ -5,9 +5,9 @@ import AnimatedImage from './AnimatedImage';
 const items = [
   {
     id: 1,
-    title: "New Arrival: Fresh Berries",
-    image: "https://images.unsplash.com/photo-1583499871858-837792083b68?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&h=700&q=80",
-    tag: "New",
+    title: "BIO Fruits & Veggies",
+    image: "https://images.unsplash.com/photo-1557844352-761f2dded376?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&h=750&q=80",
+    tag: "Organic",
   },
   {
     id: 2,
@@ -23,21 +23,35 @@ const items = [
   },
   {
     id: 4,
-    title: "Organic Vegetables",
-    image: "https://images.unsplash.com/photo-1557844352-761f2dded376?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&h=750&q=80",
-    tag: "Organic",
+    title: "Discover Premium",
+    image: "https://images.unsplash.com/photo-1490914327627-9fe8d52f4d90?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&h=750&q=80",
+    tag: "Premium",
   },
   {
     id: 5,
-    title: "Premium Italian Pasta",
-    image: "https://images.unsplash.com/photo-1556761223-4c4282c73f77?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&h=500&q=80",
-    tag: "Premium",
+    title: "Shopping Lists",
+    image: "https://images.unsplash.com/photo-1588964895597-cfccd35c2b78?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&h=500&q=80",
+    tag: "New",
   },
   {
     id: 6,
     title: "Fresh Seafood Selection",
     image: "https://images.unsplash.com/photo-1615141982883-c7ad0e69fd62?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&h=600&q=80",
     tag: "New",
+  },
+  {
+    id: 7,
+    title: "Premium Coffee Beans",
+    image: "https://images.unsplash.com/photo-1559589689-577aabd1db4f?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&h=600&q=80",
+    tag: "Ad",
+    sponsor: "Costa Coffee"
+  },
+  {
+    id: 8,
+    title: "Eco-friendly Cleaning Products",
+    image: "https://images.unsplash.com/photo-1592861956120-e524fc739696?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&h=700&q=80",
+    tag: "Ad",
+    sponsor: "Eco Clean"
   },
 ];
 
@@ -47,12 +61,13 @@ const tagColors: Record<string, { bg: string, text: string }> = {
   "Premium": { bg: "bg-amber-500", text: "text-white" },
   "Discount": { bg: "bg-green-500", text: "text-white" },
   "Organic": { bg: "bg-emerald-500", text: "text-white" },
+  "Ad": { bg: "bg-gray-500", text: "text-white" },
 };
 
 const PinterestGrid = () => {
   return (
     <div className="px-4 py-4">
-      <h2 className="text-lg font-medium mb-4">Weekly Highlights</h2>
+      <h2 className="text-lg font-medium mb-4">Discover our assortment</h2>
       
       <div className="columns-2 gap-4 space-y-0">
         {items.map((item) => (
@@ -77,6 +92,11 @@ const PinterestGrid = () => {
               
               <div className="p-3">
                 <h3 className="font-medium text-sm">{item.title}</h3>
+                {item.sponsor && (
+                  <p className="text-xs text-gray-500 mt-1">
+                    Sponsored by {item.sponsor}
+                  </p>
+                )}
               </div>
             </div>
           </div>
