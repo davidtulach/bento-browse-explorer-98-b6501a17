@@ -6,7 +6,7 @@ const items = [
   {
     id: 1,
     title: "BIO Fruits & Veggies",
-    image: "https://images.unsplash.com/photo-1557844352-761f2dded376?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&h=750&q=80",
+    image: "https://images.unsplash.com/photo-1618160702438-9b02ab6515c9?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&h=750&q=80",
     tag: "Organic",
   },
   {
