@@ -48,23 +48,23 @@ const CategoryBelt = () => {
       
       <div 
         ref={scrollRef}
-        className="flex overflow-x-auto snap-x snap-mandatory gap-3 pb-2 -mx-4 px-4 scrollbar-hide"
+        className="flex overflow-x-auto snap-x snap-mandatory gap-2 pb-2 -mx-4 px-4 scrollbar-hide"
         style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
       >
         {categories.map((category) => (
           <div 
             key={category.id}
-            className="flex-shrink-0 w-[130px] snap-start rounded-xl overflow-hidden shadow-sm hover-scale"
+            className="flex-shrink-0 w-[90px] snap-start rounded-xl overflow-hidden shadow-sm hover-scale"
           >
-            <div className="relative aspect-[4/3]">
+            <div className="relative aspect-[2/3]">
               <AnimatedImage
                 src={category.image}
                 alt={category.name}
                 className="w-full h-full object-cover"
-                aspectRatio="aspect-[4/3]"
+                aspectRatio="aspect-[2/3]"
               />
-              <div className="absolute inset-0 bg-gradient-to-b from-black/5 to-black/40"></div>
-              <div className="absolute bottom-0 left-0 right-0 p-2 text-white font-medium text-sm">
+              <div className="absolute inset-0 bg-gradient-to-b from-black/5 to-black/60"></div>
+              <div className="absolute bottom-0 left-0 right-0 p-2 text-white font-medium text-xs text-center">
                 {category.name}
               </div>
             </div>
