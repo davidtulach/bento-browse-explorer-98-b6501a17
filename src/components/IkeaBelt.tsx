@@ -1,3 +1,4 @@
+
 import { useRef } from 'react';
 import { cn } from '@/lib/utils';
 import AnimatedImage from './AnimatedImage';
@@ -48,7 +49,7 @@ const discountedProducts = {
       discountedPrice: 59,
       weight: "1 kg",
       pricePerUnit: "59 CZK/kg",
-      image: "/lovable-uploads/24478780-f5e1-46bf-ab23-a561b8dbffb5.png",
+      image: "https://images.unsplash.com/photo-1619546813926-a78fa6372cd2?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=800&q=80",
       discount: "25%",
       isNew: false,
     },
@@ -60,7 +61,7 @@ const discountedProducts = {
       discountedPrice: 299,
       weight: "500 g",
       pricePerUnit: "598 CZK/kg",
-      image: "/lovable-uploads/57df0949-8906-423f-8116-7248ef4503f4.png",
+      image: "https://images.unsplash.com/photo-1603048588665-791ca8aea617?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=800&q=80",
       discount: "25%",
       isNew: false,
     },
@@ -72,7 +73,7 @@ const discountedProducts = {
       discountedPrice: 49,
       weight: "400 g",
       pricePerUnit: "122.5 CZK/kg",
-      image: "https://images.unsplash.com/photo-1608198093002-ad4e005484ec?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=500&q=80",
+      image: "https://images.unsplash.com/photo-1586444248902-2f64eddc13df?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=800&q=80",
       discount: "29%",
       isNew: true,
     },
@@ -84,8 +85,32 @@ const discountedProducts = {
       discountedPrice: 129,
       weight: "250 g",
       pricePerUnit: "516 CZK/kg",
-      image: "https://images.unsplash.com/photo-1452195100486-9cc805987862?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=500&q=80",
+      image: "https://images.unsplash.com/photo-1452195100486-9cc805987862?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=800&q=80",
       discount: "19%",
+      isNew: false,
+    },
+    {
+      id: 205,
+      title: "Avocado",
+      category: "Fruits",
+      originalPrice: 49,
+      discountedPrice: 39,
+      weight: "1 pc",
+      pricePerUnit: "39 CZK/pc",
+      image: "https://images.unsplash.com/photo-1523049673857-eb18f1d7b578?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=800&q=80",
+      discount: "20%",
+      isNew: true,
+    },
+    {
+      id: 206,
+      title: "Salmon Fillet",
+      category: "Fish",
+      originalPrice: 199,
+      discountedPrice: 159,
+      weight: "200 g",
+      pricePerUnit: "795 CZK/kg",
+      image: "https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=800&q=80",
+      discount: "20%",
       isNew: false,
     }
   ]
@@ -155,45 +180,45 @@ const IkeaBelt = () => {
           {discountedProducts.items.map((product) => (
             <div
               key={product.id}
-              className="flex-shrink-0 snap-start overflow-hidden rounded-xl bg-white shadow-sm transition-all hover:shadow-md"
-              style={{ width: '180px' }}
+              className="flex-shrink-0 snap-start overflow-hidden transition-all hover:shadow-sm"
+              style={{ width: '150px' }}
             >
               <div className="relative">
                 <AnimatedImage
                   src={product.image}
                   alt={product.title}
                   aspectRatio="aspect-square"
-                  className="w-full"
+                  className="w-full rounded-lg"
                 />
                 
                 {/* Discount badge */}
-                <div className="absolute top-2 right-2 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full">
+                <div className="absolute top-1 right-1 bg-red-500 text-white text-xs font-bold px-1.5 py-0.5 rounded-md">
                   {product.discount}
                 </div>
                 
                 {/* New badge */}
                 {product.isNew && (
-                  <div className="absolute top-2 left-2 bg-blue-500 text-white text-xs font-bold px-2 py-1 rounded-full">
+                  <div className="absolute top-1 left-1 bg-blue-500 text-white text-xs font-bold px-1.5 py-0.5 rounded-md">
                     New
                   </div>
                 )}
               </div>
               
-              <div className="p-3">
-                <div className="text-xs text-gray-500 mb-1">{product.category}</div>
-                <h3 className="font-medium text-sm text-gray-900 mb-1 truncate">{product.title}</h3>
+              <div className="py-2">
+                <div className="text-xs text-gray-500 mb-0.5">{product.category}</div>
+                <h3 className="font-medium text-sm text-gray-900 mb-0.5 truncate">{product.title}</h3>
                 
-                <div className="flex items-center gap-1 mb-1">
+                <div className="flex items-center gap-1 mb-0.5">
                   <Weight className="w-3 h-3 text-gray-400" />
                   <span className="text-xs text-gray-500">{product.weight}</span>
                 </div>
                 
-                <div className="flex items-baseline gap-2">
+                <div className="flex items-baseline gap-1.5">
                   <span className="text-sm font-bold text-gray-900">{product.discountedPrice} CZK</span>
-                  <span className="text-xs line-through text-gray-400">{product.originalPrice} CZK</span>
+                  <span className="text-xs line-through text-gray-400">{product.originalPrice}</span>
                 </div>
                 
-                <div className="text-xs text-gray-500 mt-1">{product.pricePerUnit}</div>
+                <div className="text-xs text-gray-500">{product.pricePerUnit}</div>
               </div>
             </div>
           ))}
