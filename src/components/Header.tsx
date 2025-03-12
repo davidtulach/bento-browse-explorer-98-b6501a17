@@ -1,17 +1,16 @@
-
 import { Bell, ChevronDown, Clock, User } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const DeliveryWindow = () => {
   return (
-    <div className="flex flex-col">
-      <div className="flex items-center bg-white/80 backdrop-blur-sm rounded-full py-1.5 px-3 text-sm border border-gray-100 shadow-sm hover:shadow-md transition-all">
+    <button className="flex flex-col items-start bg-white/80 backdrop-blur-sm rounded-xl py-1.5 px-3 text-sm border border-gray-100 shadow-sm hover:shadow-md transition-all">
+      <div className="flex items-center">
         <Clock className="w-4 h-4 mr-1.5 text-primary" />
         <span className="font-medium">Today 15:20</span>
         <ChevronDown className="w-3 h-3 ml-1 opacity-60" />
       </div>
-      <span className="text-xs text-gray-500 mt-1 ml-1">Vinohradská 1234, Praha 2</span>
-    </div>
+      <span className="text-xs text-gray-500 mt-0.5 ml-5">Vinohradská 1234, Praha 2</span>
+    </button>
   );
 };
 
