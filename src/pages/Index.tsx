@@ -62,13 +62,15 @@ const Index = () => {
           <div className="h-[1px] bg-gradient-to-r from-transparent via-gray-200 to-transparent" />
         </div>
         
-        <PinterestGrid />
+        {/* Weekly offers and small tiles sections */}
+        <IkeaBelt />
         
         <div className="py-2">
           <div className="h-[1px] bg-gradient-to-r from-transparent via-gray-200 to-transparent" />
         </div>
         
-        <IkeaBelt />
+        {/* Pinterest grid */}
+        <PinterestGrid />
       </main>
     </div>
   );
