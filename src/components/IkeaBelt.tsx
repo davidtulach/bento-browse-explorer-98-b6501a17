@@ -1,4 +1,3 @@
-
 import { ChevronRight } from 'lucide-react';
 import { useRef } from 'react';
 import { cn } from '@/lib/utils';
@@ -40,7 +39,7 @@ const weeklyOffers = {
 // Small format sections
 const smallSections = {
   id: 2,
-  title: "Quick access",
+  title: "Our Best Offers",
   cta: "View all",
   items: [
     {
