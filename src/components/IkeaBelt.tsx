@@ -49,7 +49,7 @@ const smallSections = {
     {
       id: 202,
       title: "Shopping lists",
-      image: "https://images.unsplash.com/photo-1588964895597-cfccd35c2b78?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&h=400&q=80",
+      image: "https://images.unsplash.com/photo-1649972904349-6e44c42644a7?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&h=400&q=80",
     },
     {
       id: 203,
