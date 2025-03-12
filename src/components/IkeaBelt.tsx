@@ -44,12 +44,12 @@ const smallSections = {
     {
       id: 201,
       title: "BIO",
-      image: "https://images.unsplash.com/photo-1618160702438-9b02ab6515c9?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&h=400&q=80",
+      image: "/lovable-uploads/f6afccdb-a1d0-4123-9b27-53eba8f72c50.png",
     },
     {
       id: 202,
       title: "Shopping lists",
-      image: "https://images.unsplash.com/photo-1649972904349-6e44c42644a7?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&h=400&q=80",
+      image: "/lovable-uploads/21973ef3-313c-4b5a-b26d-abf6db0d5d62.png",
     },
     {
       id: 203,
@@ -59,7 +59,7 @@ const smallSections = {
     {
       id: 204,
       title: "New Arrivals",
-      image: "https://images.unsplash.com/photo-1490914327627-9fe8d52f4d90?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&h=400&q=80",
+      image: "/lovable-uploads/5cb0fd3c-bc04-49aa-bc80-6aa2d3c36550.png",
     },
   ]
 };
