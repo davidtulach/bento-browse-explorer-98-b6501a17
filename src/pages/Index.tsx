@@ -1,12 +1,53 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+
+import { useState } from 'react';
+import { cn } from '@/lib/utils';
+import Header from '@/components/Header';
+import SearchBar from '@/components/SearchBar';
+import StoryScroller from '@/components/StoryScroller';
+import CategoryBelt from '@/components/CategoryBelt';
+import PinterestGrid from '@/components/PinterestGrid';
+import IkeaBelt from '@/components/IkeaBelt';
 
 const Index = () => {
+  const [scrollPosition, setScrollPosition] = useState(0);
+
+  // Handle scroll event
+  const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
+    const position = e.currentTarget.scrollTop;
+    setScrollPosition(position);
+  };
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold mb-4">Welcome to Your Blank App</h1>
-        <p className="text-xl text-gray-600">Start building your amazing project here!</p>
-      </div>
+    <div 
+      className="min-h-screen bg-gray-50 flex flex-col"
+      onScroll={handleScroll}
+    >
+      <Header />
+      
+      <main className="flex-1 pb-20">
+        <SearchBar />
+        
+        <div className={cn(
+          "transition-opacity duration-500",
+          scrollPosition > 200 ? "opacity-0 pointer-events-none h-0 overflow-hidden" : "opacity-100"
+        )}>
+          <StoryScroller />
+        </div>
+        
+        <CategoryBelt />
+        
+        <div className="py-2">
+          <div className="h-[1px] bg-gradient-to-r from-transparent via-gray-200 to-transparent" />
+        </div>
+        
+        <PinterestGrid />
+        
+        <div className="py-2">
+          <div className="h-[1px] bg-gradient-to-r from-transparent via-gray-200 to-transparent" />
+        </div>
+        
+        <IkeaBelt />
+      </main>
     </div>
   );
 };
