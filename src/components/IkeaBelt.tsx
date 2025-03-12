@@ -1,13 +1,11 @@
-import { ChevronRight } from 'lucide-react';
 import { useRef } from 'react';
 import { cn } from '@/lib/utils';
 import AnimatedImage from './AnimatedImage';
 
-// Weekly Offers sections
+// Weekly offers sections
 const weeklyOffers = {
   id: 1,
-  title: "Weekly offers",
-  cta: "View all",
+  title: "Weekly Topics",
   items: [
     {
       id: 101,
@@ -78,16 +76,10 @@ const IkeaBelt = () => {
 
   return (
     <div className="py-4">
-      {/* Weekly offers section - larger panels */}
+      {/* Weekly Topics section - larger panels */}
       <div className="mb-10">
-        <div className="px-4 flex justify-between items-center mb-3">
-          <div>
-            <h2 className="text-lg font-medium">{weeklyOffers.title}</h2>
-          </div>
-          <button className="text-sm font-medium text-primary flex items-center">
-            {weeklyOffers.cta}
-            <ChevronRight className="w-4 h-4 ml-0.5" />
-          </button>
+        <div className="px-4 mb-3">
+          <h2 className="text-lg font-medium">{weeklyOffers.title}</h2>
         </div>
         
         <div
@@ -98,22 +90,22 @@ const IkeaBelt = () => {
           {weeklyOffers.items.map((item) => (
             <div
               key={item.id}
-              className="flex-shrink-0 snap-start rounded-xl overflow-hidden shadow-sm hover-scale w-[300px]"
+              className="flex-shrink-0 snap-start overflow-hidden shadow-sm hover-scale w-[300px]"
             >
               <div className="relative">
                 <AnimatedImage
                   src={item.image}
                   alt={item.title}
                   className="w-full"
-                  aspectRatio="aspect-[3/2]"
+                  aspectRatio="aspect-[3/4]"
                 />
-              </div>
-              
-              <div className="p-3 bg-white">
-                <h3 className="font-medium">{item.title}</h3>
-                {item.description && (
-                  <p className="text-sm text-gray-600 mt-1">{item.description}</p>
-                )}
+                <div className="absolute inset-0 bg-gradient-to-b from-black/10 to-black/70"></div>
+                <div className="absolute bottom-0 left-0 right-0 p-4 text-white">
+                  <h3 className="font-medium text-lg">{item.title}</h3>
+                  {item.description && (
+                    <p className="text-sm text-white/90 mt-1">{item.description}</p>
+                  )}
+                </div>
               </div>
             </div>
           ))}
