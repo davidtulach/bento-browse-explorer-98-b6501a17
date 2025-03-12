@@ -1,7 +1,7 @@
 import { useRef } from 'react';
 import { cn } from '@/lib/utils';
 import AnimatedImage from './AnimatedImage';
-import { Tag, PackageOpen, Flame, ShoppingBag } from 'lucide-react';
+import { Tag, ShoppingBag, Percent, Weight } from 'lucide-react';
 
 // Weekly offers sections
 const weeklyOffers = {
@@ -35,41 +35,65 @@ const weeklyOffers = {
   ]
 };
 
-// Price hits section
-const priceHits = {
+// Discounted products data
+const discountedProducts = {
   id: 2,
   title: "Price Hits",
   items: [
     {
       id: 201,
-      title: "Today's Deals",
-      icon: Tag,
-      color: "bg-orange-100 text-orange-700",
+      title: "Organic Apples",
+      category: "Fruits",
+      originalPrice: 79,
+      discountedPrice: 59,
+      weight: "1 kg",
+      pricePerUnit: "59 CZK/kg",
+      image: "/lovable-uploads/24478780-f5e1-46bf-ab23-a561b8dbffb5.png",
+      discount: "25%",
+      isNew: false,
     },
     {
       id: 202,
-      title: "Fresh Offers",
-      icon: PackageOpen,
-      color: "bg-green-100 text-green-700",
+      title: "Beef Ribeye",
+      category: "Meat",
+      originalPrice: 399,
+      discountedPrice: 299,
+      weight: "500 g",
+      pricePerUnit: "598 CZK/kg",
+      image: "/lovable-uploads/57df0949-8906-423f-8116-7248ef4503f4.png",
+      discount: "25%",
+      isNew: false,
     },
     {
       id: 203,
-      title: "Hot Deals",
-      icon: Flame,
-      color: "bg-red-100 text-red-700",
+      title: "Sourdough Bread",
+      category: "Bakery",
+      originalPrice: 69,
+      discountedPrice: 49,
+      weight: "400 g",
+      pricePerUnit: "122.5 CZK/kg",
+      image: "https://images.unsplash.com/photo-1608198093002-ad4e005484ec?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=500&q=80",
+      discount: "29%",
+      isNew: true,
     },
     {
       id: 204,
-      title: "Bundle Savings",
-      icon: ShoppingBag,
-      color: "bg-blue-100 text-blue-700",
-    },
+      title: "French Cheese",
+      category: "Dairy",
+      originalPrice: 159,
+      discountedPrice: 129,
+      weight: "250 g",
+      pricePerUnit: "516 CZK/kg",
+      image: "https://images.unsplash.com/photo-1452195100486-9cc805987862?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=500&q=80",
+      discount: "19%",
+      isNew: false,
+    }
   ]
 };
 
 const IkeaBelt = () => {
   const weeklyScrollRef = useRef<HTMLDivElement>(null);
-  const priceHitsScrollRef = useRef<HTMLDivElement>(null);
+  const productsScrollRef = useRef<HTMLDivElement>(null);
 
   const scroll = (ref: React.RefObject<HTMLDivElement>, direction: 'left' | 'right') => {
     if (ref.current) {
@@ -116,29 +140,62 @@ const IkeaBelt = () => {
         </div>
       </div>
 
-      {/* Price Hits section */}
+      {/* Discounted Products Section */}
       <div className="mb-6">
-        <div className="px-4 mb-4">
-          <h2 className="text-lg font-medium text-gray-900">{priceHits.title}</h2>
+        <div className="px-4 mb-4 flex items-center gap-2">
+          <Percent className="w-5 h-5 text-red-500" />
+          <h2 className="text-lg font-medium text-gray-900">{discountedProducts.title}</h2>
         </div>
         
         <div
-          ref={priceHitsScrollRef}
+          ref={productsScrollRef}
           className="flex gap-3 px-4 pb-2 overflow-x-auto scrollbar-hide"
           style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
         >
-          {priceHits.items.map((item) => (
-            <button
-              key={item.id}
-              className={cn(
-                "flex flex-col items-center justify-center p-4 rounded-xl transition-transform hover:scale-105",
-                "min-w-[120px] h-[120px]",
-                item.color
-              )}
+          {discountedProducts.items.map((product) => (
+            <div
+              key={product.id}
+              className="flex-shrink-0 snap-start overflow-hidden rounded-xl bg-white shadow-sm transition-all hover:shadow-md"
+              style={{ width: '180px' }}
             >
-              <item.icon className="w-6 h-6 mb-2" />
-              <span className="text-sm font-medium text-center">{item.title}</span>
-            </button>
+              <div className="relative">
+                <AnimatedImage
+                  src={product.image}
+                  alt={product.title}
+                  aspectRatio="aspect-square"
+                  className="w-full"
+                />
+                
+                {/* Discount badge */}
+                <div className="absolute top-2 right-2 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full">
+                  {product.discount}
+                </div>
+                
+                {/* New badge */}
+                {product.isNew && (
+                  <div className="absolute top-2 left-2 bg-blue-500 text-white text-xs font-bold px-2 py-1 rounded-full">
+                    New
+                  </div>
+                )}
+              </div>
+              
+              <div className="p-3">
+                <div className="text-xs text-gray-500 mb-1">{product.category}</div>
+                <h3 className="font-medium text-sm text-gray-900 mb-1 truncate">{product.title}</h3>
+                
+                <div className="flex items-center gap-1 mb-1">
+                  <Weight className="w-3 h-3 text-gray-400" />
+                  <span className="text-xs text-gray-500">{product.weight}</span>
+                </div>
+                
+                <div className="flex items-baseline gap-2">
+                  <span className="text-sm font-bold text-gray-900">{product.discountedPrice} CZK</span>
+                  <span className="text-xs line-through text-gray-400">{product.originalPrice} CZK</span>
+                </div>
+                
+                <div className="text-xs text-gray-500 mt-1">{product.pricePerUnit}</div>
+              </div>
+            </div>
           ))}
         </div>
       </div>
