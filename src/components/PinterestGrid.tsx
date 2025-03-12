@@ -6,13 +6,13 @@ const items = [
   {
     id: 1,
     title: "BIO Fruits & Veggies",
-    image: "https://images.unsplash.com/photo-1618160702438-9b02ab6515c9?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&h=750&q=80",
+    image: "/lovable-uploads/8b6e7d15-1f15-448b-9910-39864305b594.png",
     tag: "Organic",
   },
   {
     id: 2,
     title: "Premium Imported Cheese",
-    image: "https://images.unsplash.com/photo-1452195100486-9cc805987862?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&h=500&q=80",
+    image: "/lovable-uploads/0ccbc4e9-e89f-461b-ab5e-ff37120e43a9.png",
     tag: "Premium",
   },
   {
@@ -30,7 +30,7 @@ const items = [
   {
     id: 5,
     title: "Shopping Lists",
-    image: "https://images.unsplash.com/photo-1649972904349-6e44c42644a7?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&h=500&q=80",
+    image: "/lovable-uploads/395a1055-a028-4359-9d87-650fd9c29440.png",
     tag: "New",
   },
   {

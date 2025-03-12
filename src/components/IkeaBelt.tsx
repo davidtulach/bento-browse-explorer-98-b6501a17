@@ -12,13 +12,13 @@ const weeklyOffers = {
       id: 101,
       title: "Fresh Produce Sale",
       description: "Up to 40% off on seasonal fruits and vegetables",
-      image: "https://images.unsplash.com/photo-1610348725531-843dff563e2c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=500&q=80",
+      image: "/lovable-uploads/24478780-f5e1-46bf-ab23-a561b8dbffb5.png",
     },
     {
       id: 102,
       title: "Butcher's Special",
       description: "Premium cuts at special weekend prices",
-      image: "https://images.unsplash.com/photo-1603360946369-dc9bb6258143?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=500&q=80",
+      image: "/lovable-uploads/57df0949-8906-423f-8116-7248ef4503f4.png",
     },
     {
       id: 103,
