@@ -1,8 +1,9 @@
 
-import { useRef } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import AnimatedImage from './AnimatedImage';
-import { Tag, ShoppingBag, Percent, Weight } from 'lucide-react';
+import { Tag, ShoppingBag, Percent, Weight, Plus, Minus, Check } from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
 
 // Weekly offers sections
 const weeklyOffers = {
@@ -119,6 +120,10 @@ const discountedProducts = {
 const IkeaBelt = () => {
   const weeklyScrollRef = useRef<HTMLDivElement>(null);
   const productsScrollRef = useRef<HTMLDivElement>(null);
+  const { toast } = useToast();
+  const [cart, setCart] = useState<Record<number, number>>({});
+  const [expandedItems, setExpandedItems] = useState<Record<number, boolean>>({});
+  const [expandTimers, setExpandTimers] = useState<Record<number, NodeJS.Timeout>>({});
 
   const scroll = (ref: React.RefObject<HTMLDivElement>, direction: 'left' | 'right') => {
     if (ref.current) {
@@ -126,6 +131,75 @@ const IkeaBelt = () => {
       ref.current.scrollBy({ left: scrollAmount, behavior: 'smooth' });
     }
   };
+
+  const handleAddToCart = (productId: number, productTitle: string) => {
+    setCart(prev => {
+      const newCount = (prev[productId] || 0) + 1;
+      
+      // Show toast notification
+      toast({
+        title: "Added to cart",
+        description: `${productTitle} (${newCount} ${newCount === 1 ? 'pc' : 'pcs'})`,
+        duration: 2000,
+      });
+      
+      return { ...prev, [productId]: newCount };
+    });
+    expandCartControl(productId);
+  };
+
+  const handleRemoveFromCart = (productId: number, productTitle: string) => {
+    setCart(prev => {
+      const currentCount = prev[productId] || 0;
+      if (currentCount <= 1) {
+        const newCart = { ...prev };
+        delete newCart[productId];
+        
+        // Show toast notification for removal
+        toast({
+          title: "Removed from cart",
+          description: `${productTitle}`,
+          duration: 2000,
+        });
+        
+        return newCart;
+      }
+      
+      // Show toast notification for quantity reduction
+      toast({
+        title: "Updated cart",
+        description: `${productTitle} (${currentCount - 1} ${currentCount - 1 === 1 ? 'pc' : 'pcs'})`,
+        duration: 2000,
+      });
+      
+      return { ...prev, [productId]: currentCount - 1 };
+    });
+    expandCartControl(productId);
+  };
+
+  const expandCartControl = (productId: number) => {
+    // Clear any existing timer for this product
+    if (expandTimers[productId]) {
+      clearTimeout(expandTimers[productId]);
+    }
+    
+    // Expand the control
+    setExpandedItems(prev => ({ ...prev, [productId]: true }));
+    
+    // Set a new timer to collapse it after 3 seconds
+    const timerId = setTimeout(() => {
+      setExpandedItems(prev => ({ ...prev, [productId]: false }));
+    }, 3000);
+    
+    setExpandTimers(prev => ({ ...prev, [productId]: timerId }));
+  };
+
+  // Clear all timers on component unmount
+  useEffect(() => {
+    return () => {
+      Object.values(expandTimers).forEach(timer => clearTimeout(timer));
+    };
+  }, [expandTimers]);
 
   return (
     <div className="py-4">
@@ -180,7 +254,7 @@ const IkeaBelt = () => {
           {discountedProducts.items.map((product) => (
             <div
               key={product.id}
-              className="flex-shrink-0 snap-start overflow-hidden transition-all hover:shadow-sm"
+              className="flex-shrink-0 snap-start overflow-hidden transition-all"
               style={{ width: '150px' }}
             >
               <div className="relative">
@@ -204,7 +278,7 @@ const IkeaBelt = () => {
                 )}
               </div>
               
-              <div className="py-2">
+              <div className="py-2 relative">
                 <div className="text-xs text-gray-500 mb-0.5">{product.category}</div>
                 <h3 className="font-medium text-sm text-gray-900 mb-0.5 truncate">{product.title}</h3>
                 
@@ -219,6 +293,56 @@ const IkeaBelt = () => {
                 </div>
                 
                 <div className="text-xs text-gray-500">{product.pricePerUnit}</div>
+
+                {/* Add to cart button */}
+                <div className="absolute bottom-2 right-0">
+                  {cart[product.id] ? (
+                    <div 
+                      className={cn(
+                        "flex items-center justify-center bg-primary text-white rounded-full transition-all duration-300",
+                        expandedItems[product.id] 
+                          ? "w-[80px] h-8" 
+                          : "w-8 h-8"
+                      )}
+                    >
+                      {expandedItems[product.id] ? (
+                        <>
+                          <button 
+                            className="w-8 h-8 flex items-center justify-center" 
+                            onClick={() => handleRemoveFromCart(product.id, product.title)}
+                            aria-label="Remove item"
+                          >
+                            <Minus className="w-4 h-4" />
+                          </button>
+                          <span className="text-xs font-medium">{cart[product.id]}</span>
+                          <button 
+                            className="w-8 h-8 flex items-center justify-center" 
+                            onClick={() => handleAddToCart(product.id, product.title)}
+                            aria-label="Add item"
+                          >
+                            <Plus className="w-4 h-4" />
+                          </button>
+                        </>
+                      ) : (
+                        <button 
+                          className="w-8 h-8 flex items-center justify-center" 
+                          onClick={() => expandCartControl(product.id)}
+                          aria-label="Adjust quantity"
+                        >
+                          <span className="text-xs font-medium">{cart[product.id]}</span>
+                        </button>
+                      )}
+                    </div>
+                  ) : (
+                    <button 
+                      className="w-8 h-8 flex items-center justify-center bg-primary text-white rounded-full hover:bg-primary/90 transition-colors"
+                      onClick={() => handleAddToCart(product.id, product.title)}
+                      aria-label="Add to cart"
+                    >
+                      <Plus className="w-4 h-4" />
+                    </button>
+                  )}
+                </div>
               </div>
             </div>
           ))}
