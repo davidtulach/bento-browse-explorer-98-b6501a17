@@ -1,4 +1,3 @@
-
 import { useRef, useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import AnimatedImage from './AnimatedImage';
@@ -294,48 +293,48 @@ const IkeaBelt = () => {
                 
                 <div className="text-xs text-gray-500">{product.pricePerUnit}</div>
 
-                {/* Add to cart button */}
+                {/* Add to cart button - with animations */}
                 <div className="absolute bottom-2 right-0">
                   {cart[product.id] ? (
                     <div 
                       className={cn(
-                        "flex items-center justify-center bg-primary text-white rounded-full transition-all duration-300",
+                        "flex items-center justify-center bg-primary text-white rounded-full transition-all duration-300 ease-in-out transform",
                         expandedItems[product.id] 
-                          ? "w-[80px] h-8" 
-                          : "w-8 h-8"
+                          ? "w-[80px] h-8 scale-100" 
+                          : "w-8 h-8 scale-95"
                       )}
                     >
                       {expandedItems[product.id] ? (
                         <>
                           <button 
-                            className="w-8 h-8 flex items-center justify-center" 
+                            className="w-8 h-8 flex items-center justify-center transition-transform duration-200 hover:scale-110" 
                             onClick={() => handleRemoveFromCart(product.id, product.title)}
                             aria-label="Remove item"
                           >
-                            <Minus className="w-4 h-4" />
+                            <Minus className="w-4 h-4 transition-opacity duration-150" />
                           </button>
-                          <span className="text-xs font-medium">{cart[product.id]}</span>
+                          <span className="text-xs font-medium animate-fade-in">{cart[product.id]}</span>
                           <button 
-                            className="w-8 h-8 flex items-center justify-center" 
+                            className="w-8 h-8 flex items-center justify-center transition-transform duration-200 hover:scale-110" 
                             onClick={() => handleAddToCart(product.id, product.title)}
                             aria-label="Add item"
                           >
-                            <Plus className="w-4 h-4" />
+                            <Plus className="w-4 h-4 transition-opacity duration-150" />
                           </button>
                         </>
                       ) : (
                         <button 
-                          className="w-8 h-8 flex items-center justify-center" 
+                          className="w-8 h-8 flex items-center justify-center transition-transform duration-200 hover:scale-110" 
                           onClick={() => expandCartControl(product.id)}
                           aria-label="Adjust quantity"
                         >
-                          <span className="text-xs font-medium">{cart[product.id]}</span>
+                          <span className="text-xs font-medium animate-fade-in">{cart[product.id]}</span>
                         </button>
                       )}
                     </div>
                   ) : (
                     <button 
-                      className="w-8 h-8 flex items-center justify-center bg-primary text-white rounded-full hover:bg-primary/90 transition-colors"
+                      className="w-8 h-8 flex items-center justify-center bg-primary text-white rounded-full hover:bg-primary/90 transition-all duration-200 transform hover:scale-110"
                       onClick={() => handleAddToCart(product.id, product.title)}
                       aria-label="Add to cart"
                     >
