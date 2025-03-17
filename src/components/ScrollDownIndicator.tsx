@@ -1,6 +1,22 @@
 
 import { useEffect, useState, useRef } from 'react';
 
+// Add declaration for dotlottie-player custom element
+declare global {
+  namespace JSX {
+    interface IntrinsicElements {
+      'dotlottie-player': React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & {
+        src: string;
+        background: string;
+        speed: string;
+        style?: React.CSSProperties;
+        loop?: boolean;
+        autoplay?: boolean;
+      };
+    }
+  }
+}
+
 interface ScrollDownIndicatorProps {
   show: boolean;
 }
@@ -46,7 +62,6 @@ const ScrollDownIndicator = ({ show }: ScrollDownIndicatorProps) => {
       }`}
     >
       {/* Removed the background circle, now just rendering the player directly */}
-      {/* @ts-ignore */}
       <dotlottie-player 
         src="https://lottie.host/85dd3c9d-bf13-46b8-97cf-2e73908d76c2/EMjP9SQVy4.lottie" 
         background="transparent" 

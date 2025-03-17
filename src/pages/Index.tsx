@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import Header from '@/components/Header';
@@ -26,10 +27,10 @@ const Index = () => {
     const position = e.currentTarget.scrollTop;
     setScrollPosition(position);
     
-    // Hide scroll indicator immediately when user starts scrolling
-    if (position > 10 && showScrollIndicator) {
+    // Hide scroll indicator when user scrolls, show only at top
+    if (position > 0) {
       setShowScrollIndicator(false);
-    } else if (position <= 10 && !showScrollIndicator) {
+    } else {
       setShowScrollIndicator(true);
     }
   };
