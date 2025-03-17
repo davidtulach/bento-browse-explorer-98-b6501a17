@@ -1,7 +1,6 @@
 
 import { useEffect, useState } from 'react';
 import LottieAnimation from './LottieAnimation';
-import scrollDownAnimation from '@/lottie/scroll-down.json';
 
 interface ScrollDownIndicatorProps {
   show: boolean;
@@ -9,6 +8,15 @@ interface ScrollDownIndicatorProps {
 
 const ScrollDownIndicator = ({ show }: ScrollDownIndicatorProps) => {
   const [isVisible, setIsVisible] = useState(show);
+  const [lottieData, setLottieData] = useState(null);
+
+  // Fetch the Lottie animation from the provided URL
+  useEffect(() => {
+    fetch('https://lottie.host/85dd3c9d-bf13-46b8-97cf-2e73908d76c2/EMjP9SQVy4.lottie')
+      .then(response => response.json())
+      .then(data => setLottieData(data))
+      .catch(error => console.error('Error loading Lottie animation:', error));
+  }, []);
 
   useEffect(() => {
     if (show) {
@@ -22,6 +30,7 @@ const ScrollDownIndicator = ({ show }: ScrollDownIndicatorProps) => {
   }, [show]);
 
   if (!isVisible && !show) return null;
+  if (!lottieData) return null;
 
   return (
     <div 
@@ -32,7 +41,7 @@ const ScrollDownIndicator = ({ show }: ScrollDownIndicatorProps) => {
       <div className="w-16 h-16 mb-2 bg-white/80 backdrop-blur-sm rounded-full shadow-lg flex items-center justify-center">
         <div className="w-14 h-14">
           <LottieAnimation 
-            animationData={scrollDownAnimation}
+            animationData={lottieData}
             loop={true}
             autoplay={true}
           />
