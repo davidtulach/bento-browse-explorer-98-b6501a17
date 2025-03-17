@@ -3,6 +3,7 @@ import { X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import AnimatedImage from './AnimatedImage';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetClose } from '@/components/ui/sheet';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 // Define subcategories for each category
 const categorySubcategories = {
@@ -73,6 +74,8 @@ interface CategoryOverlayProps {
 }
 
 const CategoryOverlay = ({ isOpen, onClose, category }: CategoryOverlayProps) => {
+  const isMobile = useIsMobile();
+  
   if (!category) return null;
   
   const subcategories = categorySubcategories[category as keyof typeof categorySubcategories] || [];
@@ -81,8 +84,8 @@ const CategoryOverlay = ({ isOpen, onClose, category }: CategoryOverlayProps) =>
   return (
     <Sheet open={isOpen} onOpenChange={(open) => !open && onClose()}>
       <SheetContent side="bottom" className="h-auto max-h-[70vh] rounded-t-xl p-0">
-        <div className="relative pt-10 pb-6 px-4">
-          <SheetHeader className="pb-4">
+        <div className="relative pt-6 pb-4 px-4">
+          <SheetHeader className="pb-2">
             <SheetTitle className="text-xl">{category}</SheetTitle>
             <SheetClose className="absolute right-4 top-4 rounded-full bg-muted p-2 hover:bg-muted/80">
               <X className="h-5 w-5" />
@@ -90,33 +93,33 @@ const CategoryOverlay = ({ isOpen, onClose, category }: CategoryOverlayProps) =>
           </SheetHeader>
           
           <div className="flex flex-col md:flex-row">
-            {/* Subcategories with reduced height */}
-            <div className="flex-grow grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 mb-6 md:mb-0 md:mr-6">
+            {/* Compact subcategories grid */}
+            <div className="flex-grow grid grid-cols-2 gap-2 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 mb-4 md:mb-0 md:mr-4">
               {subcategories.map((subcat, index) => (
                 <button 
                   key={index}
-                  className="h-10 px-3 flex items-center justify-center bg-gray-100 rounded-lg text-sm font-medium hover:bg-gray-200 transition-colors"
+                  className="h-8 px-2 flex items-center justify-center bg-gray-100 rounded-md text-xs font-medium hover:bg-gray-200 transition-colors"
                 >
                   {subcat}
                 </button>
               ))}
             </div>
             
-            {/* Brand message */}
-            <div className="w-full md:w-1/3 lg:w-1/4 flex-shrink-0">
+            {/* Brand message with shorter height for desktop */}
+            <div className="w-full md:w-1/4 lg:w-1/5 flex-shrink-0">
               <div className="relative rounded-lg overflow-hidden bg-white shadow">
                 <AnimatedImage 
                   src={brandMessage.imageSrc}
                   alt={brandMessage.title}
-                  aspectRatio="aspect-[2/3]"
+                  aspectRatio={isMobile ? "aspect-[2/3]" : "aspect-[3/2]"}
                   objectFit="cover"
                   className="w-full"
                 />
                 <div className="absolute inset-0 bg-gradient-to-b from-black/10 to-black/70"></div>
-                <div className="absolute bottom-0 left-0 right-0 p-4 text-white">
-                  <h3 className="font-semibold text-lg mb-1">{brandMessage.title}</h3>
-                  <p className="text-sm text-white/90 mb-2">{brandMessage.description}</p>
-                  <button className="text-sm font-medium underline">Read more</button>
+                <div className="absolute bottom-0 left-0 right-0 p-3 text-white">
+                  <h3 className="font-semibold text-sm md:text-base mb-0.5">{brandMessage.title}</h3>
+                  <p className="text-xs text-white/90 mb-1 line-clamp-2">{brandMessage.description}</p>
+                  <button className="text-xs font-medium underline">Read more</button>
                 </div>
               </div>
             </div>
