@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { cn } from '@/lib/utils';
 import Header from '@/components/Header';
@@ -7,6 +6,7 @@ import StoryScroller from '@/components/StoryScroller';
 import CategoryBelt from '@/components/CategoryBelt';
 import PinterestGrid from '@/components/PinterestGrid';
 import IkeaBelt from '@/components/IkeaBelt';
+import BrandsBelt from '@/components/BrandsBelt';
 
 const pillButtons = [
   { id: 'favorites', label: 'Favorites', color: 'bg-purple-100 text-purple-700' },
@@ -18,7 +18,6 @@ const pillButtons = [
 const Index = () => {
   const [scrollPosition, setScrollPosition] = useState(0);
 
-  // Handle scroll event
   const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
     const position = e.currentTarget.scrollTop;
     setScrollPosition(position);
@@ -34,12 +33,10 @@ const Index = () => {
       <main className="flex-1 pb-20">
         <SearchBar />
         
-        {/* StoryScroller now manages its own visibility based on screen size */}
         <StoryScroller />
         
         <CategoryBelt />
         
-        {/* Pill Buttons */}
         <div className="px-4 py-3 flex overflow-x-auto gap-2 scrollbar-hide justify-center">
           {pillButtons.map((button) => (
             <button 
@@ -58,15 +55,19 @@ const Index = () => {
           <div className="h-[1px] bg-gradient-to-r from-transparent via-gray-200 to-transparent" />
         </div>
         
-        {/* Weekly offers and small tiles sections */}
         <IkeaBelt />
         
         <div className="py-2">
           <div className="h-[1px] bg-gradient-to-r from-transparent via-gray-200 to-transparent" />
         </div>
         
-        {/* Pinterest grid */}
         <PinterestGrid />
+        
+        <div className="py-2">
+          <div className="h-[1px] bg-gradient-to-r from-transparent via-gray-200 to-transparent" />
+        </div>
+        
+        <BrandsBelt />
       </main>
     </div>
   );
