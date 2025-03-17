@@ -27,10 +27,10 @@ const Index = () => {
     const position = e.currentTarget.scrollTop;
     setScrollPosition(position);
     
-    // Hide scroll indicator when scrolled, show it when at top
-    if (position > 50 && showScrollIndicator) {
+    // Hide scroll indicator immediately when user starts scrolling
+    if (position > 10 && showScrollIndicator) {
       setShowScrollIndicator(false);
-    } else if (position <= 50 && !showScrollIndicator) {
+    } else if (position <= 10 && !showScrollIndicator) {
       setShowScrollIndicator(true);
     }
   };

@@ -11,7 +11,6 @@ const ScrollDownIndicator = ({ show }: ScrollDownIndicatorProps) => {
   const [isVisible, setIsVisible] = useState(show);
 
   useEffect(() => {
-    // Add animation delay when hiding to allow fade out
     if (show) {
       setIsVisible(true);
     } else {
@@ -30,14 +29,14 @@ const ScrollDownIndicator = ({ show }: ScrollDownIndicatorProps) => {
         show ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
       }`}
     >
-      <div className="w-16 h-16 mb-2 bg-white/80 backdrop-blur-sm rounded-full p-2 shadow-md">
+      <div className="w-16 h-16 mb-2 bg-white/90 backdrop-blur-sm rounded-full p-2 shadow-lg">
         <LottieAnimation 
           animationData={scrollDownAnimation}
           loop={true}
           autoplay={true}
         />
       </div>
-      <p className="text-xs bg-white/80 backdrop-blur-sm px-3 py-1 rounded-full text-red-600 font-medium shadow-sm">
+      <p className="text-xs bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-purple-600 font-semibold shadow-sm">
         Scroll to explore
       </p>
     </div>
