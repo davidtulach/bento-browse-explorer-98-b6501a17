@@ -1,5 +1,5 @@
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { cn } from '@/lib/utils';
 import Header from '@/components/Header';
 import SearchBar from '@/components/SearchBar';
@@ -22,16 +22,44 @@ const pillButtons = [
 const Index = () => {
   const [scrollPosition, setScrollPosition] = useState(0);
   const [showScrollIndicator, setShowScrollIndicator] = useState(true);
+  const scrollTimerRef = useRef<number | null>(null);
+
+  useEffect(() => {
+    // Clear timer on component unmount
+    return () => {
+      if (scrollTimerRef.current) {
+        clearTimeout(scrollTimerRef.current);
+      }
+    };
+  }, []);
 
   const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
     const position = e.currentTarget.scrollTop;
     setScrollPosition(position);
     
-    // Hide scroll indicator when user scrolls, show only at top
-    if (position > 0) {
-      setShowScrollIndicator(false);
-    } else {
+    // If at the top of the page, show the indicator
+    if (position === 0) {
       setShowScrollIndicator(true);
+      // Clear any existing timers
+      if (scrollTimerRef.current) {
+        clearTimeout(scrollTimerRef.current);
+        scrollTimerRef.current = null;
+      }
+    } 
+    // If we start scrolling, hide the indicator and set a timer to show it again after 30 seconds
+    else if (position > 0 && showScrollIndicator) {
+      setShowScrollIndicator(false);
+      
+      // Clear any existing timers before setting a new one
+      if (scrollTimerRef.current) {
+        clearTimeout(scrollTimerRef.current);
+      }
+      
+      // Set timer to show indicator again after 30 seconds (30000ms)
+      scrollTimerRef.current = window.setTimeout(() => {
+        setShowScrollIndicator(true);
+        scrollTimerRef.current = null;
+      }, 30000);
     }
   };
 
