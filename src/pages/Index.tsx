@@ -1,5 +1,5 @@
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import Header from '@/components/Header';
 import SearchBar from '@/components/SearchBar';
@@ -10,6 +10,7 @@ import IkeaBelt from '@/components/IkeaBelt';
 import BrandsBelt from '@/components/BrandsBelt';
 import LottieAnimation from '@/components/LottieAnimation';
 import shoppingAnimation from '@/lottie/shopping.json';
+import ScrollDownIndicator from '@/components/ScrollDownIndicator';
 
 const pillButtons = [
   { id: 'favorites', label: 'Favorites', color: 'bg-purple-100 text-purple-700' },
@@ -20,15 +21,23 @@ const pillButtons = [
 
 const Index = () => {
   const [scrollPosition, setScrollPosition] = useState(0);
+  const [showScrollIndicator, setShowScrollIndicator] = useState(true);
 
   const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
     const position = e.currentTarget.scrollTop;
     setScrollPosition(position);
+    
+    // Hide scroll indicator when scrolled, show it when at top
+    if (position > 50 && showScrollIndicator) {
+      setShowScrollIndicator(false);
+    } else if (position <= 50 && !showScrollIndicator) {
+      setShowScrollIndicator(true);
+    }
   };
 
   return (
     <div 
-      className="min-h-screen bg-gray-50 flex flex-col"
+      className="min-h-screen bg-gray-50 flex flex-col overflow-auto"
       onScroll={handleScroll}
     >
       <Header />
@@ -87,6 +96,9 @@ const Index = () => {
         
         <BrandsBelt />
       </main>
+      
+      {/* Scroll Down Indicator */}
+      <ScrollDownIndicator show={showScrollIndicator} />
     </div>
   );
 };
