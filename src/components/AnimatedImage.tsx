@@ -8,6 +8,7 @@ interface AnimatedImageProps {
   className?: string;
   aspectRatio?: string;
   objectFit?: "contain" | "cover" | "fill" | "none" | "scale-down";
+  rounded?: boolean;
 }
 
 const AnimatedImage = ({ 
@@ -15,7 +16,8 @@ const AnimatedImage = ({
   alt, 
   className, 
   aspectRatio = "aspect-square",
-  objectFit = "contain" 
+  objectFit = "contain",
+  rounded = false
 }: AnimatedImageProps) => {
   const [isLoading, setIsLoading] = useState(true);
   const [isVisible, setIsVisible] = useState(false);
@@ -39,6 +41,7 @@ const AnimatedImage = ({
     <div className={cn(
       aspectRatio,
       "overflow-hidden relative",
+      rounded && "rounded-lg",
       className
     )}>
       {isLoading && (

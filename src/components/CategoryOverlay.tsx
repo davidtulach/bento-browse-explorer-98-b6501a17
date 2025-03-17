@@ -1,3 +1,4 @@
+
 import { X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import AnimatedImage from './AnimatedImage';
@@ -99,12 +100,20 @@ const CategoryOverlay = ({ isOpen, onClose, category, position }: CategoryOverla
         
         <div className="flex flex-col md:flex-row gap-8">
           {/* Left side - Categories in two columns */}
-          <div className="md:w-3/5 grid grid-cols-2 gap-x-12 gap-y-4">
+          <div className="md:w-3/5 grid grid-cols-2 gap-x-8 gap-y-2">
+            {/* "Browse all" option */}
+            <a 
+              href="#"
+              className="text-sm font-bold hover:underline col-span-2 mb-2"
+            >
+              Browse all from {category}
+            </a>
+            
             {subcategories.map((subcat, index) => (
               <a 
                 key={index}
                 href="#"
-                className="text-sm hover:underline"
+                className="text-sm hover:underline py-1"
               >
                 {subcat}
               </a>
@@ -113,7 +122,7 @@ const CategoryOverlay = ({ isOpen, onClose, category, position }: CategoryOverla
           
           {/* Right side - Image and promotion */}
           <div className="md:w-2/5">
-            <div className="relative rounded-lg overflow-hidden bg-white">
+            <div className="relative overflow-hidden bg-white">
               <AnimatedImage 
                 src={brandMessage.imageSrc}
                 alt={brandMessage.title}
