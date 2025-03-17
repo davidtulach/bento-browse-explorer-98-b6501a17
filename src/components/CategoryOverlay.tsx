@@ -54,6 +54,7 @@ const categoryBrandMessages = {
     title: 'Refreshment Selection',
     description: 'From sparkling waters to craft sodas, we offer a wide range of beverages for every taste.',
     imageSrc: 'https://images.unsplash.com/photo-1544145945-f90425340c7e',
+    fallbackSrc: 'https://images.unsplash.com/photo-1544145945-f90425340c7e',
   },
   'Frozen': {
     title: 'Frozen at Peak Freshness',
@@ -65,66 +66,79 @@ const categoryBrandMessages = {
     title: 'Perfect Treats',
     description: 'From savory to sweet, our snack selection offers something for every craving.',
     imageSrc: 'https://images.unsplash.com/photo-1599490659213-e2b9527bd087',
+    fallbackSrc: 'https://images.unsplash.com/photo-1599490659213-e2b9527bd087',
   },
   'Household': {
     title: 'Home Essentials',
     description: 'Everything you need to keep your home clean, organized, and comfortable.',
     imageSrc: 'https://images.unsplash.com/photo-1583947215259-38e31be8751f',
+    fallbackSrc: 'https://images.unsplash.com/photo-1583947215259-38e31be8751f',
   },
   'Pasta & Rice': {
     title: 'Pantry Staples',
     description: 'Quality pasta and rice for your favorite recipes.',
     imageSrc: 'https://images.unsplash.com/photo-1627286400579-027de47e9e73',
+    fallbackSrc: 'https://images.unsplash.com/photo-1627286400579-027de47e9e73',
   },
   'Canned Goods': {
     title: 'Stock Your Pantry',
     description: 'Long-lasting staples to keep on hand for quick and easy meals.',
     imageSrc: 'https://images.unsplash.com/photo-1584263347416-85a696b4eda7',
+    fallbackSrc: 'https://images.unsplash.com/photo-1584263347416-85a696b4eda7',
   },
   'Breakfast': {
     title: 'Start Your Day Right',
     description: 'Nutritious and delicious breakfast options to power your morning.',
     imageSrc: 'https://images.unsplash.com/photo-1533089860892-a7c6f10a081a',
+    fallbackSrc: 'https://images.unsplash.com/photo-1533089860892-a7c6f10a081a',
   },
   'Condiments': {
     title: 'Flavor Enhancers',
     description: 'Add extra flavor to your meals with our selection of quality condiments.',
     imageSrc: 'https://images.unsplash.com/photo-1472476443507-c7a5948772fc',
+    fallbackSrc: 'https://images.unsplash.com/photo-1472476443507-c7a5948772fc',
   },
   'Baking': {
     title: 'Baking Essentials',
     description: 'Everything you need to create delicious homemade treats.',
     imageSrc: 'https://images.unsplash.com/photo-1486427944299-d1955d23e34d',
+    fallbackSrc: 'https://images.unsplash.com/photo-1486427944299-d1955d23e34d',
   },
   'Health Foods': {
     title: 'Wellness Selection',
     description: 'Nutritious options to support your healthy lifestyle.',
     imageSrc: 'https://images.unsplash.com/photo-1490819312566-8912e9c8a213',
+    fallbackSrc: 'https://images.unsplash.com/photo-1490819312566-8912e9c8a213',
   },
   'International': {
     title: 'Global Flavors',
     description: 'Explore cuisines from around the world with our international selection.',
     imageSrc: 'https://images.unsplash.com/photo-1516714435131-44d6b64dc6a2',
+    fallbackSrc: 'https://images.unsplash.com/photo-1516714435131-44d6b64dc6a2',
   },
   'Sweets': {
     title: 'Sweet Treats',
     description: 'Indulge your sweet tooth with our selection of candies and chocolates.',
     imageSrc: 'https://images.unsplash.com/photo-1582058091505-f87a2e55a40f',
+    fallbackSrc: 'https://images.unsplash.com/photo-1582058091505-f87a2e55a40f',
   },
   'Pet Supplies': {
     title: 'For Your Furry Friends',
     description: 'Quality food and supplies for all your pets.',
     imageSrc: 'https://images.unsplash.com/photo-1548767797-d8c844163c4c',
+    fallbackSrc: 'https://images.unsplash.com/photo-1548767797-d8c844163c4c',
   },
   'Baby Products': {
     title: 'Baby Care',
     description: 'Everything you need for your little one, from food to care products.',
     imageSrc: 'https://images.unsplash.com/photo-1594824494829-c1655ba0f581',
+    fallbackSrc: 'https://images.unsplash.com/photo-1594824494829-c1655ba0f581',
   },
   default: {
     title: 'Quality Products',
     description: 'We carefully select our products to ensure you get the best quality for your money.',
     imageSrc: 'https://images.unsplash.com/photo-1604719312566-8912e9c8a213',
+    fallbackSrc: 'https://images.unsplash.com/photo-1604719312566-8912e9c8a213',
   }
 };
 
