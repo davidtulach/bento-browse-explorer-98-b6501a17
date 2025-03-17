@@ -13,6 +13,16 @@ const categories = [
   { id: 6, name: "Frozen", image: "https://images.unsplash.com/photo-1570696590864-63772baf6617?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&h=200&q=80" },
   { id: 7, name: "Snacks", image: "https://images.unsplash.com/photo-1621939514649-280e2ee25f60?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&h=200&q=80" },
   { id: 8, name: "Household", image: "https://images.unsplash.com/photo-1620626011761-996317b8d101?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&h=200&q=80" },
+  { id: 9, name: "Pasta & Rice", image: "https://images.unsplash.com/photo-1556761223-4c4282c73f77?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&h=200&q=80" },
+  { id: 10, name: "Canned Goods", image: "https://images.unsplash.com/photo-1534483509719-3feaee7c30da?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&h=200&q=80" },
+  { id: 11, name: "Breakfast", image: "https://images.unsplash.com/photo-1525351484163-7529414344d8?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&h=200&q=80" },
+  { id: 12, name: "Condiments", image: "https://images.unsplash.com/photo-1583941339800-a7a00b36bd83?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&h=200&q=80" },
+  { id: 13, name: "Baking", image: "https://images.unsplash.com/photo-1486297678162-eb2a19b0a32d?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&h=200&q=80" },
+  { id: 14, name: "Health Foods", image: "https://images.unsplash.com/photo-1490885578174-acda8905c2c6?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&h=200&q=80" },
+  { id: 15, name: "International", image: "https://images.unsplash.com/photo-1455619452474-d2be8b1e70cd?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&h=200&q=80" },
+  { id: 16, name: "Sweets", image: "https://images.unsplash.com/photo-1621303837174-89787a7d4729?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&h=200&q=80" },
+  { id: 17, name: "Pet Supplies", image: "https://images.unsplash.com/photo-1583337130417-3346a1be7dee?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&h=200&q=80" },
+  { id: 18, name: "Baby Products", image: "https://images.unsplash.com/photo-1519689680058-324335c77eba?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&h=200&q=80" },
 ];
 
 const CategoryBelt = () => {

@@ -69,7 +69,7 @@ const PinterestGrid = () => {
     <div className="px-4 py-4">
       <h2 className="text-lg font-medium mb-4">Discover our assortment</h2>
       
-      <div className="columns-2 gap-4 space-y-4">
+      <div className="columns-2 md:columns-3 lg:columns-4 xl:columns-5 gap-4 space-y-4 max-w-6xl mx-auto">
         {items.map((item) => (
           <div key={item.id} className="mb-4 break-inside-avoid">
             <div className="overflow-hidden rounded-xl shadow-sm">
