@@ -1,14 +1,14 @@
 
 import { useRef } from 'react';
-import { ChevronLeft, ChevronRight, Apple, Bread, Milk, Beef, GlassWater, Snowflake, 
+import { ChevronLeft, ChevronRight, Apple, Bed, Milk, Beef, GlassWater, Snowflake, 
   Candy, House, Wheat, Package, Egg, Droplet, CookingPot, LeafyGreen, Globe, 
   IceCream, Dog, Baby } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
-// Replace images with icons
+// Fixed icons list to only use available lucide-react icons
 const categories = [
   { id: 1, name: "Fruit & Veg", icon: Apple },
-  { id: 2, name: "Bakery", icon: Bread },
+  { id: 2, name: "Bakery", icon: Bed },  // Changed from Bread to Bed since Bread doesn't exist
   { id: 3, name: "Dairy", icon: Milk },
   { id: 4, name: "Meat", icon: Beef },
   { id: 5, name: "Drinks", icon: GlassWater },
