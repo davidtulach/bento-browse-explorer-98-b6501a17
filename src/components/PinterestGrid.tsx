@@ -114,7 +114,7 @@ const PinterestGrid = () => {
 
   return (
     <div className="px-2 py-2 md:px-2">
-      <h2 className="text-lg font-medium mb-3 px-2">Discover our assortment</h2>
+      <h2 className="text-lg font-medium mb-3 px-2">Our best offers</h2>
       
       {isMobile ? (
         // Mobile view with two columns and offset for right column

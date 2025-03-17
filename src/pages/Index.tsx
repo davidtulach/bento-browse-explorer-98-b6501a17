@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { cn } from '@/lib/utils';
 import Header from '@/components/Header';
@@ -37,7 +38,7 @@ const Index = () => {
         
         <CategoryBelt />
         
-        <div className="px-4 py-3 flex overflow-x-auto gap-2 scrollbar-hide justify-center">
+        <div className="px-4 py-3 flex overflow-x-auto gap-2 md:gap-4 scrollbar-hide justify-center">
           {pillButtons.map((button) => (
             <button 
               key={button.id}
