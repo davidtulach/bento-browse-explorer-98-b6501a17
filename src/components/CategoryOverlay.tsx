@@ -30,21 +30,25 @@ const categoryBrandMessages = {
     title: 'Fresh from Local Farms',
     description: 'Our fruits and vegetables are sourced from local farmers who share our passion for quality and sustainability.',
     imageSrc: '/lovable-uploads/546abab4-afa9-4f81-a412-1cee66378b6b.png',
+    fallbackSrc: 'https://images.unsplash.com/photo-1610832958506-aa56368176cf',
   },
   'Bakery': {
     title: 'Freshly Baked Daily',
     description: 'Our bakery products are made fresh daily using traditional recipes and quality ingredients.',
     imageSrc: '/lovable-uploads/132e56cb-640b-449f-ba4e-7b0dc9b2b22f.png',
+    fallbackSrc: 'https://images.unsplash.com/photo-1509440159596-0249088772ff',
   },
   'Dairy': {
     title: 'Farm to Table',
     description: 'We work with local dairy farms to bring you the freshest milk, cheese, and other dairy products.',
     imageSrc: '/lovable-uploads/b6da379e-12f4-4e03-bea8-4239cf9a1b88.png',
+    fallbackSrc: 'https://images.unsplash.com/photo-1628088062854-d1870b4553da',
   },
   'Meat': {
     title: 'Sustainably Sourced',
     description: 'Our meat comes from farms committed to ethical and sustainable practices.',
     imageSrc: '/lovable-uploads/83c57aa5-ad25-4064-bddd-6ddd52e44f91.png',
+    fallbackSrc: 'https://images.unsplash.com/photo-1607623814075-e51df1bdc82f',
   },
   'Drinks': {
     title: 'Refreshment Selection',
@@ -55,6 +59,7 @@ const categoryBrandMessages = {
     title: 'Frozen at Peak Freshness',
     description: 'Our frozen products are flash-frozen at peak freshness to preserve nutrients and flavor.',
     imageSrc: '/lovable-uploads/52102b56-f168-4c24-94b7-056625b16ce4.png',
+    fallbackSrc: 'https://images.unsplash.com/photo-1563805042-7684c019e1cb',
   },
   'Snacks': {
     title: 'Perfect Treats',
@@ -94,7 +99,7 @@ const categoryBrandMessages = {
   'Health Foods': {
     title: 'Wellness Selection',
     description: 'Nutritious options to support your healthy lifestyle.',
-    imageSrc: 'https://images.unsplash.com/photo-1490818387583-1baba5e638af',
+    imageSrc: 'https://images.unsplash.com/photo-1490819312566-8912e9c8a213',
   },
   'International': {
     title: 'Global Flavors',
@@ -184,6 +189,7 @@ const CategoryOverlay = ({ isOpen, onClose, category, position }: CategoryOverla
             <div className="relative overflow-hidden bg-white">
               <AnimatedImage 
                 src={brandMessage.imageSrc}
+                fallbackSrc={brandMessage.fallbackSrc}
                 alt={brandMessage.title}
                 aspectRatio="aspect-[16/10]"
                 objectFit="cover"

@@ -5,6 +5,7 @@ import { cn } from '@/lib/utils';
 interface AnimatedImageProps {
   src: string;
   alt: string;
+  fallbackSrc?: string;
   className?: string;
   aspectRatio?: string;
   objectFit?: "contain" | "cover" | "fill" | "none" | "scale-down";
@@ -14,6 +15,7 @@ interface AnimatedImageProps {
 const AnimatedImage = ({ 
   src, 
   alt, 
+  fallbackSrc,
   className, 
   aspectRatio = "aspect-square",
   objectFit = "contain",
@@ -22,8 +24,13 @@ const AnimatedImage = ({
   const [isLoading, setIsLoading] = useState(true);
   const [isVisible, setIsVisible] = useState(false);
   const [hasError, setHasError] = useState(false);
+  const [currentSrc, setCurrentSrc] = useState(src);
 
   useEffect(() => {
+    setIsLoading(true);
+    setHasError(false);
+    setCurrentSrc(src);
+    
     const img = new Image();
     img.src = src;
     img.onload = () => {
@@ -31,11 +38,29 @@ const AnimatedImage = ({
       setTimeout(() => setIsVisible(true), 100);
     };
     img.onerror = () => {
-      setIsLoading(false);
-      setHasError(true);
-      console.error(`Failed to load image: ${src}`);
+      // If there's a fallback image available, try that instead
+      if (fallbackSrc) {
+        console.log(`Trying fallback image for: ${src}`);
+        setCurrentSrc(fallbackSrc);
+        
+        const fallbackImg = new Image();
+        fallbackImg.src = fallbackSrc;
+        fallbackImg.onload = () => {
+          setIsLoading(false);
+          setTimeout(() => setIsVisible(true), 100);
+        };
+        fallbackImg.onerror = () => {
+          setIsLoading(false);
+          setHasError(true);
+          console.error(`Failed to load both primary and fallback images: ${src} and ${fallbackSrc}`);
+        };
+      } else {
+        setIsLoading(false);
+        setHasError(true);
+        console.error(`Failed to load image: ${src}`);
+      }
     };
-  }, [src]);
+  }, [src, fallbackSrc]);
 
   return (
     <div className={cn(
@@ -54,7 +79,7 @@ const AnimatedImage = ({
         </div>
       ) : (
         <img
-          src={src}
+          src={currentSrc}
           alt={alt}
           className={cn(
             "w-full h-full transition-all duration-700",
@@ -62,6 +87,12 @@ const AnimatedImage = ({
             isVisible ? "opacity-100 scale-100" : "opacity-0 scale-105"
           )}
           onLoad={() => setIsLoading(false)}
+          onError={() => {
+            // This handles any potential errors with the currently displayed image
+            if (currentSrc === fallbackSrc || !fallbackSrc) {
+              setHasError(true);
+            }
+          }}
         />
       )}
     </div>
