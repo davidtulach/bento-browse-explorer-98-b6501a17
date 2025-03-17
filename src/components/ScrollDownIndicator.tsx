@@ -25,18 +25,20 @@ const ScrollDownIndicator = ({ show }: ScrollDownIndicatorProps) => {
 
   return (
     <div 
-      className={`fixed bottom-8 left-1/2 -translate-x-1/2 z-50 flex flex-col items-center transition-all duration-300 ${
+      className={`fixed bottom-10 left-1/2 -translate-x-1/2 z-50 flex flex-col items-center transition-all duration-300 ${
         show ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
       }`}
     >
-      <div className="w-16 h-16 mb-2 bg-white/90 backdrop-blur-sm rounded-full p-2 shadow-lg">
-        <LottieAnimation 
-          animationData={scrollDownAnimation}
-          loop={true}
-          autoplay={true}
-        />
+      <div className="w-16 h-16 mb-2 bg-white/80 backdrop-blur-sm rounded-full shadow-lg flex items-center justify-center">
+        <div className="w-14 h-14">
+          <LottieAnimation 
+            animationData={scrollDownAnimation}
+            loop={true}
+            autoplay={true}
+          />
+        </div>
       </div>
-      <p className="text-xs bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-purple-600 font-semibold shadow-sm">
+      <p className="text-xs bg-white/80 backdrop-blur-sm px-3 py-1 rounded-full text-purple-600 font-semibold shadow-sm">
         Scroll to explore
       </p>
     </div>
