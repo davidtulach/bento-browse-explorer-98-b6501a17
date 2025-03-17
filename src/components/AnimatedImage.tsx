@@ -25,7 +25,7 @@ const AnimatedImage = ({ src, alt, className, aspectRatio = "aspect-square" }: A
   return (
     <div className={cn(
       aspectRatio,
-      "overflow-hidden relative bg-muted",
+      "overflow-hidden relative",
       className
     )}>
       {isLoading && (
@@ -36,7 +36,7 @@ const AnimatedImage = ({ src, alt, className, aspectRatio = "aspect-square" }: A
         src={src}
         alt={alt}
         className={cn(
-          "w-full h-full object-cover transition-all duration-700",
+          "w-full h-full object-contain transition-all duration-700",
           isVisible ? "opacity-100 scale-100" : "opacity-0 scale-105"
         )}
         onLoad={() => setIsLoading(false)}

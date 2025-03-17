@@ -37,47 +37,46 @@ const CategoryBelt = () => {
   };
 
   return (
-    <div className="relative px-4 py-3">
-      <div className="flex justify-between items-center mb-3">
-        <h2 className="text-lg font-medium">Categories</h2>
-        <div className="flex space-x-1">
+    <div className="relative px-4 py-8">
+      <div className="flex justify-between items-center mb-6">
+        <h2 className="text-xl font-medium">Categories</h2>
+        <div className="flex space-x-2">
           <button 
             onClick={() => scroll('left')}
-            className="w-7 h-7 rounded-full flex items-center justify-center hover:bg-gray-100"
+            className="w-10 h-10 rounded-full flex items-center justify-center bg-black text-white hover:bg-black/90 transition-colors"
+            aria-label="Scroll left"
           >
-            <ChevronLeft className="w-5 h-5" />
+            <ChevronLeft className="w-6 h-6" />
           </button>
           <button 
             onClick={() => scroll('right')}
-            className="w-7 h-7 rounded-full flex items-center justify-center hover:bg-gray-100"
+            className="w-10 h-10 rounded-full flex items-center justify-center bg-black text-white hover:bg-black/90 transition-colors"
+            aria-label="Scroll right"
           >
-            <ChevronRight className="w-5 h-5" />
+            <ChevronRight className="w-6 h-6" />
           </button>
         </div>
       </div>
       
       <div 
         ref={scrollRef}
-        className="flex overflow-x-auto snap-x snap-mandatory gap-2 pb-2 -mx-4 px-4 scrollbar-hide"
+        className="flex overflow-x-auto snap-x snap-mandatory gap-6 pb-4 -mx-4 px-4 scrollbar-hide"
         style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
       >
         {categories.map((category) => (
           <div 
             key={category.id}
-            className="flex-shrink-0 w-[90px] snap-start rounded-xl overflow-hidden shadow-sm hover-scale"
+            className="flex-shrink-0 snap-start text-center cursor-pointer"
           >
-            <div className="relative aspect-[2/3]">
+            <div className="w-[110px] h-[110px] mb-2 mx-auto relative flex items-center justify-center bg-gray-50 transition-transform hover:scale-105 duration-200">
               <AnimatedImage
                 src={category.image}
                 alt={category.name}
-                className="w-full h-full object-cover"
-                aspectRatio="aspect-[2/3]"
+                className="max-w-full max-h-full object-contain"
+                aspectRatio="aspect-square"
               />
-              <div className="absolute inset-0 bg-gradient-to-b from-black/5 to-black/60"></div>
-              <div className="absolute bottom-0 left-0 right-0 p-2 text-white font-medium text-xs text-center">
-                {category.name}
-              </div>
             </div>
+            <p className="text-sm font-normal mt-1 text-center">{category.name}</p>
           </div>
         ))}
       </div>
