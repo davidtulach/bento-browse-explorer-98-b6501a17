@@ -1,11 +1,10 @@
-
 import { X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import AnimatedImage from './AnimatedImage';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetClose } from '@/components/ui/sheet';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { Dialog, DialogContent } from "@/components/ui/dialog";
 
-// Define subcategories for each category
 const categorySubcategories = {
   'Fruit & Veg': ['Apples', 'Bananas', 'Berries', 'Citrus', 'Tropical Fruits', 'Salad & Leafy Greens', 'Root Vegetables', 'Herbs'],
   'Bakery': ['Bread', 'Buns & Rolls', 'Cakes', 'Pastries', 'Cookies', 'Gluten-free'],
@@ -27,7 +26,6 @@ const categorySubcategories = {
   'Baby Products': ['Diapers', 'Baby Food', 'Formula', 'Baby Care', 'Baby Accessories'],
 };
 
-// Define brand messages for each category
 const categoryBrandMessages = {
   'Fruit & Veg': {
     title: 'Fresh from Local Farms',
@@ -59,7 +57,6 @@ const categoryBrandMessages = {
     description: 'Our frozen products are flash-frozen at peak freshness to preserve nutrients and flavor.',
     imageSrc: '/lovable-uploads/57df0949-8906-423f-8116-7248ef4503f4.png',
   },
-  // Default message for categories without specific content
   default: {
     title: 'Quality Products',
     description: 'We carefully select our products to ensure you get the best quality for your money.',
@@ -71,9 +68,10 @@ interface CategoryOverlayProps {
   isOpen: boolean;
   onClose: () => void;
   category: string | null;
+  position?: { top: number; left: number; width: number };
 }
 
-const CategoryOverlay = ({ isOpen, onClose, category }: CategoryOverlayProps) => {
+const CategoryOverlay = ({ isOpen, onClose, category, position }: CategoryOverlayProps) => {
   const isMobile = useIsMobile();
   
   if (!category) return null;
@@ -81,53 +79,103 @@ const CategoryOverlay = ({ isOpen, onClose, category }: CategoryOverlayProps) =>
   const subcategories = categorySubcategories[category as keyof typeof categorySubcategories] || [];
   const brandMessage = categoryBrandMessages[category as keyof typeof categoryBrandMessages] || categoryBrandMessages.default;
 
-  return (
-    <Sheet open={isOpen} onOpenChange={(open) => !open && onClose()}>
-      <SheetContent side="bottom" className="h-auto max-h-[70vh] rounded-t-xl p-0">
-        <div className="relative pt-6 pb-4 px-4">
+  const renderContent = () => (
+    <div className="relative">
+      <div className={cn("pt-6 pb-4 px-4", isMobile && "relative")}>
+        <div className={cn(!isMobile && "hidden")}>
           <SheetHeader className="pb-2">
             <SheetTitle className="text-xl">{category}</SheetTitle>
-            <SheetClose className="absolute right-4 top-4 rounded-full bg-muted p-2 hover:bg-muted/80">
-              <X className="h-5 w-5" />
-            </SheetClose>
           </SheetHeader>
+        </div>
+        {!isMobile && (
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-xl font-medium">{category}</h2>
+            <button 
+              onClick={onClose}
+              className="rounded-full bg-muted p-2 hover:bg-muted/80"
+            >
+              <X className="h-5 w-5" />
+            </button>
+          </div>
+        )}
+        
+        <div className="flex flex-col md:flex-row">
+          <div className="flex-grow grid grid-cols-2 gap-2 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 mb-4 md:mb-0 md:mr-4">
+            {subcategories.map((subcat, index) => (
+              <button 
+                key={index}
+                className="h-8 px-2 flex items-center justify-center bg-gray-100 rounded-md text-xs font-medium hover:bg-gray-200 transition-colors"
+              >
+                {subcat}
+              </button>
+            ))}
+          </div>
           
-          <div className="flex flex-col md:flex-row">
-            {/* Compact subcategories grid */}
-            <div className="flex-grow grid grid-cols-2 gap-2 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 mb-4 md:mb-0 md:mr-4">
-              {subcategories.map((subcat, index) => (
-                <button 
-                  key={index}
-                  className="h-8 px-2 flex items-center justify-center bg-gray-100 rounded-md text-xs font-medium hover:bg-gray-200 transition-colors"
-                >
-                  {subcat}
-                </button>
-              ))}
-            </div>
-            
-            {/* Brand message with shorter height for desktop */}
-            <div className="w-full md:w-1/4 lg:w-1/5 flex-shrink-0">
-              <div className="relative rounded-lg overflow-hidden bg-white shadow">
-                <AnimatedImage 
-                  src={brandMessage.imageSrc}
-                  alt={brandMessage.title}
-                  aspectRatio={isMobile ? "aspect-[2/3]" : "aspect-[3/2]"}
-                  objectFit="cover"
-                  className="w-full"
-                />
-                <div className="absolute inset-0 bg-gradient-to-b from-black/10 to-black/70"></div>
-                <div className="absolute bottom-0 left-0 right-0 p-3 text-white">
-                  <h3 className="font-semibold text-sm md:text-base mb-0.5">{brandMessage.title}</h3>
-                  <p className="text-xs text-white/90 mb-1 line-clamp-2">{brandMessage.description}</p>
-                  <button className="text-xs font-medium underline">Read more</button>
-                </div>
+          <div className="w-full md:w-1/4 lg:w-1/5 flex-shrink-0">
+            <div className="relative rounded-lg overflow-hidden bg-white shadow">
+              <AnimatedImage 
+                src={brandMessage.imageSrc}
+                alt={brandMessage.title}
+                aspectRatio={isMobile ? "aspect-[2/3]" : "aspect-[3/2]"}
+                objectFit="cover"
+                className="w-full"
+              />
+              <div className="absolute inset-0 bg-gradient-to-b from-black/10 to-black/70"></div>
+              <div className="absolute bottom-0 left-0 right-0 p-3 text-white">
+                <h3 className="font-semibold text-sm md:text-base mb-0.5">{brandMessage.title}</h3>
+                <p className="text-xs text-white/90 mb-1 line-clamp-2">{brandMessage.description}</p>
+                <button className="text-xs font-medium underline">Read more</button>
               </div>
             </div>
           </div>
         </div>
-      </SheetContent>
-    </Sheet>
+      </div>
+    </div>
   );
+
+  if (isMobile) {
+    return (
+      <Sheet open={isOpen} onOpenChange={(open) => !open && onClose()}>
+        <SheetContent side="bottom" className="h-auto max-h-[70vh] rounded-t-xl p-0">
+          <SheetClose className="absolute right-4 top-4 rounded-full bg-muted p-2 hover:bg-muted/80 z-10">
+            <X className="h-5 w-5" />
+          </SheetClose>
+          {renderContent()}
+        </SheetContent>
+      </Sheet>
+    );
+  } else {
+    return (
+      <div 
+        className={cn(
+          "fixed inset-0 z-50",
+          !isOpen && "pointer-events-none"
+        )}
+        onClick={(e) => {
+          if (e.target === e.currentTarget) onClose();
+        }}
+      >
+        <div 
+          className={cn(
+            "absolute bg-white rounded-lg shadow-lg border border-gray-200 transition-all duration-200 overflow-hidden",
+            !isOpen && "opacity-0 scale-95",
+            isOpen && "opacity-100 scale-100"
+          )}
+          style={{
+            top: position ? `${position.top + 60}px` : '50%',
+            left: position ? `${position.left}px` : '50%',
+            width: position ? `${position.width}px` : '90%',
+            maxWidth: '1200px',
+            transform: position ? 'none' : 'translate(-50%, -50%)',
+            maxHeight: '80vh',
+            overflowY: 'auto'
+          }}
+        >
+          {renderContent()}
+        </div>
+      </div>
+    );
+  }
 };
 
 export default CategoryOverlay;

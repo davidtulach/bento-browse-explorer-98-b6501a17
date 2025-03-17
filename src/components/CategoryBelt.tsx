@@ -1,12 +1,11 @@
-
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { ChevronLeft, ChevronRight, Apple, Bed, Milk, Beef, GlassWater, Snowflake, 
   Candy, House, Wheat, Package, Egg, Droplet, CookingPot, LeafyGreen, Globe, 
   IceCream, Dog, Baby } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import CategoryOverlay from './CategoryOverlay';
+import { useIsMobile } from '@/hooks/use-mobile';
 
-// Fixed icons list to only use available lucide-react icons
 const categories = [
   { id: 1, name: "Fruit & Veg", icon: Apple },
   { id: 2, name: "Bakery", icon: Bed },  // Changed from Bread to Bed since Bread doesn't exist
@@ -30,8 +29,11 @@ const categories = [
 
 const CategoryBelt = () => {
   const scrollRef = useRef<HTMLDivElement>(null);
+  const beltRef = useRef<HTMLDivElement>(null);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [isOverlayOpen, setIsOverlayOpen] = useState(false);
+  const [overlayPosition, setOverlayPosition] = useState<{ top: number; left: number; width: number } | undefined>();
+  const isMobile = useIsMobile();
 
   const scroll = (direction: 'left' | 'right') => {
     if (scrollRef.current) {
@@ -41,8 +43,19 @@ const CategoryBelt = () => {
     }
   };
 
-  const handleCategoryClick = (categoryName: string) => {
+  const handleCategoryClick = (categoryName: string, event?: React.MouseEvent<HTMLDivElement>) => {
     setSelectedCategory(categoryName);
+    
+    // Only set position for desktop view
+    if (!isMobile && event && beltRef.current) {
+      const beltRect = beltRef.current.getBoundingClientRect();
+      setOverlayPosition({
+        top: beltRect.bottom,
+        left: beltRect.left,
+        width: beltRect.width
+      });
+    }
+    
     setIsOverlayOpen(true);
   };
 
@@ -50,8 +63,20 @@ const CategoryBelt = () => {
     setIsOverlayOpen(false);
   };
 
+  // Close overlay on resize to prevent positioning issues
+  useEffect(() => {
+    const handleResize = () => {
+      if (isOverlayOpen && !isMobile) {
+        setIsOverlayOpen(false);
+      }
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, [isOverlayOpen, isMobile]);
+
   return (
-    <div className="relative px-4 py-6">
+    <div className="relative px-4 py-6" ref={beltRef}>
       <h2 className="text-xl font-medium mb-4">Categories</h2>
       
       <div className="relative">
@@ -75,7 +100,7 @@ const CategoryBelt = () => {
               <div 
                 key={category.id}
                 className="flex-shrink-0 snap-start text-center cursor-pointer"
-                onClick={() => handleCategoryClick(category.name)}
+                onClick={(e) => handleCategoryClick(category.name, e)}
               >
                 <div className="w-[90px] h-[90px] mb-1 mx-auto relative flex items-center justify-center transition-transform hover:scale-105 duration-200">
                   <IconComponent className="w-12 h-12 text-primary" strokeWidth={1.5} />
@@ -101,6 +126,7 @@ const CategoryBelt = () => {
         isOpen={isOverlayOpen}
         onClose={handleCloseOverlay}
         category={selectedCategory}
+        position={!isMobile ? overlayPosition : undefined}
       />
     </div>
   );
