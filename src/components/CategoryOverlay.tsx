@@ -1,3 +1,4 @@
+
 import { X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import AnimatedImage from './AnimatedImage';
@@ -81,7 +82,7 @@ const CategoryOverlay = ({ isOpen, onClose, category, position }: CategoryOverla
 
   const renderContent = () => (
     <div className="relative">
-      <div className={cn("pt-6 pb-4 px-4", isMobile && "relative")}>
+      <div className={cn("py-6 px-6", isMobile && "relative")}>
         <div className={cn(!isMobile && "hidden")}>
           <SheetHeader className="pb-2">
             <SheetTitle className="text-xl">{category}</SheetTitle>
@@ -89,7 +90,7 @@ const CategoryOverlay = ({ isOpen, onClose, category, position }: CategoryOverla
         </div>
         {!isMobile && (
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-xl font-medium">{category}</h2>
+            <h2 className="text-xl font-medium">All in {category}</h2>
             <button 
               onClick={onClose}
               className="rounded-full bg-muted p-2 hover:bg-muted/80"
@@ -99,32 +100,34 @@ const CategoryOverlay = ({ isOpen, onClose, category, position }: CategoryOverla
           </div>
         )}
         
-        <div className="flex flex-col md:flex-row">
-          <div className="flex-grow grid grid-cols-2 gap-2 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 mb-4 md:mb-0 md:mr-4">
+        <div className="flex flex-col md:flex-row gap-8">
+          {/* Left side - Categories in two columns */}
+          <div className="md:w-3/5 grid grid-cols-2 gap-x-12 gap-y-4">
             {subcategories.map((subcat, index) => (
-              <button 
+              <a 
                 key={index}
-                className="h-8 px-2 flex items-center justify-center bg-gray-100 rounded-md text-xs font-medium hover:bg-gray-200 transition-colors"
+                href="#"
+                className="text-sm hover:underline"
               >
                 {subcat}
-              </button>
+              </a>
             ))}
           </div>
           
-          <div className="w-full md:w-1/4 lg:w-1/5 flex-shrink-0">
-            <div className="relative rounded-lg overflow-hidden bg-white shadow">
+          {/* Right side - Image and promotion */}
+          <div className="md:w-2/5">
+            <div className="relative rounded-lg overflow-hidden bg-white">
               <AnimatedImage 
                 src={brandMessage.imageSrc}
                 alt={brandMessage.title}
-                aspectRatio={isMobile ? "aspect-[2/3]" : "aspect-[3/2]"}
+                aspectRatio="aspect-[16/10]"
                 objectFit="cover"
                 className="w-full"
               />
-              <div className="absolute inset-0 bg-gradient-to-b from-black/10 to-black/70"></div>
-              <div className="absolute bottom-0 left-0 right-0 p-3 text-white">
-                <h3 className="font-semibold text-sm md:text-base mb-0.5">{brandMessage.title}</h3>
-                <p className="text-xs text-white/90 mb-1 line-clamp-2">{brandMessage.description}</p>
-                <button className="text-xs font-medium underline">Read more</button>
+              <div className="mt-4">
+                <h3 className="font-semibold text-lg mb-1">{brandMessage.title}</h3>
+                <p className="text-sm text-gray-600 mb-2">{brandMessage.description}</p>
+                <button className="text-sm font-medium text-primary underline">Read more</button>
               </div>
             </div>
           </div>
@@ -157,18 +160,16 @@ const CategoryOverlay = ({ isOpen, onClose, category, position }: CategoryOverla
       >
         <div 
           className={cn(
-            "absolute bg-white rounded-lg shadow-lg border border-gray-200 transition-all duration-200 overflow-hidden",
-            !isOpen && "opacity-0 scale-95",
-            isOpen && "opacity-100 scale-100"
+            "absolute bg-white rounded-lg shadow-xl border border-gray-200 transition-all duration-200 overflow-hidden",
+            !isOpen && "opacity-0 translate-y-[-10px]",
+            isOpen && "opacity-100 translate-y-0"
           )}
           style={{
-            top: position ? `${position.top + 60}px` : '50%',
-            left: position ? `${position.left}px` : '50%',
-            width: position ? `${position.width}px` : '90%',
+            top: position?.top || 0,
+            left: position?.left || 0,
+            width: position?.width || '100%',
             maxWidth: '1200px',
-            transform: position ? 'none' : 'translate(-50%, -50%)',
-            maxHeight: '80vh',
-            overflowY: 'auto'
+            zIndex: 50
           }}
         >
           {renderContent()}
