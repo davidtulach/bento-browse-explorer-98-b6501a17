@@ -72,7 +72,7 @@ const ScrollDownIndicator = ({ show, onClick }: ScrollDownIndicatorProps) => {
         loop 
         autoplay
       ></dotlottie-player>
-      <p className="text-xs bg-black text-white px-4 py-1.5 rounded-full font-semibold shadow-sm cursor-pointer text-center">
+      <p className="text-xs bg-black text-white px-4 py-1.5 rounded-full font-semibold shadow-sm cursor-pointer text-center whitespace-nowrap min-w-[200px]">
         Scroll for your unique discount
       </p>
     </div>
