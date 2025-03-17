@@ -30,32 +30,32 @@ const categoryBrandMessages = {
   'Fruit & Veg': {
     title: 'Fresh from Local Farms',
     description: 'Our fruits and vegetables are sourced from local farmers who share our passion for quality and sustainability.',
-    imageSrc: '/lovable-uploads/8b6e7d15-1f15-448b-9910-39864305b594.png',
+    imageSrc: '/lovable-uploads/d8455960-6e56-4803-a46b-8bd6545d7225.png',
   },
   'Bakery': {
     title: 'Freshly Baked Daily',
     description: 'Our bakery products are made fresh daily using traditional recipes and quality ingredients.',
-    imageSrc: '/lovable-uploads/5cb0fd3c-bc04-49aa-bc80-6aa2d3c36550.png',
+    imageSrc: '/lovable-uploads/411820ff-e8c7-47a1-a092-4129f27abcc8.png',
   },
   'Dairy': {
     title: 'Farm to Table',
     description: 'We work with local dairy farms to bring you the freshest milk, cheese, and other dairy products.',
-    imageSrc: '/lovable-uploads/f6afccdb-a1d0-4123-9b27-53eba8f72c50.png',
+    imageSrc: '/lovable-uploads/9e582ba8-f631-4a20-9188-2d315bdec4c5.png',
   },
   'Meat': {
     title: 'Sustainably Sourced',
     description: 'Our meat comes from farms committed to ethical and sustainable practices.',
-    imageSrc: '/lovable-uploads/24478780-f5e1-46bf-ab23-a561b8dbffb5.png',
+    imageSrc: '/lovable-uploads/131ceddb-225a-4fc8-bc44-e59c0b55cfc5.png',
   },
   'Drinks': {
     title: 'Refreshment Selection',
     description: 'From sparkling waters to craft sodas, we offer a wide range of beverages for every taste.',
-    imageSrc: '/lovable-uploads/0ccbc4e9-e89f-461b-ab5e-ff37120e43a9.png',
+    imageSrc: '/lovable-uploads/491b8d66-c78a-4c8a-8a5a-0a0d9fe8c979.png',
   },
   'Frozen': {
     title: 'Frozen at Peak Freshness',
     description: 'Our frozen products are flash-frozen at peak freshness to preserve nutrients and flavor.',
-    imageSrc: '/lovable-uploads/57df0949-8906-423f-8116-7248ef4503f4.png',
+    imageSrc: '/lovable-uploads/acc39f74-b8a9-4ff6-b556-cc9c98dd6465.png',
   },
   default: {
     title: 'Quality Products',
@@ -186,3 +186,4 @@ const CategoryOverlay = ({ isOpen, onClose, category, position }: CategoryOverla
 };
 
 export default CategoryOverlay;
+
