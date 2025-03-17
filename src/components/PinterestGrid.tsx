@@ -66,13 +66,16 @@ const tagColors: Record<string, { bg: string, text: string }> = {
 
 const PinterestGrid = () => {
   return (
-    <div className="px-4 py-4">
-      <h2 className="text-lg font-medium mb-4">Discover our assortment</h2>
+    <div className="px-2 py-4 md:px-4">
+      <h2 className="text-lg font-medium mb-4 px-2">Discover our assortment</h2>
       
-      <div className="columns-2 md:columns-3 lg:columns-4 xl:columns-5 gap-4 space-y-4 max-w-6xl mx-auto">
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 auto-rows-auto gap-3 max-w-6xl mx-auto">
         {items.map((item) => (
-          <div key={item.id} className="mb-4 break-inside-avoid">
-            <div className="overflow-hidden rounded-xl shadow-sm">
+          <div 
+            key={item.id} 
+            className="pin-card hover:shadow-xl transition-all duration-200"
+          >
+            <div className="relative overflow-hidden rounded-xl">
               {/* Image with tag badge */}
               <div className="relative">
                 <AnimatedImage
@@ -80,6 +83,7 @@ const PinterestGrid = () => {
                   alt={item.title}
                   className="w-full rounded-xl"
                   aspectRatio=""
+                  objectFit="cover"
                 />
                 
                 <div className="absolute top-2 left-2">
@@ -95,12 +99,12 @@ const PinterestGrid = () => {
             </div>
             
             {/* Title below image, outside the card */}
-            <div className="mt-2 mb-1 flex justify-between items-start">
+            <div className="mt-2 mb-1 flex justify-between items-start px-1">
               <h3 className="font-medium text-sm">{item.title}</h3>
-              <button className="text-lg leading-none opacity-70">•••</button>
+              <button className="text-lg leading-none opacity-70 hover:opacity-100">•••</button>
             </div>
             {item.sponsor && (
-              <p className="text-xs text-gray-500">
+              <p className="text-xs text-gray-500 px-1">
                 Sponsored by {item.sponsor}
               </p>
             )}
