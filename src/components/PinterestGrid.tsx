@@ -100,9 +100,9 @@ const PinterestGrid = () => {
         </div>
       </div>
       
-      <div className="mt-2 mb-1 flex justify-between items-start px-1">
-        <h3 className="font-medium text-sm">{item.title}</h3>
-        <button className="text-lg leading-none opacity-70 hover:opacity-100">•••</button>
+      <div className="mt-1 mb-1 flex justify-between items-start px-1">
+        <h3 className="font-medium text-xs">{item.title}</h3>
+        <button className="text-sm leading-none opacity-70 hover:opacity-100">•••</button>
       </div>
       {item.sponsor && (
         <p className="text-xs text-gray-500 px-1">
@@ -113,25 +113,25 @@ const PinterestGrid = () => {
   );
 
   return (
-    <div className="px-2 py-4 md:px-4">
-      <h2 className="text-lg font-medium mb-4 px-2">Discover our assortment</h2>
+    <div className="px-2 py-2 md:px-2">
+      <h2 className="text-lg font-medium mb-3 px-2">Discover our assortment</h2>
       
       {isMobile ? (
         // Mobile view with two columns and offset for right column
-        <div className="flex gap-3 max-w-6xl mx-auto">
+        <div className="flex gap-2 max-w-6xl mx-auto">
           {/* Left column */}
-          <div className="w-1/2 flex flex-col gap-3">
+          <div className="w-1/2 flex flex-col gap-2">
             {leftColumnItems.map(renderMasonryItem)}
           </div>
           
           {/* Right column with offset */}
-          <div className="w-1/2 flex flex-col gap-3 mt-10">
+          <div className="w-1/2 flex flex-col gap-2 mt-10">
             {rightColumnItems.map(renderMasonryItem)}
           </div>
         </div>
       ) : (
-        // Desktop view with regular grid
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 auto-rows-auto gap-3 max-w-6xl mx-auto">
+        // Desktop view with compact grid (more columns, smaller gap)
+        <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-2 max-w-6xl mx-auto">
           {items.map(renderMasonryItem)}
         </div>
       )}
