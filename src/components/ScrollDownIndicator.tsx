@@ -45,16 +45,16 @@ const ScrollDownIndicator = ({ show }: ScrollDownIndicatorProps) => {
         show ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
       }`}
     >
-      <div className="w-16 h-16 mb-2 bg-white/80 backdrop-blur-sm rounded-full shadow-lg flex items-center justify-center overflow-hidden">
-        <dotlottie-player 
-          src="https://lottie.host/85dd3c9d-bf13-46b8-97cf-2e73908d76c2/EMjP9SQVy4.lottie" 
-          background="transparent" 
-          speed="1" 
-          style={{ width: '56px', height: '56px' }} 
-          loop 
-          autoplay
-        ></dotlottie-player>
-      </div>
+      {/* Removed the background circle, now just rendering the player directly */}
+      {/* @ts-ignore */}
+      <dotlottie-player 
+        src="https://lottie.host/85dd3c9d-bf13-46b8-97cf-2e73908d76c2/EMjP9SQVy4.lottie" 
+        background="transparent" 
+        speed="1" 
+        style={{ width: '56px', height: '56px' }} 
+        loop 
+        autoplay
+      ></dotlottie-player>
       <p className="text-xs bg-white/80 backdrop-blur-sm px-3 py-1 rounded-full text-purple-600 font-semibold shadow-sm">
         Scroll to explore
       </p>
