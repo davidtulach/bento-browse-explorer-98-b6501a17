@@ -1,9 +1,10 @@
 
-import { useRef } from 'react';
+import { useState, useRef } from 'react';
 import { ChevronLeft, ChevronRight, Apple, Bed, Milk, Beef, GlassWater, Snowflake, 
   Candy, House, Wheat, Package, Egg, Droplet, CookingPot, LeafyGreen, Globe, 
   IceCream, Dog, Baby } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import CategoryOverlay from './CategoryOverlay';
 
 // Fixed icons list to only use available lucide-react icons
 const categories = [
@@ -29,6 +30,8 @@ const categories = [
 
 const CategoryBelt = () => {
   const scrollRef = useRef<HTMLDivElement>(null);
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [isOverlayOpen, setIsOverlayOpen] = useState(false);
 
   const scroll = (direction: 'left' | 'right') => {
     if (scrollRef.current) {
@@ -36,6 +39,15 @@ const CategoryBelt = () => {
       const scrollAmount = direction === 'left' ? -300 : 300;
       current.scrollBy({ left: scrollAmount, behavior: 'smooth' });
     }
+  };
+
+  const handleCategoryClick = (categoryName: string) => {
+    setSelectedCategory(categoryName);
+    setIsOverlayOpen(true);
+  };
+
+  const handleCloseOverlay = () => {
+    setIsOverlayOpen(false);
   };
 
   return (
@@ -63,6 +75,7 @@ const CategoryBelt = () => {
               <div 
                 key={category.id}
                 className="flex-shrink-0 snap-start text-center cursor-pointer"
+                onClick={() => handleCategoryClick(category.name)}
               >
                 <div className="w-[90px] h-[90px] mb-1 mx-auto relative flex items-center justify-center transition-transform hover:scale-105 duration-200">
                   <IconComponent className="w-12 h-12 text-primary" strokeWidth={1.5} />
@@ -82,6 +95,13 @@ const CategoryBelt = () => {
           <ChevronRight className="w-5 h-5" />
         </button>
       </div>
+
+      {/* Category Overlay */}
+      <CategoryOverlay 
+        isOpen={isOverlayOpen}
+        onClose={handleCloseOverlay}
+        category={selectedCategory}
+      />
     </div>
   );
 };
