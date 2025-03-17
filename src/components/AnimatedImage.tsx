@@ -12,6 +12,7 @@ interface AnimatedImageProps {
 const AnimatedImage = ({ src, alt, className, aspectRatio = "aspect-square" }: AnimatedImageProps) => {
   const [isLoading, setIsLoading] = useState(true);
   const [isVisible, setIsVisible] = useState(false);
+  const [hasError, setHasError] = useState(false);
 
   useEffect(() => {
     const img = new Image();
@@ -19,6 +20,11 @@ const AnimatedImage = ({ src, alt, className, aspectRatio = "aspect-square" }: A
     img.onload = () => {
       setIsLoading(false);
       setTimeout(() => setIsVisible(true), 100);
+    };
+    img.onerror = () => {
+      setIsLoading(false);
+      setHasError(true);
+      console.error(`Failed to load image: ${src}`);
     };
   }, [src]);
 
@@ -32,15 +38,21 @@ const AnimatedImage = ({ src, alt, className, aspectRatio = "aspect-square" }: A
         <div className="absolute inset-0 animate-image-shimmer bg-gradient-to-r from-transparent via-white/20 to-transparent" />
       )}
       
-      <img
-        src={src}
-        alt={alt}
-        className={cn(
-          "w-full h-full object-contain transition-all duration-700",
-          isVisible ? "opacity-100 scale-100" : "opacity-0 scale-105"
-        )}
-        onLoad={() => setIsLoading(false)}
-      />
+      {hasError ? (
+        <div className="w-full h-full flex items-center justify-center bg-gray-100 text-gray-400 text-xs">
+          Image not found
+        </div>
+      ) : (
+        <img
+          src={src}
+          alt={alt}
+          className={cn(
+            "w-full h-full object-contain transition-all duration-700",
+            isVisible ? "opacity-100 scale-100" : "opacity-0 scale-105"
+          )}
+          onLoad={() => setIsLoading(false)}
+        />
+      )}
     </div>
   );
 };
