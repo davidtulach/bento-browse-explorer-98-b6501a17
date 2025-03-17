@@ -1,10 +1,8 @@
-
 import { X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import AnimatedImage from './AnimatedImage';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetClose } from '@/components/ui/sheet';
 import { useIsMobile } from '@/hooks/use-mobile';
-import { Dialog, DialogContent } from "@/components/ui/dialog";
 
 const categorySubcategories = {
   'Fruit & Veg': ['Apples', 'Bananas', 'Berries', 'Citrus', 'Tropical Fruits', 'Salad & Leafy Greens', 'Root Vegetables', 'Herbs'],
@@ -83,12 +81,11 @@ const CategoryOverlay = ({ isOpen, onClose, category, position }: CategoryOverla
   const renderContent = () => (
     <div className="relative">
       <div className={cn("py-6 px-6", isMobile && "relative")}>
-        <div className={cn(!isMobile && "hidden")}>
+        {isMobile ? (
           <SheetHeader className="pb-2">
             <SheetTitle className="text-xl">{category}</SheetTitle>
           </SheetHeader>
-        </div>
-        {!isMobile && (
+        ) : (
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-xl font-medium">All in {category}</h2>
             <button 
