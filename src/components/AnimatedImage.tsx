@@ -7,9 +7,16 @@ interface AnimatedImageProps {
   alt: string;
   className?: string;
   aspectRatio?: string;
+  objectFit?: "contain" | "cover" | "fill" | "none" | "scale-down";
 }
 
-const AnimatedImage = ({ src, alt, className, aspectRatio = "aspect-square" }: AnimatedImageProps) => {
+const AnimatedImage = ({ 
+  src, 
+  alt, 
+  className, 
+  aspectRatio = "aspect-square",
+  objectFit = "contain" 
+}: AnimatedImageProps) => {
   const [isLoading, setIsLoading] = useState(true);
   const [isVisible, setIsVisible] = useState(false);
   const [hasError, setHasError] = useState(false);
@@ -47,7 +54,8 @@ const AnimatedImage = ({ src, alt, className, aspectRatio = "aspect-square" }: A
           src={src}
           alt={alt}
           className={cn(
-            "w-full h-full object-contain transition-all duration-700",
+            "w-full h-full transition-all duration-700",
+            `object-${objectFit}`,
             isVisible ? "opacity-100 scale-100" : "opacity-0 scale-105"
           )}
           onLoad={() => setIsLoading(false)}

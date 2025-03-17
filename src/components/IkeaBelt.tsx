@@ -226,6 +226,7 @@ const IkeaBelt = () => {
                     alt={item.title}
                     className="w-full"
                     aspectRatio="aspect-[3/4]"
+                    objectFit="cover"
                   />
                   <div className="absolute inset-0 bg-gradient-to-b from-black/10 to-black/70"></div>
                   <div className="absolute bottom-0 left-0 right-0 p-4 text-white">
@@ -265,6 +266,7 @@ const IkeaBelt = () => {
                   alt={product.title}
                   aspectRatio="aspect-square"
                   className="w-full rounded-lg"
+                  objectFit="cover"
                 />
                 
                 {/* Discount badge */}
