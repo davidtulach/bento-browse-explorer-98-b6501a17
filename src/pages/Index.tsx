@@ -44,7 +44,7 @@ const Index = () => {
         <CategoryBelt />
         
         {/* Pill Buttons */}
-        <div className="px-4 py-3 flex overflow-x-auto gap-2 scrollbar-hide">
+        <div className="px-4 py-3 flex overflow-x-auto gap-2 scrollbar-hide justify-center">
           {pillButtons.map((button) => (
             <button 
               key={button.id}
