@@ -1,7 +1,6 @@
-
 import { useState, useRef, useEffect } from 'react';
-import { ChevronLeft, ChevronRight, Apple, Bread, Milk, Beef, GlassWater, Snowflake, 
-  Candy, House, Wheat, Package, Egg, Droplet, CookingPot, LeafyGreen, Globe, 
+import { ChevronLeft, ChevronRight, Apple, Wheat, Milk, Beef, GlassWater, Snowflake, 
+  Candy, House, Package, Egg, Droplet, CookingPot, LeafyGreen, Globe, 
   IceCream, Dog, Baby } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import CategoryOverlay from './CategoryOverlay';
@@ -9,7 +8,7 @@ import { useIsMobile } from '@/hooks/use-mobile';
 
 const categories = [
   { id: 1, name: "Fruit & Veg", icon: Apple },
-  { id: 2, name: "Bakery", icon: Bread },  // Changed from Bed to Bread
+  { id: 2, name: "Bakery", icon: Wheat },  // Changed from Bread to Wheat
   { id: 3, name: "Dairy", icon: Milk },
   { id: 4, name: "Meat", icon: Beef },
   { id: 5, name: "Drinks", icon: GlassWater },
