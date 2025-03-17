@@ -1,4 +1,3 @@
-
 import { X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import AnimatedImage from './AnimatedImage';
@@ -30,37 +29,37 @@ const categoryBrandMessages = {
   'Fruit & Veg': {
     title: 'Fresh from Local Farms',
     description: 'Our fruits and vegetables are sourced from local farmers who share our passion for quality and sustainability.',
-    imageSrc: '/lovable-uploads/d8455960-6e56-4803-a46b-8bd6545d7225.png',
+    imageSrc: 'https://images.unsplash.com/photo-1518770660439-4636190af475',
   },
   'Bakery': {
     title: 'Freshly Baked Daily',
     description: 'Our bakery products are made fresh daily using traditional recipes and quality ingredients.',
-    imageSrc: '/lovable-uploads/411820ff-e8c7-47a1-a092-4129f27abcc8.png',
+    imageSrc: 'https://images.unsplash.com/photo-1649972904349-6e44c42644a7',
   },
   'Dairy': {
     title: 'Farm to Table',
     description: 'We work with local dairy farms to bring you the freshest milk, cheese, and other dairy products.',
-    imageSrc: '/lovable-uploads/9e582ba8-f631-4a20-9188-2d315bdec4c5.png',
+    imageSrc: 'https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d',
   },
   'Meat': {
     title: 'Sustainably Sourced',
     description: 'Our meat comes from farms committed to ethical and sustainable practices.',
-    imageSrc: '/lovable-uploads/131ceddb-225a-4fc8-bc44-e59c0b55cfc5.png',
+    imageSrc: 'https://images.unsplash.com/photo-1488590528505-98d2b5aba04b',
   },
   'Drinks': {
     title: 'Refreshment Selection',
     description: 'From sparkling waters to craft sodas, we offer a wide range of beverages for every taste.',
-    imageSrc: '/lovable-uploads/491b8d66-c78a-4c8a-8a5a-0a0d9fe8c979.png',
+    imageSrc: 'https://images.unsplash.com/photo-1461749280684-dccba630e2f6',
   },
   'Frozen': {
     title: 'Frozen at Peak Freshness',
     description: 'Our frozen products are flash-frozen at peak freshness to preserve nutrients and flavor.',
-    imageSrc: '/lovable-uploads/acc39f74-b8a9-4ff6-b556-cc9c98dd6465.png',
+    imageSrc: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158',
   },
   default: {
     title: 'Quality Products',
     description: 'We carefully select our products to ensure you get the best quality for your money.',
-    imageSrc: '/lovable-uploads/395a1055-a028-4359-9d87-650fd9c29440.png',
+    imageSrc: 'https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d',
   }
 };
 
@@ -186,4 +185,3 @@ const CategoryOverlay = ({ isOpen, onClose, category, position }: CategoryOverla
 };
 
 export default CategoryOverlay;
-
