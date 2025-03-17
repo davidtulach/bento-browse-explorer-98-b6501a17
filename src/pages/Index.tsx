@@ -12,6 +12,19 @@ import DiscountCode from '@/components/DiscountCode';
 import LottieAnimation from '@/components/LottieAnimation';
 import shoppingAnimation from '@/lottie/shopping.json';
 import ScrollDownIndicator from '@/components/ScrollDownIndicator';
+import { Haptics } from '@capacitor/haptics';
+
+// Initialize Capacitor if available
+const initializeCapacitor = async () => {
+  try {
+    // Check if running in Capacitor environment (on a device)
+    if (typeof (window as any).Capacitor !== 'undefined') {
+      console.log('Capacitor initialized');
+    }
+  } catch (error) {
+    console.error('Error initializing Capacitor:', error);
+  }
+};
 
 const pillButtons = [
   { id: 'favorites', label: 'Favorites', color: 'bg-purple-100 text-purple-700' },
@@ -28,6 +41,9 @@ const Index = () => {
   const [isAtBottom, setIsAtBottom] = useState(false);
 
   useEffect(() => {
+    // Initialize Capacitor
+    initializeCapacitor();
+    
     // Clear timer on component unmount
     return () => {
       if (scrollTimerRef.current) {

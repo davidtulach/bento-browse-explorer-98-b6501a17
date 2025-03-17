@@ -3,6 +3,8 @@ import { cn } from '@/lib/utils';
 import AnimatedImage from './AnimatedImage';
 import { Tag, ShoppingBag, Percent, Weight, Plus, Minus, Check } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { useHapticFeedback } from '@/hooks/use-haptic';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 // Weekly offers sections
 const weeklyOffers = {
@@ -124,9 +126,19 @@ const IkeaBelt = () => {
   const weeklyScrollRef = useRef<HTMLDivElement>(null);
   const productsScrollRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
+  const { triggerHaptic } = useHapticFeedback();
+  const isMobile = useIsMobile();
+  
   const [cart, setCart] = useState<Record<number, number>>({});
   const [expandedItems, setExpandedItems] = useState<Record<number, boolean>>({});
   const [expandTimers, setExpandTimers] = useState<Record<number, NodeJS.Timeout>>({});
+  
+  const [focusedWeeklyIndex, setFocusedWeeklyIndex] = useState<number | null>(0);
+  const [focusedProductIndex, setFocusedProductIndex] = useState<number | null>(0);
+  
+  const weeklyItemRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const productItemRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const lastHapticTime = useRef<number>(0);
 
   const scroll = (ref: React.RefObject<HTMLDivElement>, direction: 'left' | 'right') => {
     if (ref.current) {
@@ -197,6 +209,100 @@ const IkeaBelt = () => {
     setExpandTimers(prev => ({ ...prev, [productId]: timerId }));
   };
 
+  // Set up intersection observer for weekly offers
+  useEffect(() => {
+    if (!isMobile || !weeklyScrollRef.current) return;
+    
+    const options = {
+      root: null,
+      rootMargin: '0px',
+      threshold: 0.7,
+    };
+    
+    const handleIntersection = (entries: IntersectionObserverEntry[]) => {
+      // Find the leftmost visible item
+      const visibleEntries = entries.filter(entry => entry.isIntersecting)
+        .sort((a, b) => {
+          const rectA = a.boundingClientRect;
+          const rectB = b.boundingClientRect;
+          return rectA.left - rectB.left;
+        });
+      
+      if (visibleEntries.length > 0) {
+        const leftmostItem = visibleEntries[0];
+        const index = Number(leftmostItem.target.getAttribute('data-index'));
+        
+        if (focusedWeeklyIndex !== index) {
+          setFocusedWeeklyIndex(index);
+          
+          // Trigger haptic feedback with throttling
+          const now = Date.now();
+          if (now - lastHapticTime.current > 150) {
+            triggerHaptic();
+            lastHapticTime.current = now;
+          }
+        }
+      }
+    };
+    
+    const observer = new IntersectionObserver(handleIntersection, options);
+    
+    weeklyItemRefs.current.forEach(item => {
+      if (item) observer.observe(item);
+    });
+    
+    return () => {
+      observer.disconnect();
+    };
+  }, [isMobile, focusedWeeklyIndex, triggerHaptic]);
+
+  // Set up intersection observer for products
+  useEffect(() => {
+    if (!isMobile || !productsScrollRef.current) return;
+    
+    const options = {
+      root: null,
+      rootMargin: '0px',
+      threshold: 0.7,
+    };
+    
+    const handleIntersection = (entries: IntersectionObserverEntry[]) => {
+      // Find the leftmost visible item
+      const visibleEntries = entries.filter(entry => entry.isIntersecting)
+        .sort((a, b) => {
+          const rectA = a.boundingClientRect;
+          const rectB = b.boundingClientRect;
+          return rectA.left - rectB.left;
+        });
+      
+      if (visibleEntries.length > 0) {
+        const leftmostItem = visibleEntries[0];
+        const index = Number(leftmostItem.target.getAttribute('data-index'));
+        
+        if (focusedProductIndex !== index) {
+          setFocusedProductIndex(index);
+          
+          // Trigger haptic feedback with throttling
+          const now = Date.now();
+          if (now - lastHapticTime.current > 150) {
+            triggerHaptic();
+            lastHapticTime.current = now;
+          }
+        }
+      }
+    };
+    
+    const observer = new IntersectionObserver(handleIntersection, options);
+    
+    productItemRefs.current.forEach(item => {
+      if (item) observer.observe(item);
+    });
+    
+    return () => {
+      observer.disconnect();
+    };
+  }, [isMobile, focusedProductIndex, triggerHaptic]);
+
   // Clear all timers on component unmount
   useEffect(() => {
     return () => {
@@ -218,10 +324,15 @@ const IkeaBelt = () => {
             className="flex flex-nowrap overflow-x-auto snap-x snap-mandatory gap-4 pb-4 scrollbar-hide"
             style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
           >
-            {weeklyOffers.items.map((item) => (
+            {weeklyOffers.items.map((item, index) => (
               <div
                 key={item.id}
-                className="flex-shrink-0 snap-start overflow-hidden shadow-sm hover-scale w-[300px] md:w-[calc(33.333%-16px)] lg:w-[calc(25%-16px)]"
+                ref={el => weeklyItemRefs.current[index] = el}
+                data-index={index}
+                className={cn(
+                  "flex-shrink-0 snap-start overflow-hidden shadow-sm w-[300px] md:w-[calc(33.333%-16px)] lg:w-[calc(25%-16px)] transition-all duration-200",
+                  focusedWeeklyIndex === index && "scale-105 shadow-md" 
+                )}
               >
                 <div className="relative">
                   <AnimatedImage
@@ -232,7 +343,10 @@ const IkeaBelt = () => {
                     aspectRatio="aspect-[3/4]"
                     objectFit="cover"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-b from-black/10 to-black/70"></div>
+                  <div className={cn(
+                    "absolute inset-0 bg-gradient-to-b from-black/10 to-black/70 transition-opacity duration-200",
+                    focusedWeeklyIndex === index ? "opacity-90" : "opacity-100"
+                  )}></div>
                   <div className="absolute bottom-0 left-0 right-0 p-4 text-white">
                     <h3 className="font-medium text-lg">{item.title}</h3>
                     {item.description && (
@@ -258,10 +372,16 @@ const IkeaBelt = () => {
           className="flex gap-3 px-4 pb-2 overflow-x-auto scrollbar-hide"
           style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
         >
-          {discountedProducts.items.map((product) => (
+          {discountedProducts.items.map((product, index) => (
             <div
               key={product.id}
-              className="flex-shrink-0 snap-start overflow-hidden transition-all"
+              ref={el => productItemRefs.current[index] = el}
+              data-index={index}
+              className={cn(
+                "flex-shrink-0 snap-start overflow-hidden transition-all",
+                focusedProductIndex === index && "scale-105 shadow-md rounded-lg",
+                "style-width-150px"
+              )}
               style={{ width: '150px' }}
             >
               <div className="relative">
@@ -269,7 +389,10 @@ const IkeaBelt = () => {
                   src={product.image}
                   alt={product.title}
                   aspectRatio="aspect-square"
-                  className="w-full rounded-lg"
+                  className={cn(
+                    "w-full rounded-lg",
+                    focusedProductIndex === index && "border-2 border-primary/20"
+                  )}
                   objectFit="cover"
                 />
                 
