@@ -19,9 +19,10 @@ declare global {
 
 interface ScrollDownIndicatorProps {
   show: boolean;
+  onClick?: () => void;
 }
 
-const ScrollDownIndicator = ({ show }: ScrollDownIndicatorProps) => {
+const ScrollDownIndicator = ({ show, onClick }: ScrollDownIndicatorProps) => {
   const [isVisible, setIsVisible] = useState(show);
   const playerRef = useRef<HTMLElement | null>(null);
 
@@ -60,6 +61,7 @@ const ScrollDownIndicator = ({ show }: ScrollDownIndicatorProps) => {
       className={`fixed bottom-10 left-1/2 -translate-x-1/2 z-50 flex flex-col items-center transition-all duration-300 ${
         show ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
       }`}
+      onClick={onClick}
     >
       {/* Removed the background circle, now just rendering the player directly */}
       <dotlottie-player 
@@ -70,7 +72,7 @@ const ScrollDownIndicator = ({ show }: ScrollDownIndicatorProps) => {
         loop 
         autoplay
       ></dotlottie-player>
-      <p className="text-xs bg-white/80 backdrop-blur-sm px-3 py-1 rounded-full text-purple-600 font-semibold shadow-sm">
+      <p className="text-xs bg-white/80 backdrop-blur-sm px-3 py-1 rounded-full text-purple-600 font-semibold shadow-sm cursor-pointer">
         Scroll to explore
       </p>
     </div>

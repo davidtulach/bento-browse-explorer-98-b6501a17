@@ -63,6 +63,22 @@ const Index = () => {
     }
   };
 
+  const handleIndicatorClick = () => {
+    // Hide the indicator when clicked
+    setShowScrollIndicator(false);
+    
+    // Clear any existing timers
+    if (scrollTimerRef.current) {
+      clearTimeout(scrollTimerRef.current);
+    }
+    
+    // Set a new timer to show the indicator again after 60 seconds
+    scrollTimerRef.current = window.setTimeout(() => {
+      setShowScrollIndicator(true);
+      scrollTimerRef.current = null;
+    }, 60000); // 60 seconds
+  };
+
   return (
     <div 
       className="min-h-screen bg-gray-50 flex flex-col overflow-auto"
@@ -126,7 +142,10 @@ const Index = () => {
       </main>
       
       {/* Scroll Down Indicator */}
-      <ScrollDownIndicator show={showScrollIndicator} />
+      <ScrollDownIndicator 
+        show={showScrollIndicator} 
+        onClick={handleIndicatorClick}
+      />
     </div>
   );
 };
