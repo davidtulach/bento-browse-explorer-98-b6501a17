@@ -23,6 +23,8 @@ const Index = () => {
   const [scrollPosition, setScrollPosition] = useState(0);
   const [showScrollIndicator, setShowScrollIndicator] = useState(true);
   const scrollTimerRef = useRef<number | null>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [isAtBottom, setIsAtBottom] = useState(false);
 
   useEffect(() => {
     // Clear timer on component unmount
@@ -34,8 +36,18 @@ const Index = () => {
   }, []);
 
   const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
-    const position = e.currentTarget.scrollTop;
+    const container = e.currentTarget;
+    const position = container.scrollTop;
     setScrollPosition(position);
+    
+    // Check if we're at the bottom of the page
+    const isBottom = 
+      Math.abs(
+        (container.scrollHeight - container.scrollTop) - 
+        container.clientHeight
+      ) < 5; // Small threshold for rounding errors
+    
+    setIsAtBottom(isBottom);
     
     // If at the top of the page, show the indicator
     if (position === 0) {
@@ -57,7 +69,10 @@ const Index = () => {
       
       // Set timer to show indicator again after 30 seconds (30000ms)
       scrollTimerRef.current = window.setTimeout(() => {
-        setShowScrollIndicator(true);
+        // Only show if we're not at the bottom
+        if (!isAtBottom) {
+          setShowScrollIndicator(true);
+        }
         scrollTimerRef.current = null;
       }, 30000);
     }
@@ -74,7 +89,10 @@ const Index = () => {
     
     // Set a new timer to show the indicator again after 60 seconds
     scrollTimerRef.current = window.setTimeout(() => {
-      setShowScrollIndicator(true);
+      // Only show if we're not at the bottom
+      if (!isAtBottom) {
+        setShowScrollIndicator(true);
+      }
       scrollTimerRef.current = null;
     }, 60000); // 60 seconds
   };
@@ -83,6 +101,7 @@ const Index = () => {
     <div 
       className="min-h-screen bg-gray-50 flex flex-col overflow-auto"
       onScroll={handleScroll}
+      ref={containerRef}
     >
       <Header />
       
@@ -141,11 +160,13 @@ const Index = () => {
         <BrandsBelt />
       </main>
       
-      {/* Scroll Down Indicator */}
-      <ScrollDownIndicator 
-        show={showScrollIndicator} 
-        onClick={handleIndicatorClick}
-      />
+      {/* Scroll Down Indicator - hide if at bottom */}
+      {!isAtBottom && (
+        <ScrollDownIndicator 
+          show={showScrollIndicator} 
+          onClick={handleIndicatorClick}
+        />
+      )}
     </div>
   );
 };

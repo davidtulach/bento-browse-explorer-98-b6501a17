@@ -72,8 +72,8 @@ const ScrollDownIndicator = ({ show, onClick }: ScrollDownIndicatorProps) => {
         loop 
         autoplay
       ></dotlottie-player>
-      <p className="text-xs bg-white/80 backdrop-blur-sm px-3 py-1 rounded-full text-purple-600 font-semibold shadow-sm cursor-pointer">
-        Scroll to explore
+      <p className="text-xs bg-white/80 backdrop-blur-sm px-3 py-1 rounded-full text-orange-500 font-semibold shadow-sm cursor-pointer">
+        We have 3 new special topics
       </p>
     </div>
   );
