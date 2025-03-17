@@ -1,3 +1,4 @@
+
 import { useRef, useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import AnimatedImage from './AnimatedImage';
@@ -208,33 +209,35 @@ const IkeaBelt = () => {
           <h2 className="text-lg font-medium">{weeklyOffers.title}</h2>
         </div>
         
-        <div
-          ref={weeklyScrollRef}
-          className="flex overflow-x-auto snap-x snap-mandatory gap-4 pb-4 scrollbar-hide pl-4"
-          style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
-        >
-          {weeklyOffers.items.map((item) => (
-            <div
-              key={item.id}
-              className="flex-shrink-0 snap-start overflow-hidden shadow-sm hover-scale w-[300px]"
-            >
-              <div className="relative">
-                <AnimatedImage
-                  src={item.image}
-                  alt={item.title}
-                  className="w-full"
-                  aspectRatio="aspect-[3/4]"
-                />
-                <div className="absolute inset-0 bg-gradient-to-b from-black/10 to-black/70"></div>
-                <div className="absolute bottom-0 left-0 right-0 p-4 text-white">
-                  <h3 className="font-medium text-lg">{item.title}</h3>
-                  {item.description && (
-                    <p className="text-sm text-white/90 mt-1">{item.description}</p>
-                  )}
+        <div className="relative px-4">
+          <div
+            ref={weeklyScrollRef}
+            className="flex flex-nowrap overflow-x-auto snap-x snap-mandatory gap-4 pb-4 scrollbar-hide"
+            style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+          >
+            {weeklyOffers.items.map((item) => (
+              <div
+                key={item.id}
+                className="flex-shrink-0 snap-start overflow-hidden shadow-sm hover-scale w-[300px] md:w-[calc(33.333%-16px)] lg:w-[calc(25%-16px)]"
+              >
+                <div className="relative">
+                  <AnimatedImage
+                    src={item.image}
+                    alt={item.title}
+                    className="w-full"
+                    aspectRatio="aspect-[3/4]"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-b from-black/10 to-black/70"></div>
+                  <div className="absolute bottom-0 left-0 right-0 p-4 text-white">
+                    <h3 className="font-medium text-lg">{item.title}</h3>
+                    {item.description && (
+                      <p className="text-sm text-white/90 mt-1">{item.description}</p>
+                    )}
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </div>
 
