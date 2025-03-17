@@ -8,6 +8,8 @@ import CategoryBelt from '@/components/CategoryBelt';
 import PinterestGrid from '@/components/PinterestGrid';
 import IkeaBelt from '@/components/IkeaBelt';
 import BrandsBelt from '@/components/BrandsBelt';
+import LottieAnimation from '@/components/LottieAnimation';
+import shoppingAnimation from '@/lottie/shopping.json';
 
 const pillButtons = [
   { id: 'favorites', label: 'Favorites', color: 'bg-purple-100 text-purple-700' },
@@ -56,13 +58,28 @@ const Index = () => {
           <div className="h-[1px] bg-gradient-to-r from-transparent via-gray-200 to-transparent" />
         </div>
         
-        <IkeaBelt />
+        {/* Lottie Animation */}
+        <div className="flex justify-center items-center py-4 mb-2">
+          <div className="w-20 h-20 md:w-24 md:h-24">
+            <LottieAnimation 
+              animationData={shoppingAnimation} 
+              loop={true}
+              autoplay={true}
+            />
+          </div>
+          <div className="ml-4">
+            <h3 className="text-lg font-medium text-gray-800">Shopping Made Fun</h3>
+            <p className="text-sm text-gray-500">Discover amazing deals today!</p>
+          </div>
+        </div>
+        
+        <PinterestGrid />
         
         <div className="py-2">
           <div className="h-[1px] bg-gradient-to-r from-transparent via-gray-200 to-transparent" />
         </div>
         
-        <PinterestGrid />
+        <IkeaBelt />
         
         <div className="py-2">
           <div className="h-[1px] bg-gradient-to-r from-transparent via-gray-200 to-transparent" />
