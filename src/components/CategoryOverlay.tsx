@@ -90,12 +90,12 @@ const CategoryOverlay = ({ isOpen, onClose, category }: CategoryOverlayProps) =>
           </SheetHeader>
           
           <div className="flex flex-col md:flex-row">
-            {/* Subcategories with updated height for web view */}
+            {/* Subcategories with reduced height */}
             <div className="flex-grow grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 mb-6 md:mb-0 md:mr-6">
               {subcategories.map((subcat, index) => (
                 <button 
                   key={index}
-                  className="py-2 px-3 bg-gray-100 rounded-lg text-sm font-medium hover:bg-gray-200 transition-colors text-center"
+                  className="h-10 px-3 flex items-center justify-center bg-gray-100 rounded-lg text-sm font-medium hover:bg-gray-200 transition-colors"
                 >
                   {subcat}
                 </button>
