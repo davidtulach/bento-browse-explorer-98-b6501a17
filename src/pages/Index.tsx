@@ -8,6 +8,7 @@ import CategoryBelt from '@/components/CategoryBelt';
 import PinterestGrid from '@/components/PinterestGrid';
 import IkeaBelt from '@/components/IkeaBelt';
 import BrandsBelt from '@/components/BrandsBelt';
+import DiscountCode from '@/components/DiscountCode';
 import LottieAnimation from '@/components/LottieAnimation';
 import shoppingAnimation from '@/lottie/shopping.json';
 import ScrollDownIndicator from '@/components/ScrollDownIndicator';
@@ -158,6 +159,16 @@ const Index = () => {
         </div>
         
         <BrandsBelt />
+        
+        <div className="py-2">
+          <div className="h-[1px] bg-gradient-to-r from-transparent via-gray-200 to-transparent" />
+        </div>
+        
+        {/* Discount Code Section */}
+        <DiscountCode 
+          code="XHAU8254" 
+          description="Your unique discount code for free delivery:" 
+        />
       </main>
       
       {/* Scroll Down Indicator - hide if at bottom */}
