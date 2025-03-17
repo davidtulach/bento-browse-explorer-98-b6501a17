@@ -30,14 +30,16 @@ const ScrollDownIndicator = ({ show }: ScrollDownIndicatorProps) => {
         show ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
       }`}
     >
-      <div className="w-16 h-16 mb-2">
+      <div className="w-16 h-16 mb-2 bg-white/80 backdrop-blur-sm rounded-full p-2 shadow-md">
         <LottieAnimation 
           animationData={scrollDownAnimation}
           loop={true}
           autoplay={true}
         />
       </div>
-      <p className="text-xs text-gray-500 font-medium">Scroll to explore</p>
+      <p className="text-xs bg-white/80 backdrop-blur-sm px-3 py-1 rounded-full text-red-600 font-medium shadow-sm">
+        Scroll to explore
+      </p>
     </div>
   );
 };
