@@ -34,12 +34,8 @@ const Index = () => {
       <main className="flex-1 pb-20">
         <SearchBar />
         
-        <div className={cn(
-          "transition-opacity duration-500",
-          scrollPosition > 200 ? "opacity-0 pointer-events-none h-0 overflow-hidden" : "opacity-100"
-        )}>
-          <StoryScroller />
-        </div>
+        {/* StoryScroller now manages its own visibility based on screen size */}
+        <StoryScroller />
         
         <CategoryBelt />
         

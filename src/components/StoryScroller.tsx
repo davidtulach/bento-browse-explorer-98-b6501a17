@@ -3,6 +3,7 @@ import { useRef } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import AnimatedImage from './AnimatedImage';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 const stories = [
   { id: 1, title: "Breakfast", image: "https://images.unsplash.com/photo-1525351484163-7529414344d8?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&h=200&q=80" },
@@ -17,6 +18,12 @@ const stories = [
 
 const StoryScroller = () => {
   const scrollRef = useRef<HTMLDivElement>(null);
+  const isMobile = useIsMobile();
+
+  // Only render on mobile devices
+  if (!isMobile) {
+    return null;
+  }
 
   const scroll = (direction: 'left' | 'right') => {
     if (scrollRef.current) {
