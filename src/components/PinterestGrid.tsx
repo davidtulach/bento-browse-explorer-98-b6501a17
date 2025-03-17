@@ -11,7 +11,7 @@ const items = [
   },
   {
     id: 2,
-    title: "Premium Imported Cheese",
+    title: "Discover Premium",
     image: "/lovable-uploads/0ccbc4e9-e89f-461b-ab5e-ff37120e43a9.png",
     tag: "Premium",
   },
@@ -23,33 +23,33 @@ const items = [
   },
   {
     id: 4,
-    title: "Discover Premium",
-    image: "https://images.unsplash.com/photo-1490914327627-9fe8d52f4d90?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&h=750&q=80",
+    title: "Freshly Picked Near You",
+    image: "/lovable-uploads/00d23097-6ec0-4918-b036-136735c6e583.png",
     tag: "Premium",
   },
   {
     id: 5,
     title: "Shopping Lists",
-    image: "/lovable-uploads/395a1055-a028-4359-9d87-650fd9c29440.png",
+    image: "/lovable-uploads/d6ee2bf5-680d-4701-afbf-6a284aa69456.png",
     tag: "New",
   },
   {
     id: 6,
-    title: "Fresh Seafood Selection",
-    image: "https://images.unsplash.com/photo-1615141982883-c7ad0e69fd62?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&h=600&q=80",
+    title: "Fresh Farm Poultry",
+    image: "/lovable-uploads/f740b72a-5c5c-4364-b827-45c0751320fa.png",
     tag: "New",
   },
   {
     id: 7,
-    title: "Premium Coffee Beans",
+    title: "Your Banking ad",
     image: "https://images.unsplash.com/photo-1559589689-577aabd1db4f?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&h=600&q=80",
     tag: "Ad",
     sponsor: "Costa Coffee"
   },
   {
     id: 8,
-    title: "Eco-friendly Cleaning Products",
-    image: "https://images.unsplash.com/photo-1592861956120-e524fc739696?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&h=700&q=80",
+    title: "Why Shop With Us",
+    image: "/lovable-uploads/a4bc5c29-be18-4a8a-8a4c-083acf9b661c.png",
     tag: "Ad",
     sponsor: "Eco Clean"
   },
