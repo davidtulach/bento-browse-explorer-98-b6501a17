@@ -19,13 +19,13 @@ const items = [
   {
     id: 3,
     title: "Weekend Discount: Fresh Bread",
-    image: "https://images.unsplash.com/photo-1608198093002-ad4e005484ec?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&h=600&q=80",
+    image: "/lovable-uploads/d6fe3ce3-ccf0-4750-92b2-78904cbdd8a1.png", // Updated bread image
     tag: "Discount",
   },
   {
     id: 4,
     title: "Freshly Picked Near You",
-    image: "/lovable-uploads/00d23097-6ec0-4918-b036-136735c6e583.png",
+    image: "/lovable-uploads/2ebf8da3-5721-4b76-9570-3586cad057cc.png", // Updated veggies image
     tag: "Premium",
   },
   {
@@ -37,7 +37,7 @@ const items = [
   {
     id: 6,
     title: "Fresh Farm Poultry",
-    image: "/lovable-uploads/f740b72a-5c5c-4364-b827-45c0751320fa.png",
+    image: "/lovable-uploads/d95bfd46-5d77-465d-b281-41e43d4b6d4b.png", // Updated poultry image
     tag: "New",
   },
   {
