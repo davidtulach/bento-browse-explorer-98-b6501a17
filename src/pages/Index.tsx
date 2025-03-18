@@ -10,6 +10,7 @@ import IkeaBelt from '@/components/IkeaBelt';
 import BrandsBelt from '@/components/BrandsBelt';
 import DiscountCode from '@/components/DiscountCode';
 import ScrollDownIndicator from '@/components/ScrollDownIndicator';
+import DotLottiePlayer from '@/components/DotLottiePlayer';
 import { Haptics } from '@capacitor/haptics';
 import { Toaster } from '@/components/ui/toaster';
 
@@ -140,6 +141,16 @@ const Index = () => {
               {button.label}
             </button>
           ))}
+        </div>
+        
+        {/* New Lottie Animation */}
+        <div className="flex justify-center py-4">
+          <DotLottiePlayer 
+            src="https://lottie.host/6ef8a2c9-5c28-4f6d-9667-44f4edcf14d4/eZdNiHrJg2.lottie" 
+            autoplay 
+            loop 
+            className="w-[300px] h-[300px]" 
+          />
         </div>
         
         <div className="py-2">
