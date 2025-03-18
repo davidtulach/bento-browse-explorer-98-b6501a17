@@ -29,6 +29,7 @@ const AnimatedImage = ({
   useEffect(() => {
     setIsLoading(true);
     setHasError(false);
+    setIsVisible(false);
     setCurrentSrc(src);
     
     const img = new Image();
@@ -60,6 +61,11 @@ const AnimatedImage = ({
         console.error(`Failed to load image: ${src}`);
       }
     };
+
+    return () => {
+      img.onload = null;
+      img.onerror = null;
+    };
   }, [src, fallbackSrc]);
 
   return (
@@ -86,7 +92,10 @@ const AnimatedImage = ({
             `object-${objectFit}`,
             isVisible ? "opacity-100 scale-100" : "opacity-0 scale-105"
           )}
-          onLoad={() => setIsLoading(false)}
+          onLoad={() => {
+            setIsLoading(false);
+            setTimeout(() => setIsVisible(true), 100);
+          }}
           onError={() => {
             // This handles any potential errors with the currently displayed image
             if (currentSrc === fallbackSrc || !fallbackSrc) {
