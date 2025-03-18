@@ -1,3 +1,4 @@
+
 import { useState, useEffect, useRef } from 'react';
 import { cn } from '@/lib/utils';
 import Header from '@/components/Header';
@@ -10,6 +11,7 @@ import BrandsBelt from '@/components/BrandsBelt';
 import DiscountCode from '@/components/DiscountCode';
 import ScrollDownIndicator from '@/components/ScrollDownIndicator';
 import { Haptics } from '@capacitor/haptics';
+import { Toaster } from '@/components/ui/toaster';
 
 // Initialize Capacitor if available
 const initializeCapacitor = async () => {
@@ -177,6 +179,9 @@ const Index = () => {
           onClick={handleIndicatorClick}
         />
       )}
+
+      {/* Toast notifications */}
+      <Toaster />
     </div>
   );
 };

@@ -2,7 +2,7 @@
 import { useRef, useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import AnimatedImage from './AnimatedImage';
-import { Tag, ShoppingBag, Percent, Weight, Plus, Minus, Check, ListTodo } from 'lucide-react';
+import { Tag, ShoppingBag, Percent, Weight, Plus, Minus, Check, ListTodo, Sparkles } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { useHapticFeedback } from '@/hooks/use-haptic';
 import { useIsMobile } from '@/hooks/use-mobile';
@@ -138,6 +138,8 @@ const IkeaBelt = () => {
   const [cart, setCart] = useState<Record<number, number>>({});
   const [expandedItems, setExpandedItems] = useState<Record<number, boolean>>({});
   const [expandTimers, setExpandTimers] = useState<Record<number, NodeJS.Timeout>>({});
+  const [glowingItems, setGlowingItems] = useState<Record<number, boolean>>({});
+  const [glowTimers, setGlowTimers] = useState<Record<number, NodeJS.Timeout>>({});
   
   const [focusedWeeklyIndex, setFocusedWeeklyIndex] = useState<number | null>(0);
   const [focusedProductIndex, setFocusedProductIndex] = useState<number | null>(0);
@@ -166,7 +168,28 @@ const IkeaBelt = () => {
       
       return { ...prev, [productId]: newCount };
     });
+    
+    // Trigger glow animation
+    triggerGlowAnimation(productId);
+    
     expandCartControl(productId);
+  };
+  
+  const triggerGlowAnimation = (productId: number) => {
+    // Clear any existing timer for this product
+    if (glowTimers[productId]) {
+      clearTimeout(glowTimers[productId]);
+    }
+    
+    // Set the glowing state
+    setGlowingItems(prev => ({ ...prev, [productId]: true }));
+    
+    // Set a timer to remove the glow after 700ms
+    const timerId = setTimeout(() => {
+      setGlowingItems(prev => ({ ...prev, [productId]: false }));
+    }, 700);
+    
+    setGlowTimers(prev => ({ ...prev, [productId]: timerId }));
   };
 
   const handleRemoveFromCart = (productId: number, productTitle: string) => {
@@ -313,8 +336,9 @@ const IkeaBelt = () => {
   useEffect(() => {
     return () => {
       Object.values(expandTimers).forEach(timer => clearTimeout(timer));
+      Object.values(glowTimers).forEach(timer => clearTimeout(timer));
     };
-  }, [expandTimers]);
+  }, [expandTimers, glowTimers]);
 
   return (
     <div className="py-4">
@@ -393,20 +417,31 @@ const IkeaBelt = () => {
               ref={el => productItemRefs.current[index] = el}
               data-index={index}
               className={cn(
-                "flex-shrink-0 snap-start overflow-hidden transition-all",
+                "flex-shrink-0 snap-start overflow-hidden transition-all relative",
                 focusedProductIndex === index && "scale-105 shadow-md rounded-lg",
                 "style-width-150px"
               )}
               style={{ width: '150px' }}
             >
+              {/* Glow effect overlay */}
+              {glowingItems[product.id] && (
+                <div className="absolute inset-0 z-10 pointer-events-none">
+                  <div className="absolute inset-0 animate-pulse bg-primary/10 rounded-lg"></div>
+                  <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 animate-fade-in">
+                    <Sparkles className="w-12 h-12 text-primary/70 animate-scale-in" />
+                  </div>
+                </div>
+              )}
+              
               <div className="relative">
                 <AnimatedImage
                   src={product.image}
                   alt={product.title}
                   aspectRatio="aspect-square"
                   className={cn(
-                    "w-full rounded-lg",
-                    focusedProductIndex === index && "border-2 border-primary/20"
+                    "w-full rounded-lg transition-all duration-300",
+                    focusedProductIndex === index && "border-2 border-primary/20",
+                    glowingItems[product.id] && "ring-4 ring-primary/30 ring-offset-2 ring-offset-background/10"
                   )}
                   objectFit="cover"
                 />
@@ -448,7 +483,8 @@ const IkeaBelt = () => {
                         "flex items-center justify-center bg-primary text-white rounded-full transition-all duration-300 ease-in-out transform",
                         expandedItems[product.id] 
                           ? "w-[80px] h-8 scale-100" 
-                          : "w-8 h-8 scale-95"
+                          : "w-8 h-8 scale-95",
+                        glowingItems[product.id] && "shadow-[0_0_15px_rgba(22,163,74,0.5)]"
                       )}
                     >
                       {expandedItems[product.id] ? (
@@ -481,7 +517,10 @@ const IkeaBelt = () => {
                     </div>
                   ) : (
                     <button 
-                      className="w-8 h-8 flex items-center justify-center bg-primary text-white rounded-full hover:bg-primary/90 transition-all duration-200 transform hover:scale-110"
+                      className={cn(
+                        "w-8 h-8 flex items-center justify-center bg-primary text-white rounded-full hover:bg-primary/90 transition-all duration-200 transform hover:scale-110",
+                        glowingItems[product.id] && "shadow-[0_0_15px_rgba(22,163,74,0.5)]"
+                      )}
                       onClick={() => handleAddToCart(product.id, product.title)}
                       aria-label="Add to cart"
                     >
