@@ -44,7 +44,10 @@ const CategoryContent: React.FC<CategoryContentProps> = ({ category, onClose, is
               className="text-sm font-bold hover:underline col-span-2 mb-2 flex items-center group"
             >
               <span className="mr-1">Browse all from {category}</span>
-              <ChevronRight className="h-4 w-4 opacity-0 -translate-x-2 transition-all group-hover:opacity-100 group-hover:translate-x-0" />
+              <ChevronRight className={cn(
+                "h-4 w-4 transition-all",
+                isMobile ? "opacity-70" : "opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0"
+              )} />
             </a>
             
             {subcategories.map((subcat, index) => (
@@ -54,7 +57,10 @@ const CategoryContent: React.FC<CategoryContentProps> = ({ category, onClose, is
                 className="text-sm hover:underline py-1 flex items-center justify-between group"
               >
                 <span>{subcat}</span>
-                <ChevronRight className="h-4 w-4 opacity-0 -translate-x-2 transition-all group-hover:opacity-100 group-hover:translate-x-0 text-primary" />
+                <ChevronRight className={cn(
+                  "h-4 w-4 text-primary transition-all",
+                  isMobile ? "opacity-70" : "opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0"
+                )} />
               </a>
             ))}
           </div>
@@ -75,7 +81,10 @@ const CategoryContent: React.FC<CategoryContentProps> = ({ category, onClose, is
                 <p className="text-sm text-gray-600 mb-2">{brandMessage.description}</p>
                 <button className="text-sm font-medium text-primary underline flex items-center group">
                   <span>Read more</span>
-                  <ChevronRight className="h-4 w-4 ml-1 opacity-70 -translate-x-1 transition-all group-hover:opacity-100 group-hover:translate-x-0" />
+                  <ChevronRight className={cn(
+                    "h-4 w-4 ml-1 transition-all",
+                    isMobile ? "opacity-70" : "opacity-70 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0"
+                  )} />
                 </button>
               </div>
             </div>
