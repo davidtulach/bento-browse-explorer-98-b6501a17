@@ -8,6 +8,7 @@ import { useIsMobile } from '@/hooks/use-mobile';
 import { Badge } from '@/components/ui/badge';
 import DotLottiePlayer from './DotLottiePlayer';
 
+// Weekly offers sections
 const weeklyOffers = {
   id: 1,
   title: "Weekly Topics",
@@ -47,6 +48,7 @@ const weeklyOffers = {
   ]
 };
 
+// Discounted products data
 const discountedProducts = {
   id: 2,
   title: "Price Hits",
@@ -160,6 +162,7 @@ const IkeaBelt = () => {
     setCart(prev => {
       const newCount = (prev[productId] || 0) + 1;
       
+      // Show toast notification
       toast({
         title: "Added to cart",
         description: `${productTitle} (${newCount} ${newCount === 1 ? 'pc' : 'pcs'})`,
@@ -169,18 +172,22 @@ const IkeaBelt = () => {
       return { ...prev, [productId]: newCount };
     });
     
+    // Trigger animation on the button only
     triggerButtonAnimation(productId);
     
     expandCartControl(productId);
   };
   
   const triggerButtonAnimation = (productId: number) => {
+    // Clear any existing timer for this product
     if (buttonAnimationTimers.current[productId]) {
       clearTimeout(buttonAnimationTimers.current[productId]);
     }
     
+    // Set the animation state for the button
     setButtonAnimations(prev => ({ ...prev, [productId]: true }));
     
+    // Set a timer to remove the animation after the animation duration (1.5s)
     buttonAnimationTimers.current[productId] = setTimeout(() => {
       setButtonAnimations(prev => ({ ...prev, [productId]: false }));
     }, 1500);
@@ -193,6 +200,7 @@ const IkeaBelt = () => {
         const newCart = { ...prev };
         delete newCart[productId];
         
+        // Show toast notification for removal
         toast({
           title: "Removed from cart",
           description: `${productTitle}`,
@@ -202,6 +210,7 @@ const IkeaBelt = () => {
         return newCart;
       }
       
+      // Show toast notification for quantity reduction
       toast({
         title: "Updated cart",
         description: `${productTitle} (${currentCount - 1} ${currentCount - 1 === 1 ? 'pc' : 'pcs'})`,
@@ -214,12 +223,15 @@ const IkeaBelt = () => {
   };
 
   const expandCartControl = (productId: number) => {
+    // Clear any existing timer for this product
     if (expandTimers[productId]) {
       clearTimeout(expandTimers[productId]);
     }
     
+    // Expand the control
     setExpandedItems(prev => ({ ...prev, [productId]: true }));
     
+    // Set a new timer to collapse it after 3 seconds
     const timerId = setTimeout(() => {
       setExpandedItems(prev => ({ ...prev, [productId]: false }));
     }, 3000);
@@ -227,6 +239,7 @@ const IkeaBelt = () => {
     setExpandTimers(prev => ({ ...prev, [productId]: timerId }));
   };
 
+  // Set up intersection observer for weekly offers
   useEffect(() => {
     if (!isMobile || !weeklyScrollRef.current) return;
     
@@ -237,6 +250,7 @@ const IkeaBelt = () => {
     };
     
     const handleIntersection = (entries: IntersectionObserverEntry[]) => {
+      // Find the leftmost visible item
       const visibleEntries = entries.filter(entry => entry.isIntersecting)
         .sort((a, b) => {
           const rectA = a.boundingClientRect;
@@ -251,6 +265,7 @@ const IkeaBelt = () => {
         if (focusedWeeklyIndex !== index) {
           setFocusedWeeklyIndex(index);
           
+          // Trigger haptic feedback with throttling
           const now = Date.now();
           if (now - lastHapticTime.current > 150) {
             triggerHaptic();
@@ -271,6 +286,7 @@ const IkeaBelt = () => {
     };
   }, [isMobile, focusedWeeklyIndex, triggerHaptic]);
 
+  // Set up intersection observer for products
   useEffect(() => {
     if (!isMobile || !productsScrollRef.current) return;
     
@@ -281,6 +297,7 @@ const IkeaBelt = () => {
     };
     
     const handleIntersection = (entries: IntersectionObserverEntry[]) => {
+      // Find the leftmost visible item
       const visibleEntries = entries.filter(entry => entry.isIntersecting)
         .sort((a, b) => {
           const rectA = a.boundingClientRect;
@@ -295,6 +312,7 @@ const IkeaBelt = () => {
         if (focusedProductIndex !== index) {
           setFocusedProductIndex(index);
           
+          // Trigger haptic feedback with throttling
           const now = Date.now();
           if (now - lastHapticTime.current > 150) {
             triggerHaptic();
@@ -315,6 +333,7 @@ const IkeaBelt = () => {
     };
   }, [isMobile, focusedProductIndex, triggerHaptic]);
 
+  // Clear all timers on component unmount
   useEffect(() => {
     return () => {
       Object.values(expandTimers).forEach(timer => clearTimeout(timer));
@@ -325,6 +344,7 @@ const IkeaBelt = () => {
 
   return (
     <div className="py-4">
+      {/* Weekly Topics section - larger panels */}
       <div className="mb-10">
         <div className="px-4 mb-3">
           <h2 className="text-lg font-medium">{weeklyOffers.title}</h2>
@@ -355,6 +375,7 @@ const IkeaBelt = () => {
                     aspectRatio="aspect-[3/4]"
                     objectFit="cover"
                   />
+                  {/* Shopping list badge with increased padding */}
                   {item.badge && (
                     <div className="absolute top-4 left-4 z-10">
                       <Badge variant="secondary" className="px-2 py-1 bg-white/90 text-primary shadow-sm backdrop-blur-sm flex items-center gap-1.5">
@@ -380,6 +401,7 @@ const IkeaBelt = () => {
         </div>
       </div>
 
+      {/* Discounted Products Section */}
       <div className="mb-6">
         <div className="px-4 mb-4 flex items-center gap-2">
           <Percent className="w-5 h-5 text-red-500" />
@@ -415,10 +437,12 @@ const IkeaBelt = () => {
                   objectFit="cover"
                 />
                 
+                {/* Discount badge */}
                 <div className="absolute top-1 right-1 bg-red-500 text-white text-xs font-bold px-1.5 py-0.5 rounded-md">
                   {product.discount}
                 </div>
                 
+                {/* New badge */}
                 {product.isNew && (
                   <div className="absolute top-1 left-1 bg-blue-500 text-white text-xs font-bold px-1.5 py-0.5 rounded-md">
                     New
@@ -442,11 +466,13 @@ const IkeaBelt = () => {
                 
                 <div className="text-xs text-gray-500">{product.pricePerUnit}</div>
 
+                {/* Add to cart button - with animations */}
                 <div className="absolute bottom-2 right-0">
+                  {/* Lottie animation overlay for button only */}
                   {buttonAnimations[product.id] && (
                     <div className="absolute inset-0 z-10 pointer-events-none" style={{ width: cart[product.id] ? '80px' : '32px', height: '32px' }}>
                       <DotLottiePlayer 
-                        src="https://lottie.host/35708cde-df8a-478a-833a-0478643e67be/g9t1Qm8v5J.lottie" 
+                        src="https://lottie.host/6ef8a2c9-5c28-4f6d-9667-44f4edcf14d4/eZdNiHrJg2.lottie" 
                         background="transparent" 
                         speed={1}
                         loop={false}
