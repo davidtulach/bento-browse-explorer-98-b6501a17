@@ -15,29 +15,29 @@ const weeklyOffers = {
       id: 101,
       title: "Fresh Produce Sale",
       description: "Up to 40% off on seasonal fruits and vegetables",
-      image: "/lovable-uploads/062a87c7-6e52-44cd-9aa3-91a140378e36.png",
-      fallbackSrc: "/lovable-uploads/24478780-f5e1-46bf-ab23-a561b8dbffb5.png",
+      image: "/lovable-uploads/5e135883-52db-4451-b69d-b7abc32c058d.png",
+      fallbackSrc: "/lovable-uploads/5e135883-52db-4451-b69d-b7abc32c058d.png",
     },
     {
       id: 102,
       title: "Butcher's Special",
       description: "Premium cuts at special weekend prices",
-      image: "/lovable-uploads/eff1ed76-f0f8-4a63-8523-67b31f267de6.png",
-      fallbackSrc: "/lovable-uploads/57df0949-8906-423f-8116-7248ef4503f4.png",
+      image: "/lovable-uploads/93315171-35f2-45a1-9399-e3f088c074fc.png",
+      fallbackSrc: "/lovable-uploads/93315171-35f2-45a1-9399-e3f088c074fc.png",
     },
     {
       id: 103,
       title: "Bakery Fresh",
       description: "Buy 2 get 1 free on all artisan breads",
-      image: "https://images.unsplash.com/photo-1608198093002-ad4e005484ec?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=500&q=80",
-      fallbackSrc: "https://images.unsplash.com/photo-1608198093002-ad4e005484ec?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=500&q=80",
+      image: "/lovable-uploads/449d2a80-7b69-4959-8a66-f74b63814e56.png",
+      fallbackSrc: "/lovable-uploads/449d2a80-7b69-4959-8a66-f74b63814e56.png",
     },
     {
       id: 104,
       title: "Wine & Cheese Festival",
       description: "Special pairings and tastings this weekend",
-      image: "https://images.unsplash.com/photo-1452195100486-9cc805987862?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=500&q=80",
-      fallbackSrc: "https://images.unsplash.com/photo-1452195100486-9cc805987862?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=500&q=80",
+      image: "/lovable-uploads/c2a98500-94d6-4675-9461-4de64da74d39.png",
+      fallbackSrc: "/lovable-uploads/c2a98500-94d6-4675-9461-4de64da74d39.png",
     }
   ]
 };
