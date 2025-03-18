@@ -7,6 +7,7 @@ import { useToast } from '@/hooks/use-toast';
 import { useHapticFeedback } from '@/hooks/use-haptic';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { Badge } from '@/components/ui/badge';
+import DotLottiePlayer from './DotLottiePlayer';
 
 // Weekly offers sections
 const weeklyOffers = {
@@ -184,10 +185,10 @@ const IkeaBelt = () => {
     // Set the glowing state
     setGlowingItems(prev => ({ ...prev, [productId]: true }));
     
-    // Set a timer to remove the glow after 700ms
+    // Set a timer to remove the glow after 1.5s (longer to match Lottie animation duration)
     const timerId = setTimeout(() => {
       setGlowingItems(prev => ({ ...prev, [productId]: false }));
-    }, 700);
+    }, 1500);
     
     setGlowTimers(prev => ({ ...prev, [productId]: timerId }));
   };
@@ -423,13 +424,17 @@ const IkeaBelt = () => {
               )}
               style={{ width: '150px' }}
             >
-              {/* Glow effect overlay */}
+              {/* Lottie animation overlay */}
               {glowingItems[product.id] && (
                 <div className="absolute inset-0 z-10 pointer-events-none">
-                  <div className="absolute inset-0 animate-pulse bg-primary/10 rounded-lg"></div>
-                  <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 animate-fade-in">
-                    <Sparkles className="w-12 h-12 text-primary/70 animate-scale-in" />
-                  </div>
+                  <DotLottiePlayer 
+                    src="https://lottie.host/6ef8a2c9-5c28-4f6d-9667-44f4edcf14d4/eZdNiHrJg2.lottie" 
+                    background="transparent" 
+                    speed={1}
+                    loop={false}
+                    autoplay={true}
+                    style={{ position: 'absolute', top: '-50%', left: '-50%', width: '200%', height: '200%' }}
+                  />
                 </div>
               )}
               
@@ -440,8 +445,7 @@ const IkeaBelt = () => {
                   aspectRatio="aspect-square"
                   className={cn(
                     "w-full rounded-lg transition-all duration-300",
-                    focusedProductIndex === index && "border-2 border-primary/20",
-                    glowingItems[product.id] && "ring-4 ring-primary/30 ring-offset-2 ring-offset-background/10"
+                    focusedProductIndex === index && "border-2 border-primary/20"
                   )}
                   objectFit="cover"
                 />
@@ -483,8 +487,7 @@ const IkeaBelt = () => {
                         "flex items-center justify-center bg-primary text-white rounded-full transition-all duration-300 ease-in-out transform",
                         expandedItems[product.id] 
                           ? "w-[80px] h-8 scale-100" 
-                          : "w-8 h-8 scale-95",
-                        glowingItems[product.id] && "shadow-[0_0_15px_rgba(22,163,74,0.5)]"
+                          : "w-8 h-8 scale-95"
                       )}
                     >
                       {expandedItems[product.id] ? (
@@ -517,10 +520,7 @@ const IkeaBelt = () => {
                     </div>
                   ) : (
                     <button 
-                      className={cn(
-                        "w-8 h-8 flex items-center justify-center bg-primary text-white rounded-full hover:bg-primary/90 transition-all duration-200 transform hover:scale-110",
-                        glowingItems[product.id] && "shadow-[0_0_15px_rgba(22,163,74,0.5)]"
-                      )}
+                      className="w-8 h-8 flex items-center justify-center bg-primary text-white rounded-full hover:bg-primary/90 transition-all duration-200 transform hover:scale-110"
                       onClick={() => handleAddToCart(product.id, product.title)}
                       aria-label="Add to cart"
                     >
