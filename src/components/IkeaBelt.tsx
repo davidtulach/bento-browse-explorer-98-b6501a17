@@ -1,4 +1,3 @@
-
 import { useRef, useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import AnimatedImage from './AnimatedImage';
@@ -149,6 +148,9 @@ const IkeaBelt = () => {
   const productItemRefs = useRef<(HTMLDivElement | null)[]>([]);
   const lastHapticTime = useRef<number>(0);
 
+  const [buttonAnimations, setButtonAnimations] = useState<Record<number, boolean>>({});
+  const buttonAnimationTimers = useRef<Record<number, NodeJS.Timeout>>({});
+
   const scroll = (ref: React.RefObject<HTMLDivElement>, direction: 'left' | 'right') => {
     if (ref.current) {
       const scrollAmount = direction === 'left' ? -300 : 300;
@@ -170,29 +172,27 @@ const IkeaBelt = () => {
       return { ...prev, [productId]: newCount };
     });
     
-    // Trigger glow animation
-    triggerGlowAnimation(productId);
+    // Trigger animation on the button only
+    triggerButtonAnimation(productId);
     
     expandCartControl(productId);
   };
   
-  const triggerGlowAnimation = (productId: number) => {
+  const triggerButtonAnimation = (productId: number) => {
     // Clear any existing timer for this product
-    if (glowTimers[productId]) {
-      clearTimeout(glowTimers[productId]);
+    if (buttonAnimationTimers.current[productId]) {
+      clearTimeout(buttonAnimationTimers.current[productId]);
     }
     
-    // Set the glowing state
-    setGlowingItems(prev => ({ ...prev, [productId]: true }));
+    // Set the animation state for the button
+    setButtonAnimations(prev => ({ ...prev, [productId]: true }));
     
-    // Set a timer to remove the glow after 1.5s (longer to match Lottie animation duration)
-    const timerId = setTimeout(() => {
-      setGlowingItems(prev => ({ ...prev, [productId]: false }));
+    // Set a timer to remove the animation after the animation duration (1.5s)
+    buttonAnimationTimers.current[productId] = setTimeout(() => {
+      setButtonAnimations(prev => ({ ...prev, [productId]: false }));
     }, 1500);
-    
-    setGlowTimers(prev => ({ ...prev, [productId]: timerId }));
   };
-
+  
   const handleRemoveFromCart = (productId: number, productTitle: string) => {
     setCart(prev => {
       const currentCount = prev[productId] || 0;
@@ -338,6 +338,7 @@ const IkeaBelt = () => {
     return () => {
       Object.values(expandTimers).forEach(timer => clearTimeout(timer));
       Object.values(glowTimers).forEach(timer => clearTimeout(timer));
+      Object.values(buttonAnimationTimers.current).forEach(timer => clearTimeout(timer));
     };
   }, [expandTimers, glowTimers]);
 
@@ -424,20 +425,6 @@ const IkeaBelt = () => {
               )}
               style={{ width: '150px' }}
             >
-              {/* Lottie animation overlay */}
-              {glowingItems[product.id] && (
-                <div className="absolute inset-0 z-10 pointer-events-none">
-                  <DotLottiePlayer 
-                    src="https://lottie.host/6ef8a2c9-5c28-4f6d-9667-44f4edcf14d4/eZdNiHrJg2.lottie" 
-                    background="transparent" 
-                    speed={1}
-                    loop={false}
-                    autoplay={true}
-                    style={{ position: 'absolute', top: '-50%', left: '-50%', width: '200%', height: '200%' }}
-                  />
-                </div>
-              )}
-              
               <div className="relative">
                 <AnimatedImage
                   src={product.image}
@@ -481,6 +468,20 @@ const IkeaBelt = () => {
 
                 {/* Add to cart button - with animations */}
                 <div className="absolute bottom-2 right-0">
+                  {/* Lottie animation overlay for button only */}
+                  {buttonAnimations[product.id] && (
+                    <div className="absolute inset-0 z-10 pointer-events-none" style={{ width: cart[product.id] ? '80px' : '32px', height: '32px' }}>
+                      <DotLottiePlayer 
+                        src="https://lottie.host/6ef8a2c9-5c28-4f6d-9667-44f4edcf14d4/eZdNiHrJg2.lottie" 
+                        background="transparent" 
+                        speed={1}
+                        loop={false}
+                        autoplay={true}
+                        style={{ position: 'absolute', top: '-50%', left: '-50%', width: '200%', height: '200%' }}
+                      />
+                    </div>
+                  )}
+                  
                   {cart[product.id] ? (
                     <div 
                       className={cn(
