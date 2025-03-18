@@ -1,3 +1,4 @@
+
 import React, { useRef, useState, useEffect } from 'react';
 import { 
   Circle, Square, Triangle, Diamond, Hexagon, 
@@ -239,9 +240,9 @@ const BrandsBelt = () => {
                   {brandProducts[brand.id as keyof typeof brandProducts].map((product) => (
                     <div 
                       key={product.id} 
-                      className="flex-shrink-0 w-[160px] bg-white rounded-md shadow-sm overflow-hidden border border-gray-100"
+                      className="flex-shrink-0 w-[140px] bg-white rounded-md shadow-sm overflow-hidden border border-gray-100"
                     >
-                      <div className="w-full h-32 bg-gray-100">
+                      <div className="w-full h-28 bg-gray-100">
                         <img 
                           src={product.image} 
                           alt={product.name} 
