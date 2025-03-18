@@ -29,7 +29,7 @@ const categoryBrandMessages = {
   'Fruit & Veg': {
     title: 'Fresh from Local Farms',
     description: 'Our fruits and vegetables are sourced from local farmers who share our passion for quality and sustainability.',
-    imageSrc: '/lovable-uploads/546abab4-afa9-4f81-a412-1cee66378b6b.png',
+    imageSrc: '/lovable-uploads/54d6749f-b6d1-4a00-b452-be237d542390.png',
     fallbackSrc: 'https://images.unsplash.com/photo-1610832958506-aa56368176cf',
   },
   'Bakery': {
