@@ -37,31 +37,31 @@ export const categoryBrandMessages: Record<string, BrandMessage> = {
   'Bakery': {
     title: 'Freshly Baked Daily',
     description: 'Our bakery products are made fresh daily using traditional recipes and quality ingredients.',
-    imageSrc: '/lovable-uploads/132e56cb-640b-449f-ba4e-7b0dc9b2b22f.png',
+    imageSrc: 'https://images.pexels.com/photos/31140365/pexels-photo-31140365/free-photo-of-traditional-bread-baking-in-wood-fired-oven.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
     fallbackSrc: 'https://images.unsplash.com/photo-1509440159596-0249088772ff',
   },
   'Dairy': {
     title: 'Farm to Table',
     description: 'We work with local dairy farms to bring you the freshest milk, cheese, and other dairy products.',
-    imageSrc: '/lovable-uploads/b6da379e-12f4-4e03-bea8-4239cf9a1b88.png',
+    imageSrc: 'https://images.pexels.com/photos/15835847/pexels-photo-15835847/free-photo-of-woman-milking-cow.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
     fallbackSrc: 'https://images.unsplash.com/photo-1628088062854-d1870b4553da',
   },
   'Meat': {
     title: 'Sustainably Sourced',
     description: 'Our meat comes from farms committed to ethical and sustainable practices.',
-    imageSrc: '/lovable-uploads/83c57aa5-ad25-4064-bddd-6ddd52e44f91.png',
+    imageSrc: 'https://images.pexels.com/photos/1251208/pexels-photo-1251208.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
     fallbackSrc: 'https://images.unsplash.com/photo-1607623814075-e51df1bdc82f',
   },
   'Drinks': {
     title: 'Refreshment Selection',
     description: 'From sparkling waters to craft sodas, we offer a wide range of beverages for every taste.',
-    imageSrc: 'https://images.unsplash.com/photo-1544145945-f90425340c7e',
+    imageSrc: 'https://images.pexels.com/photos/4021869/pexels-photo-4021869.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
     fallbackSrc: 'https://images.unsplash.com/photo-1544145945-f90425340c7e',
   },
   'Frozen': {
     title: 'Frozen at Peak Freshness',
     description: 'Our frozen products are flash-frozen at peak freshness to preserve nutrients and flavor.',
-    imageSrc: '/lovable-uploads/52102b56-f168-4c24-94b7-056625b16ce4.png',
+    imageSrc: 'https://images.pexels.com/photos/2067474/pexels-photo-2067474.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
     fallbackSrc: 'https://images.unsplash.com/photo-1563805042-7684c019e1cb',
   },
   'Snacks': {
