@@ -1,4 +1,3 @@
-
 import React, { useRef, useState, useEffect } from 'react';
 import { 
   Circle, Square, Triangle, Diamond, Hexagon, 
@@ -11,7 +10,6 @@ import { useIsMobile } from '@/hooks/use-mobile';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
-// Sample product data for each brand
 const brandProducts = {
   1: [
     { id: 1, name: "Organic Veggie Mix", price: "$4.99", image: "https://placehold.co/300x200/4CAF50/FFFFFF/?text=Eco+Fresh" },
@@ -125,18 +123,16 @@ const BrandsBelt = () => {
   const itemRefs = useRef<(HTMLDivElement | null)[]>([]);
   const lastHapticTime = useRef<number>(0);
   
-  // Set up intersection observer to track visible items
   useEffect(() => {
     if (!isMobile || !scrollRef.current) return;
     
     const options = {
       root: null,
       rootMargin: '0px',
-      threshold: 0.8, // Item must be 80% visible to be considered "in view"
+      threshold: 0.8,
     };
     
     const handleIntersection = (entries: IntersectionObserverEntry[]) => {
-      // Find the leftmost visible item
       const visibleEntries = entries.filter(entry => entry.isIntersecting)
         .sort((a, b) => {
           const rectA = a.boundingClientRect;
@@ -151,11 +147,9 @@ const BrandsBelt = () => {
         if (focusedItemIndex !== index) {
           setFocusedItemIndex(index);
           
-          // Update active tab
           const brandId = brandIcons[index].id.toString();
           setActiveTab(brandId);
           
-          // Trigger haptic feedback with throttling (max once per 150ms)
           const now = Date.now();
           if (now - lastHapticTime.current > 150) {
             triggerHaptic();
@@ -167,7 +161,6 @@ const BrandsBelt = () => {
     
     const observer = new IntersectionObserver(handleIntersection, options);
     
-    // Observe all brand items
     itemRefs.current.forEach(item => {
       if (item) observer.observe(item);
     });
@@ -180,14 +173,11 @@ const BrandsBelt = () => {
   const handleTabChange = (value: string) => {
     setActiveTab(value);
     
-    // Find the index of the brand with the matching id
     const index = brandIcons.findIndex(brand => brand.id.toString() === value);
     
-    // Scroll to that brand if it exists and we have a valid ref
     if (index !== -1 && scrollRef.current && itemRefs.current[index]) {
       const item = itemRefs.current[index];
       if (item) {
-        // Calculate the scroll position (center the item in the scroll container)
         const containerWidth = scrollRef.current.clientWidth;
         const itemLeft = item.offsetLeft;
         const itemWidth = item.clientWidth;
@@ -244,8 +234,8 @@ const BrandsBelt = () => {
         <div className="mt-4">
           {brandIcons.map((brand) => (
             <TabsContent key={brand.id} value={brand.id.toString()} className="mt-2">
-              <ScrollArea className="w-full">
-                <div className="flex gap-4 pb-4 scrollbar-hide overflow-x-auto">
+              <div className="w-full overflow-x-auto pb-4">
+                <div className="flex gap-4 min-w-max">
                   {brandProducts[brand.id as keyof typeof brandProducts].map((product) => (
                     <div 
                       key={product.id} 
@@ -265,7 +255,7 @@ const BrandsBelt = () => {
                     </div>
                   ))}
                 </div>
-              </ScrollArea>
+              </div>
             </TabsContent>
           ))}
         </div>
