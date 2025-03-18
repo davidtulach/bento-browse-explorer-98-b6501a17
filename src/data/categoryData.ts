@@ -31,7 +31,7 @@ export const categoryBrandMessages: Record<string, BrandMessage> = {
   'Fruit & Veg': {
     title: 'Fresh from Local Farms',
     description: 'Our fruits and vegetables are sourced from local farmers who share our passion for quality and sustainability.',
-    imageSrc: 'https://images.pexels.com/photos/7728337/pexels-photo-7728337.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+    imageSrc: 'https://images.pexels.com/photos/2817549/pexels-photo-2817549.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
     fallbackSrc: 'https://images.unsplash.com/photo-1610832958506-aa56368176cf',
   },
   'Bakery': {
