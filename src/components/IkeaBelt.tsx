@@ -1,10 +1,11 @@
 import { useRef, useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import AnimatedImage from './AnimatedImage';
-import { Tag, ShoppingBag, Percent, Weight, Plus, Minus, Check } from 'lucide-react';
+import { Tag, ShoppingBag, Percent, Weight, Plus, Minus, Check, ListTodo } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { useHapticFeedback } from '@/hooks/use-haptic';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { Badge } from '@/components/ui/badge';
 
 // Weekly offers sections
 const weeklyOffers = {
@@ -17,6 +18,10 @@ const weeklyOffers = {
       description: "Check out our shopping list for a yummy Sunday",
       image: "/lovable-uploads/cbfe3137-a8fe-47b7-b7bb-4e2fdcd931fc.png",
       fallbackSrc: "/lovable-uploads/cbfe3137-a8fe-47b7-b7bb-4e2fdcd931fc.png",
+      badge: {
+        icon: "ListTodo",
+        text: "Shopping list"
+      }
     },
     {
       id: 102,
@@ -343,6 +348,15 @@ const IkeaBelt = () => {
                     aspectRatio="aspect-[3/4]"
                     objectFit="cover"
                   />
+                  {/* Shopping list badge */}
+                  {item.badge && (
+                    <div className="absolute top-2 left-2 z-10">
+                      <Badge variant="secondary" className="px-2 py-1 bg-white/90 text-primary shadow-sm backdrop-blur-sm flex items-center gap-1.5">
+                        <ListTodo className="w-3.5 h-3.5" />
+                        <span className="text-xs font-medium">{item.badge.text}</span>
+                      </Badge>
+                    </div>
+                  )}
                   <div className={cn(
                     "absolute inset-0 bg-gradient-to-b from-black/10 to-black/70 transition-opacity duration-200",
                     focusedWeeklyIndex === index ? "opacity-90" : "opacity-100"
