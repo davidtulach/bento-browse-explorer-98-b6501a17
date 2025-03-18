@@ -1,4 +1,3 @@
-
 import { useState, useEffect, useRef } from 'react';
 import { cn } from '@/lib/utils';
 import Header from '@/components/Header';
@@ -9,8 +8,6 @@ import PinterestGrid from '@/components/PinterestGrid';
 import IkeaBelt from '@/components/IkeaBelt';
 import BrandsBelt from '@/components/BrandsBelt';
 import DiscountCode from '@/components/DiscountCode';
-import LottieAnimation from '@/components/LottieAnimation';
-import shoppingAnimation from '@/lottie/shopping.json';
 import ScrollDownIndicator from '@/components/ScrollDownIndicator';
 import { Haptics } from '@capacitor/haptics';
 
@@ -145,21 +142,6 @@ const Index = () => {
         
         <div className="py-2">
           <div className="h-[1px] bg-gradient-to-r from-transparent via-gray-200 to-transparent" />
-        </div>
-        
-        {/* Lottie Animation */}
-        <div className="flex justify-center items-center py-4 mb-2">
-          <div className="w-20 h-20 md:w-24 md:h-24">
-            <LottieAnimation 
-              animationData={shoppingAnimation} 
-              loop={true}
-              autoplay={true}
-            />
-          </div>
-          <div className="ml-4">
-            <h3 className="text-lg font-medium text-gray-800">Shopping Made Fun</h3>
-            <p className="text-sm text-gray-500">Discover amazing deals today!</p>
-          </div>
         </div>
         
         {/* IkeaBelt moved above PinterestGrid */}
