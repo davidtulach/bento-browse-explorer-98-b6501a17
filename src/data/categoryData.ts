@@ -1,4 +1,3 @@
-
 export const categorySubcategories: Record<string, string[]> = {
   'Fruit & Veg': ['Apples', 'Bananas', 'Berries', 'Citrus', 'Tropical Fruits', 'Salad & Leafy Greens', 'Root Vegetables', 'Herbs'],
   'Bakery': ['Bread', 'Buns & Rolls', 'Cakes', 'Pastries', 'Cookies', 'Gluten-free'],
@@ -31,7 +30,7 @@ export const categoryBrandMessages: Record<string, BrandMessage> = {
   'Fruit & Veg': {
     title: 'Fresh from Local Farms',
     description: 'Our fruits and vegetables are sourced from local farmers who share our passion for quality and sustainability.',
-    imageSrc: '/lovable-uploads/54d6749f-b6d1-4a00-b452-be237d542390.png',
+    imageSrc: '/lovable-uploads/1c023c76-b478-4454-bd87-a705a5e4bab3.png',
     fallbackSrc: 'https://images.unsplash.com/photo-1610832958506-aa56368176cf',
   },
   'Bakery': {
