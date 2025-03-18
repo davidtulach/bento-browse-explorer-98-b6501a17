@@ -1,4 +1,3 @@
-
 import { useRef, useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import AnimatedImage from './AnimatedImage';
@@ -16,8 +15,8 @@ const weeklyOffers = {
       id: 101,
       title: "The Perfect Sunday Breakfast",
       description: "Check out our shopping list for a yummy Sunday",
-      image: "https://images.pexels.com/photos/1618660/pexels-photo-1618660.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-      fallbackSrc: "https://images.unsplash.com/photo-1533089860892-a7c6f10a081a",
+      image: "/lovable-uploads/cbfe3137-a8fe-47b7-b7bb-4e2fdcd931fc.png",
+      fallbackSrc: "/lovable-uploads/cbfe3137-a8fe-47b7-b7bb-4e2fdcd931fc.png",
     },
     {
       id: 102,
