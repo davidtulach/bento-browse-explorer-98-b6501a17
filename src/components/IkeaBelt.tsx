@@ -1,3 +1,4 @@
+
 import { useRef, useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import AnimatedImage from './AnimatedImage';
@@ -13,10 +14,10 @@ const weeklyOffers = {
   items: [
     {
       id: 101,
-      title: "Fresh Produce Sale",
-      description: "Up to 40% off on seasonal fruits and vegetables",
-      image: "/lovable-uploads/5e135883-52db-4451-b69d-b7abc32c058d.png",
-      fallbackSrc: "/lovable-uploads/5e135883-52db-4451-b69d-b7abc32c058d.png",
+      title: "The Perfect Sunday Breakfast",
+      description: "Check out our shopping list for a yummy Sunday",
+      image: "https://images.pexels.com/photos/1618660/pexels-photo-1618660.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+      fallbackSrc: "https://images.unsplash.com/photo-1533089860892-a7c6f10a081a",
     },
     {
       id: 102,
