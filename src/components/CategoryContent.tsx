@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { X } from 'lucide-react';
+import { X, ChevronRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import AnimatedImage from './AnimatedImage';
 import { SheetHeader, SheetTitle } from '@/components/ui/sheet';
@@ -41,18 +41,20 @@ const CategoryContent: React.FC<CategoryContentProps> = ({ category, onClose, is
             {/* "Browse all" option */}
             <a 
               href="#"
-              className="text-sm font-bold hover:underline col-span-2 mb-2"
+              className="text-sm font-bold hover:underline col-span-2 mb-2 flex items-center group"
             >
-              Browse all from {category}
+              <span className="mr-1">Browse all from {category}</span>
+              <ChevronRight className="h-4 w-4 opacity-0 -translate-x-2 transition-all group-hover:opacity-100 group-hover:translate-x-0" />
             </a>
             
             {subcategories.map((subcat, index) => (
               <a 
                 key={index}
                 href="#"
-                className="text-sm hover:underline py-1"
+                className="text-sm hover:underline py-1 flex items-center justify-between group"
               >
-                {subcat}
+                <span>{subcat}</span>
+                <ChevronRight className="h-4 w-4 opacity-0 -translate-x-2 transition-all group-hover:opacity-100 group-hover:translate-x-0 text-primary" />
               </a>
             ))}
           </div>
@@ -71,7 +73,10 @@ const CategoryContent: React.FC<CategoryContentProps> = ({ category, onClose, is
               <div className="mt-4">
                 <h3 className="font-semibold text-lg mb-1">{brandMessage.title}</h3>
                 <p className="text-sm text-gray-600 mb-2">{brandMessage.description}</p>
-                <button className="text-sm font-medium text-primary underline">Read more</button>
+                <button className="text-sm font-medium text-primary underline flex items-center group">
+                  <span>Read more</span>
+                  <ChevronRight className="h-4 w-4 ml-1 opacity-70 -translate-x-1 transition-all group-hover:opacity-100 group-hover:translate-x-0" />
+                </button>
               </div>
             </div>
           </div>
