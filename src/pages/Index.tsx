@@ -1,4 +1,3 @@
-
 import { useState, useEffect, useRef } from 'react';
 import { cn } from '@/lib/utils';
 import Header from '@/components/Header';
@@ -146,7 +145,13 @@ const Index = () => {
           <div className="h-[1px] bg-gradient-to-r from-transparent via-gray-200 to-transparent" />
         </div>
         
-        {/* IkeaBelt moved above PinterestGrid */}
+        {/* Swap the order: BrandsBelt first, then IkeaBelt (Price Hits) */}
+        <BrandsBelt />
+        
+        <div className="py-2">
+          <div className="h-[1px] bg-gradient-to-r from-transparent via-gray-200 to-transparent" />
+        </div>
+        
         <IkeaBelt />
         
         <div className="py-2">
@@ -154,12 +159,6 @@ const Index = () => {
         </div>
         
         <PinterestGrid />
-        
-        <div className="py-2">
-          <div className="h-[1px] bg-gradient-to-r from-transparent via-gray-200 to-transparent" />
-        </div>
-        
-        <BrandsBelt />
         
         <div className="py-2">
           <div className="h-[1px] bg-gradient-to-r from-transparent via-gray-200 to-transparent" />
