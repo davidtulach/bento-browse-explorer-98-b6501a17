@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { 
   Popover,
@@ -27,55 +28,55 @@ const ShoppableImage = () => {
       id: 1,
       x: 15,
       y: 30,
-      name: "LUNNOM",
-      price: "9.99",
-      unit: "each",
-      description: "LED String Lights, 12 bulbs, battery operated/outdoor"
+      name: "Fresh Bread",
+      price: "3.99",
+      unit: "loaf",
+      description: "Freshly baked artisan sourdough bread, perfect for sandwiches"
     },
     {
       id: 2,
       x: 48,
       y: 52,
-      name: "SÖTVEDEL",
-      price: "12.99",
-      unit: "each",
-      description: "Cushion, blue/white stripe, 50x50 cm"
+      name: "Organic Butter",
+      price: "4.99",
+      unit: "pack",
+      description: "Creamy organic butter made from grass-fed cow's milk"
     },
     {
       id: 3,
       x: 70,
       y: 35,
-      name: "FEJKA",
-      price: "5.99",
-      unit: "each",
-      description: "Artificial potted plant, outdoor/indoor herbs"
+      name: "Free-range Eggs",
+      price: "5.49",
+      unit: "dozen",
+      description: "Farm fresh free-range eggs from locally raised hens"
     },
     {
       id: 4,
       x: 30,
       y: 70,
-      name: "ÄPPLARÖ",
-      price: "89.99",
-      unit: "each",
-      description: "Chair with armrests, outdoor, foldable brown stained"
+      name: "Organic Milk",
+      price: "3.29",
+      unit: "liter",
+      description: "Organic whole milk from grass-fed cows, non-homogenized"
     },
     {
       id: 5,
       x: 85,
       y: 75,
-      name: "RUNNEN",
-      price: "29.99",
-      unit: "9 pack",
-      description: "Floor decking, outdoor, brown stained, 0.81 m²"
+      name: "Seasonal Fruit",
+      price: "6.99",
+      unit: "basket",
+      description: "Assorted seasonal fruits, locally grown and pesticide-free"
     },
     {
       id: 6,
       x: 60,
       y: 85,
-      name: "INGEFÄRA",
-      price: "4.99",
-      unit: "each",
-      description: "Plant pot with saucer, outdoor terracotta, 15 cm"
+      name: "Artisan Cheese",
+      price: "7.99",
+      unit: "pack",
+      description: "Locally produced artisan cheese, naturally aged and hand-crafted"
     }
   ];
 
