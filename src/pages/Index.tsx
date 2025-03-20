@@ -1,3 +1,4 @@
+
 import { useState, useEffect, useRef } from 'react';
 import { cn } from '@/lib/utils';
 import Header from '@/components/Header';
@@ -7,6 +8,7 @@ import CategoryBelt from '@/components/CategoryBelt';
 import PinterestGrid from '@/components/PinterestGrid';
 import IkeaBelt from '@/components/IkeaBelt';
 import BrandsBelt from '@/components/BrandsBelt';
+import PriceHitsBelt from '@/components/PriceHitsBelt';
 import DiscountCode from '@/components/DiscountCode';
 import ScrollDownIndicator from '@/components/ScrollDownIndicator';
 import ShoppableImage from '@/components/ShoppableImage';
@@ -146,27 +148,35 @@ const Index = () => {
           <div className="h-[1px] bg-gradient-to-r from-transparent via-gray-200 to-transparent" />
         </div>
         
-        {/* Weekly Topics first */}
+        {/* Weekly Topics */}
         <IkeaBelt />
         
         <div className="py-2">
           <div className="h-[1px] bg-gradient-to-r from-transparent via-gray-200 to-transparent" />
         </div>
         
-        {/* BrandsBelt moved below Weekly Topics */}
+        {/* BrandsBelt */}
         <BrandsBelt />
         
         <div className="py-2">
           <div className="h-[1px] bg-gradient-to-r from-transparent via-gray-200 to-transparent" />
         </div>
         
+        {/* Pinterest Grid */}
         <PinterestGrid />
         
         <div className="py-2">
           <div className="h-[1px] bg-gradient-to-r from-transparent via-gray-200 to-transparent" />
         </div>
         
-        {/* ShoppableImage remains after Pinterest grid */}
+        {/* Price Hits section moved below Pinterest grid */}
+        <PriceHitsBelt />
+        
+        <div className="py-2">
+          <div className="h-[1px] bg-gradient-to-r from-transparent via-gray-200 to-transparent" />
+        </div>
+        
+        {/* ShoppableImage */}
         <ShoppableImage />
         
         <div className="py-2">
