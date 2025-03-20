@@ -10,6 +10,7 @@ import IkeaBelt from '@/components/IkeaBelt';
 import BrandsBelt from '@/components/BrandsBelt';
 import DiscountCode from '@/components/DiscountCode';
 import ScrollDownIndicator from '@/components/ScrollDownIndicator';
+import ShoppableImage from '@/components/ShoppableImage';
 import { Haptics } from '@capacitor/haptics';
 import { Toaster } from '@/components/ui/toaster';
 
@@ -161,6 +162,13 @@ const Index = () => {
         </div>
         
         <PinterestGrid />
+        
+        <div className="py-2">
+          <div className="h-[1px] bg-gradient-to-r from-transparent via-gray-200 to-transparent" />
+        </div>
+        
+        {/* New Shoppable Image Component */}
+        <ShoppableImage />
         
         <div className="py-2">
           <div className="h-[1px] bg-gradient-to-r from-transparent via-gray-200 to-transparent" />
