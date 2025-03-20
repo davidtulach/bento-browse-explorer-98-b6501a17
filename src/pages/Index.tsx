@@ -1,4 +1,3 @@
-
 import { useState, useEffect, useRef } from 'react';
 import { cn } from '@/lib/utils';
 import Header from '@/components/Header';
@@ -147,15 +146,15 @@ const Index = () => {
           <div className="h-[1px] bg-gradient-to-r from-transparent via-gray-200 to-transparent" />
         </div>
         
-        {/* BrandsBelt moved above IkeaBelt (previously Price Hits) */}
-        <BrandsBelt />
+        {/* Weekly Topics first */}
+        <IkeaBelt />
         
         <div className="py-2">
           <div className="h-[1px] bg-gradient-to-r from-transparent via-gray-200 to-transparent" />
         </div>
         
-        {/* IkeaBelt (Price Hits) moved below BrandsBelt */}
-        <IkeaBelt />
+        {/* BrandsBelt moved below Weekly Topics */}
+        <BrandsBelt />
         
         <div className="py-2">
           <div className="h-[1px] bg-gradient-to-r from-transparent via-gray-200 to-transparent" />
@@ -167,7 +166,7 @@ const Index = () => {
           <div className="h-[1px] bg-gradient-to-r from-transparent via-gray-200 to-transparent" />
         </div>
         
-        {/* New Shoppable Image Component */}
+        {/* ShoppableImage remains after Pinterest grid */}
         <ShoppableImage />
         
         <div className="py-2">
