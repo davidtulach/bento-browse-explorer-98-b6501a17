@@ -146,7 +146,14 @@ const Index = () => {
           <div className="h-[1px] bg-gradient-to-r from-transparent via-gray-200 to-transparent" />
         </div>
         
-        {/* IkeaBelt moved above PinterestGrid */}
+        {/* BrandsBelt moved above IkeaBelt (previously Price Hits) */}
+        <BrandsBelt />
+        
+        <div className="py-2">
+          <div className="h-[1px] bg-gradient-to-r from-transparent via-gray-200 to-transparent" />
+        </div>
+        
+        {/* IkeaBelt (Price Hits) moved below BrandsBelt */}
         <IkeaBelt />
         
         <div className="py-2">
@@ -154,12 +161,6 @@ const Index = () => {
         </div>
         
         <PinterestGrid />
-        
-        <div className="py-2">
-          <div className="h-[1px] bg-gradient-to-r from-transparent via-gray-200 to-transparent" />
-        </div>
-        
-        <BrandsBelt />
         
         <div className="py-2">
           <div className="h-[1px] bg-gradient-to-r from-transparent via-gray-200 to-transparent" />
