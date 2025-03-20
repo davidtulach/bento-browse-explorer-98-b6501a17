@@ -91,7 +91,8 @@ const ShoppableImage = () => {
     <div className="py-4 px-2">
       <h2 className="text-lg font-medium mb-3 px-2">Outdoor dining inspiration</h2>
       
-      <div className="relative w-full max-w-6xl mx-auto rounded-xl overflow-hidden">
+      {/* Added max-width and centering for desktop view */}
+      <div className="relative w-full mx-auto rounded-xl overflow-hidden md:max-w-[800px] lg:max-w-[900px]">
         <img 
           src="/lovable-uploads/0df29fa2-95a6-408b-b51e-4d7f69a34fc7.png" 
           alt="Outdoor dining setup" 
