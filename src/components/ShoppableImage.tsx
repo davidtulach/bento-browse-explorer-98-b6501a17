@@ -8,7 +8,6 @@ import {
 import { Button } from '@/components/ui/button';
 import { Plus, ShoppingCart } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
-import DotLottiePlayer from './DotLottiePlayer';
 
 interface HotspotItem {
   id: number;
@@ -22,7 +21,6 @@ interface HotspotItem {
 
 const ShoppableImage = () => {
   const { toast } = useToast();
-  const [playingAnimation, setPlayingAnimation] = useState<number | null>(null);
   
   // Hotspot items data
   const hotspots: HotspotItem[] = [
@@ -89,16 +87,6 @@ const ShoppableImage = () => {
     });
   };
 
-  const handleHotspotClick = (hotspotId: number) => {
-    // Set the ID of the hotspot where animation should play
-    setPlayingAnimation(hotspotId);
-    
-    // Reset animation after it plays once (animation is about 3 seconds)
-    setTimeout(() => {
-      setPlayingAnimation(null);
-    }, 3000);
-  };
-
   return (
     <div className="py-4 px-2">
       <h2 className="text-lg font-medium mb-3 px-2">Outdoor dining inspiration</h2>
@@ -120,20 +108,9 @@ const ShoppableImage = () => {
                   left: `${hotspot.x}%`, 
                   top: `${hotspot.y}%`,
                 }}
-                onClick={() => handleHotspotClick(hotspot.id)}
                 aria-label={`View ${hotspot.name} details`}
               >
-                {playingAnimation === hotspot.id ? (
-                  <div className="absolute inset-0 w-20 h-20 -left-5 -top-5">
-                    <DotLottiePlayer
-                      src="https://lottie.host/460f0e91-3130-4044-9862-dd0d6c847281/LhQigTB4EJ.lottie"
-                      autoplay={true}
-                      loop={false}
-                    />
-                  </div>
-                ) : (
-                  <Plus className="h-5 w-5 text-gray-800" />
-                )}
+                <Plus className="h-5 w-5 text-gray-800" />
               </button>
             </PopoverTrigger>
             <PopoverContent 
