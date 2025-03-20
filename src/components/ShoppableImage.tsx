@@ -1,14 +1,11 @@
-
 import React, { useState } from 'react';
 import { 
-  Dialog, 
-  DialogContent, 
-  DialogHeader, 
-  DialogTitle,
-  DialogClose
-} from '@/components/ui/dialog';
+  Popover,
+  PopoverContent,
+  PopoverTrigger
+} from '@/components/ui/popover';
 import { Button } from '@/components/ui/button';
-import { Plus, X, ShoppingCart } from 'lucide-react';
+import { Plus, ShoppingCart } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
 interface HotspotItem {
@@ -22,7 +19,6 @@ interface HotspotItem {
 }
 
 const ShoppableImage = () => {
-  const [selectedItem, setSelectedItem] = useState<HotspotItem | null>(null);
   const { toast } = useToast();
   
   // Hotspot items data
@@ -88,7 +84,6 @@ const ShoppableImage = () => {
       title: "Added to cart",
       description: `${item.name} has been added to your cart.`,
     });
-    setSelectedItem(null);
   };
 
   return (
@@ -104,46 +99,46 @@ const ShoppableImage = () => {
         
         {/* Hotspots */}
         {hotspots.map((hotspot) => (
-          <button
-            key={hotspot.id}
-            className="absolute w-10 h-10 rounded-full bg-white/80 backdrop-blur-sm border border-gray-200 flex items-center justify-center transform -translate-x-1/2 -translate-y-1/2 transition-transform hover:scale-110 focus:outline-none focus:ring-2 focus:ring-primary"
-            style={{ 
-              left: `${hotspot.x}%`, 
-              top: `${hotspot.y}%`,
-            }}
-            onClick={() => setSelectedItem(hotspot)}
-            aria-label={`View ${hotspot.name} details`}
-          >
-            <Plus className="h-5 w-5 text-gray-800" />
-          </button>
+          <Popover key={hotspot.id}>
+            <PopoverTrigger asChild>
+              <button
+                className="absolute w-10 h-10 rounded-full bg-white/80 backdrop-blur-sm border border-gray-200 flex items-center justify-center transform -translate-x-1/2 -translate-y-1/2 transition-transform hover:scale-110 focus:outline-none focus:ring-2 focus:ring-primary"
+                style={{ 
+                  left: `${hotspot.x}%`, 
+                  top: `${hotspot.y}%`,
+                }}
+                aria-label={`View ${hotspot.name} details`}
+              >
+                <Plus className="h-5 w-5 text-gray-800" />
+              </button>
+            </PopoverTrigger>
+            <PopoverContent 
+              className="w-64 p-3 shadow-md bg-white/95 backdrop-blur-sm border border-gray-100" 
+              sideOffset={5}
+            >
+              <div className="space-y-2">
+                <h3 className="font-medium text-base">{hotspot.name}</h3>
+                <p className="text-xs text-gray-500 line-clamp-2">{hotspot.description}</p>
+                
+                <div className="flex items-center justify-between pt-1">
+                  <div>
+                    <p className="text-sm font-bold">${hotspot.price}</p>
+                    <p className="text-xs text-gray-500">Price per {hotspot.unit}</p>
+                  </div>
+                  <Button 
+                    onClick={() => handleAddToCart(hotspot)}
+                    size="sm"
+                    className="h-8 px-3 text-xs"
+                  >
+                    <ShoppingCart className="h-3 w-3 mr-1" />
+                    Add
+                  </Button>
+                </div>
+              </div>
+            </PopoverContent>
+          </Popover>
         ))}
       </div>
-
-      {/* Item details dialog */}
-      <Dialog open={!!selectedItem} onOpenChange={() => setSelectedItem(null)}>
-        <DialogContent className="sm:max-w-md">
-          <DialogHeader>
-            <DialogTitle>{selectedItem?.name}</DialogTitle>
-          </DialogHeader>
-          <div className="grid gap-4 py-4">
-            <p className="text-sm text-gray-500">{selectedItem?.description}</p>
-            
-            <div className="flex items-baseline justify-between">
-              <div>
-                <p className="text-xl font-bold">${selectedItem?.price}</p>
-                <p className="text-sm text-gray-500">Price per {selectedItem?.unit}</p>
-              </div>
-              <Button 
-                onClick={() => selectedItem && handleAddToCart(selectedItem)}
-                className="flex items-center gap-2"
-              >
-                <ShoppingCart className="h-4 w-4" />
-                Add to cart
-              </Button>
-            </div>
-          </div>
-        </DialogContent>
-      </Dialog>
     </div>
   );
 };
