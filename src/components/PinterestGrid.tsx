@@ -1,7 +1,7 @@
+
 import { cn } from '@/lib/utils';
 import AnimatedImage from './AnimatedImage';
 import { useIsMobile } from '@/hooks/use-mobile';
-import ContentPreview from './ContentPreview';
 
 const items = [
   {
@@ -73,8 +73,11 @@ const PinterestGrid = () => {
   const rightColumnItems = items.filter((_, idx) => idx % 2 === 1);
   
   // For larger screens, show in a regular grid
-  const renderMasonryItem = (item: typeof items[0]) => {
-    const itemContent = (
+  const renderMasonryItem = (item: typeof items[0]) => (
+    <div 
+      key={item.id} 
+      className="pin-card hover:shadow-xl transition-all duration-200"
+    >
       <div className="relative overflow-hidden rounded-xl">
         <div className="relative">
           <AnimatedImage
@@ -96,58 +99,18 @@ const PinterestGrid = () => {
           </div>
         </div>
       </div>
-    );
-    
-    const previewContent = (
-      <div className="relative">
-        <img 
-          src={item.image} 
-          alt={item.title} 
-          className="w-full rounded-none" 
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/20 to-black/60 flex flex-col justify-end p-4">
-          <h3 className="text-white font-medium">{item.title}</h3>
-          <p className="text-white/90 text-sm">Click to explore {item.tag.toLowerCase()} items</p>
-        </div>
+      
+      <div className="mt-1 mb-1 flex justify-between items-start px-1">
+        <h3 className="font-medium text-xs">{item.title}</h3>
+        <button className="text-sm leading-none opacity-70 hover:opacity-100">•••</button>
       </div>
-    );
-    
-    const cardContent = (
-      <>
-        {/* Main content */}
-        {itemContent}
-        
-        <div className="mt-1 mb-1 flex justify-between items-start px-1">
-          <h3 className="font-medium text-xs">{item.title}</h3>
-          <button className="text-sm leading-none opacity-70 hover:opacity-100">•••</button>
-        </div>
-        {item.sponsor && (
-          <p className="text-xs text-gray-500 px-1">
-            Sponsored by {item.sponsor}
-          </p>
-        )}
-      </>
-    );
-    
-    return (
-      <div 
-        key={item.id} 
-        className="pin-card hover:shadow-xl transition-all duration-200"
-      >
-        {isMobile ? (
-          cardContent
-        ) : (
-          <ContentPreview
-            previewContent={previewContent}
-            previewTitle={item.title}
-            openDelay={1000} // 1 second delay
-          >
-            {cardContent}
-          </ContentPreview>
-        )}
-      </div>
-    );
-  };
+      {item.sponsor && (
+        <p className="text-xs text-gray-500 px-1">
+          Sponsored by {item.sponsor}
+        </p>
+      )}
+    </div>
+  );
 
   return (
     <div className="px-2 py-2 md:px-2">
