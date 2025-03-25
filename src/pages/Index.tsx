@@ -1,3 +1,4 @@
+
 import { useState, useEffect, useRef } from 'react';
 import { cn } from '@/lib/utils';
 import Header from '@/components/Header';
@@ -12,6 +13,7 @@ import ScrollDownIndicator from '@/components/ScrollDownIndicator';
 import ShoppableImage from '@/components/ShoppableImage';
 import { Haptics } from '@capacitor/haptics';
 import { Toaster } from '@/components/ui/toaster';
+import { useHapticFeedback } from '@/hooks/use-haptic';
 
 const pillButtons = [
   { id: 'favorites', label: 'Favorites', color: 'bg-purple-100 text-purple-700' },
@@ -26,16 +28,27 @@ const Index = () => {
   const scrollTimerRef = useRef<number | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const [isAtBottom, setIsAtBottom] = useState(false);
+  const { triggerHaptic } = useHapticFeedback();
 
   useEffect(() => {
-    initializeCapacitor();
+    // Initialize any capacitor plugins if needed
+    const initCapacitorFeatures = async () => {
+      try {
+        // Just a test haptic to ensure it's working
+        await triggerHaptic();
+      } catch (error) {
+        console.error('Error initializing Capacitor features:', error);
+      }
+    };
+    
+    initCapacitorFeatures();
     
     return () => {
       if (scrollTimerRef.current) {
         clearTimeout(scrollTimerRef.current);
       }
     };
-  }, []);
+  }, [triggerHaptic]);
 
   const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
     const container = e.currentTarget;
