@@ -5,15 +5,16 @@ import { ChevronLeft, ChevronRight, Apple, Wheat, Milk, Beef, GlassWater, Snowfl
 import { cn } from '@/lib/utils';
 import CategoryOverlay from './CategoryOverlay';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { Badge } from './ui/badge';
 
 const categories = [
   { id: 1, name: "Fruit & Veg", icon: Apple },
-  { id: 2, name: "Bakery", icon: Wheat },  // Changed from Bread to Wheat
+  { id: 2, name: "Bakery", icon: Wheat, hasNewItems: true },  // Added hasNewItems flag
   { id: 3, name: "Dairy", icon: Milk },
   { id: 4, name: "Meat", icon: Beef },
   { id: 5, name: "Drinks", icon: GlassWater },
-  { id: 6, name: "Frozen", icon: Snowflake },
-  { id: 7, name: "Snacks", icon: Candy },
+  { id: 6, name: "Frozen", icon: Snowflake, hasNewItems: true },  // Added hasNewItems flag
+  { id: 7, name: "Snacks", icon: Candy, hasNewItems: true },  // Added hasNewItems flag
   { id: 8, name: "Household", icon: House },
   { id: 9, name: "Pasta & Rice", icon: Wheat },
   { id: 10, name: "Canned Goods", icon: Package },
@@ -46,7 +47,6 @@ const CategoryBelt = () => {
   const handleCategoryClick = (categoryName: string, event?: React.MouseEvent<HTMLDivElement>) => {
     setSelectedCategory(categoryName);
     
-    // Set position for desktop view
     if (!isMobile && event && beltRef.current) {
       const beltRect = beltRef.current.getBoundingClientRect();
       const scrollPosition = window.scrollY;
@@ -65,11 +65,9 @@ const CategoryBelt = () => {
     setIsOverlayOpen(false);
   };
 
-  // Close overlay on resize or scroll to prevent positioning issues
   useEffect(() => {
     const handleResize = () => {
       if (isOverlayOpen && !isMobile) {
-        // Update position on resize
         if (beltRef.current) {
           const beltRect = beltRef.current.getBoundingClientRect();
           const scrollPosition = window.scrollY;
@@ -110,7 +108,6 @@ const CategoryBelt = () => {
         <h2 className="text-xl font-medium mb-4">Categories</h2>
         
         <div className="relative">
-          {/* Left arrow - positioned at left edge */}
           <button 
             onClick={() => scroll('left')}
             className="absolute left-0 top-1/2 -translate-y-1/2 z-10 w-9 h-9 rounded-full flex items-center justify-center bg-black text-white hover:bg-black/90 transition-colors"
@@ -134,6 +131,15 @@ const CategoryBelt = () => {
                 >
                   <div className="w-[90px] h-[90px] mb-1 mx-auto relative flex items-center justify-center transition-transform hover:scale-105 duration-200">
                     <IconComponent className="w-12 h-12 text-primary" strokeWidth={1.5} />
+                    
+                    {category.hasNewItems && (
+                      <Badge 
+                        className="absolute -top-1 -right-1 bg-purple-500 text-white border-2 border-white p-1 rounded-full w-6 h-6 flex items-center justify-center"
+                        aria-label="New items available"
+                      >
+                        ★
+                      </Badge>
+                    )}
                   </div>
                   <p className="text-sm font-normal mt-0 text-center">{category.name}</p>
                 </div>
@@ -141,7 +147,6 @@ const CategoryBelt = () => {
             })}
           </div>
           
-          {/* Right arrow - positioned at right edge */}
           <button 
             onClick={() => scroll('right')}
             className="absolute right-0 top-1/2 -translate-y-1/2 z-10 w-9 h-9 rounded-full flex items-center justify-center bg-black text-white hover:bg-black/90 transition-colors"
@@ -152,7 +157,6 @@ const CategoryBelt = () => {
         </div>
       </div>
 
-      {/* Category Overlay */}
       <CategoryOverlay 
         isOpen={isOverlayOpen}
         onClose={handleCloseOverlay}
