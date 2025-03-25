@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { X, ChevronRight } from 'lucide-react';
+import { X, ChevronRight, Star } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import AnimatedImage from './AnimatedImage';
 import { SheetHeader, SheetTitle } from '@/components/ui/sheet';
@@ -12,9 +12,21 @@ interface CategoryContentProps {
   isMobile: boolean;
 }
 
+// New subcategory data with new arrivals flag
+const newArrivalSubcategories = {
+  'Bakery': ['Bread', 'Pastries'],
+  'Frozen': ['Frozen Fruits'],
+  'Snacks': ['Chips', 'Protein Bars']
+};
+
 const CategoryContent: React.FC<CategoryContentProps> = ({ category, onClose, isMobile }) => {
   const subcategories = categorySubcategories[category] || [];
   const brandMessage: BrandMessage = categoryBrandMessages[category] || categoryBrandMessages.default;
+
+  // Check if a subcategory has new arrivals
+  const hasNewArrival = (category: string, subcategory: string) => {
+    return newArrivalSubcategories[category]?.includes(subcategory) || false;
+  };
 
   return (
     <div className="relative">
@@ -54,9 +66,22 @@ const CategoryContent: React.FC<CategoryContentProps> = ({ category, onClose, is
               <a 
                 key={index}
                 href="#"
-                className="text-sm hover:underline py-1 flex items-center justify-between group"
+                className="text-sm hover:underline py-1 flex items-center justify-between group relative"
               >
-                <span>{subcat}</span>
+                <div className="flex items-center">
+                  <span>{subcat}</span>
+                  
+                  {/* New arrival badge for specific subcategories */}
+                  {hasNewArrival(category, subcat) && (
+                    <div className="ml-2 w-4 h-4 rounded-full bg-purple-500 flex items-center justify-center">
+                      <Star 
+                        className="text-white fill-current" 
+                        size={10} 
+                        strokeWidth={0}
+                      />
+                    </div>
+                  )}
+                </div>
                 <ChevronRight className={cn(
                   "h-4 w-4 text-primary transition-all",
                   isMobile ? "opacity-70" : "opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0"
