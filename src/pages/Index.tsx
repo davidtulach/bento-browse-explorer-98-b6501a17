@@ -1,4 +1,3 @@
-
 import { useState, useEffect, useRef } from 'react';
 import { cn } from '@/lib/utils';
 import Header from '@/components/Header';
@@ -16,10 +15,10 @@ import { Toaster } from '@/components/ui/toaster';
 import { useHapticFeedback } from '@/hooks/use-haptic';
 
 const pillButtons = [
-  { id: 'favorites', label: 'Favorites', color: 'bg-purple-100 text-purple-700' },
-  { id: 'price-hits', label: 'Price Hits', color: 'bg-orange-100 text-orange-700' },
-  { id: 'new-arrivals', label: 'New Arrivals', color: 'bg-blue-100 text-blue-700' },
-  { id: 'rescue', label: 'Rescue and Save', color: 'bg-green-100 text-green-700' },
+  { id: 'favorites', label: 'Favorites', color: 'bg-green-100 text-green-700' },
+  { id: 'price-hits', label: 'Price Hits', color: 'bg-yellow-100 text-yellow-700' },
+  { id: 'new-arrivals', label: 'New Arrivals', color: 'bg-purple-100 text-purple-700' },
+  { id: 'rescue', label: 'Rescue and Save', color: 'bg-pink-100 text-red-600' },
 ];
 
 const Index = () => {
@@ -31,10 +30,8 @@ const Index = () => {
   const { triggerHaptic } = useHapticFeedback();
 
   useEffect(() => {
-    // Initialize any capacitor plugins if needed
     const initCapacitorFeatures = async () => {
       try {
-        // Just a test haptic to ensure it's working
         await triggerHaptic();
       } catch (error) {
         console.error('Error initializing Capacitor features:', error);
