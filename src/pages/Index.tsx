@@ -1,3 +1,4 @@
+
 import { useState, useEffect, useRef } from 'react';
 import { cn } from '@/lib/utils';
 import Header from '@/components/Header';
@@ -113,7 +114,7 @@ const Index = () => {
       
       <main className={cn(
         "flex-1 pb-20",
-        isMobile && "pt-0"
+        isMobile && "pt-16" // Add padding at top to account for fixed search bar
       )}>
         <StoryScroller />
         

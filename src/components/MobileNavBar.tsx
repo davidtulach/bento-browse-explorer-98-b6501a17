@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Bell, Search, ShoppingCart, Sparkles, User } from 'lucide-react';
+import { Bell, Home, ShoppingCart, Sparkles, User } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const MobileNavBar = () => {
@@ -13,8 +13,8 @@ const MobileNavBar = () => {
         </button>
 
         <button className="flex flex-col items-center justify-center">
-          <Search className="w-6 h-6 text-gray-600" />
-          <span className="text-xs mt-1 text-gray-600">Search</span>
+          <Home className="w-6 h-6 text-gray-600" />
+          <span className="text-xs mt-1 text-gray-600">Home</span>
         </button>
 
         <div className="relative -mt-8">
