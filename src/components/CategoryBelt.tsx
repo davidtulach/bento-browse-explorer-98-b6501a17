@@ -1,8 +1,7 @@
-
 import { useState, useRef, useEffect } from 'react';
 import { ChevronLeft, ChevronRight, Apple, Wheat, Milk, Beef, GlassWater, Snowflake, 
   Candy, House, Package, Egg, Droplet, CookingPot, LeafyGreen, Globe, 
-  IceCream, Dog, Baby, Star } from 'lucide-react';
+  IceCream, Dog, Baby } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import CategoryOverlay from './CategoryOverlay';
 import { useIsMobile } from '@/hooks/use-mobile';
@@ -134,12 +133,12 @@ const CategoryBelt = () => {
                     <IconComponent className="w-12 h-12 text-primary" strokeWidth={1.5} />
                     
                     {category.hasNewItems && (
-                      <div className="absolute -top-1 -right-1 w-6 h-6 bg-purple-500 rounded-full flex items-center justify-center">
-                        <Star 
-                          className="w-4 h-4 text-white fill-current" 
-                          strokeWidth={2} 
-                        />
-                      </div>
+                      <Badge 
+                        className="absolute -top-1 -right-1 bg-purple-500 text-white border-2 border-white p-1 rounded-full w-6 h-6 flex items-center justify-center"
+                        aria-label="New items available"
+                      >
+                        ★
+                      </Badge>
                     )}
                   </div>
                   <p className="text-sm font-normal mt-0 text-center">{category.name}</p>
