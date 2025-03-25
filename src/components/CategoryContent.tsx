@@ -73,15 +73,10 @@ const CategoryContent: React.FC<CategoryContentProps> = ({ category, onClose, is
                   
                   {/* New arrival badge for specific subcategories */}
                   {hasNewArrival(category, subcat) && (
-                    <div className="ml-2 flex items-center">
-                      <div className="w-4 h-4 rounded-full bg-purple-500 flex items-center justify-center">
-                        <Star 
-                          className="text-white fill-current" 
-                          size={10} 
-                          strokeWidth={0}
-                        />
+                    <div className="ml-2">
+                      <div className="px-2 py-0.5 bg-purple-100 text-purple-800 text-xs font-medium rounded-full">
+                        New Arrivals
                       </div>
-                      <span className="ml-1 text-xs font-medium text-purple-600">New Arrivals</span>
                     </div>
                   )}
                 </div>
