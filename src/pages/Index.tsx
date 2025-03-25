@@ -28,10 +28,10 @@ const initializeCapacitor = async () => {
 };
 
 const pillButtons = [
-  { id: 'favorites', label: 'Favorites', color: 'bg-purple-100 text-purple-700' },
-  { id: 'price-hits', label: 'Price Hits', color: 'bg-orange-100 text-orange-700' },
-  { id: 'new-arrivals', label: 'New Arrivals', color: 'bg-blue-100 text-blue-700' },
-  { id: 'rescue', label: 'Rescue and Save', color: 'bg-green-100 text-green-700' },
+  { id: 'favorites', label: 'Favorites', color: 'bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300' },
+  { id: 'price-hits', label: 'Price Hits', color: 'bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-300' },
+  { id: 'new-arrivals', label: 'New Arrivals', color: 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300' },
+  { id: 'rescue', label: 'Rescue and Save', color: 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300' },
 ];
 
 const Index = () => {
@@ -117,7 +117,7 @@ const Index = () => {
 
   return (
     <div 
-      className="min-h-screen bg-gray-50 flex flex-col overflow-auto"
+      className="min-h-screen bg-background flex flex-col overflow-auto"
       onScroll={handleScroll}
       ref={containerRef}
     >
@@ -145,42 +145,42 @@ const Index = () => {
         </div>
         
         <div className="py-2">
-          <div className="h-[1px] bg-gradient-to-r from-transparent via-gray-200 to-transparent" />
+          <div className="h-[1px] bg-gradient-to-r from-transparent via-border to-transparent" />
         </div>
         
         {/* Weekly Topics */}
         <IkeaBelt />
         
         <div className="py-2">
-          <div className="h-[1px] bg-gradient-to-r from-transparent via-gray-200 to-transparent" />
+          <div className="h-[1px] bg-gradient-to-r from-transparent via-border to-transparent" />
         </div>
         
         {/* BrandsBelt */}
         <BrandsBelt />
         
         <div className="py-2">
-          <div className="h-[1px] bg-gradient-to-r from-transparent via-gray-200 to-transparent" />
+          <div className="h-[1px] bg-gradient-to-r from-transparent via-border to-transparent" />
         </div>
         
         {/* Pinterest Grid */}
         <PinterestGrid />
         
         <div className="py-2">
-          <div className="h-[1px] bg-gradient-to-r from-transparent via-gray-200 to-transparent" />
+          <div className="h-[1px] bg-gradient-to-r from-transparent via-border to-transparent" />
         </div>
         
         {/* Price Hits section moved below Pinterest grid */}
         <PriceHitsBelt />
         
         <div className="py-2">
-          <div className="h-[1px] bg-gradient-to-r from-transparent via-gray-200 to-transparent" />
+          <div className="h-[1px] bg-gradient-to-r from-transparent via-border to-transparent" />
         </div>
         
         {/* ShoppableImage */}
         <ShoppableImage />
         
         <div className="py-2">
-          <div className="h-[1px] bg-gradient-to-r from-transparent via-gray-200 to-transparent" />
+          <div className="h-[1px] bg-gradient-to-r from-transparent via-border to-transparent" />
         </div>
         
         {/* Discount Code Section */}
