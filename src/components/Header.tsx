@@ -1,5 +1,7 @@
-import { Bell, ChevronDown, Clock, User } from 'lucide-react';
+
+import { Bell, ChevronDown, Clock, ShoppingCart, User } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import SearchBar from './SearchBar';
 
 const DeliveryWindow = () => {
   return (
@@ -19,20 +21,32 @@ const Header = () => {
     <header className={cn(
       "sticky top-0 z-50 w-full",
       "bg-white/70 backdrop-blur-md border-b border-gray-100",
-      "px-4 py-3 flex items-center justify-between",
+      "px-4 py-3",
       "transition-all duration-300 ease-in-out"
     )}>
-      <DeliveryWindow />
-      
-      <div className="flex items-center space-x-3">
-        <button className="w-9 h-9 rounded-full flex items-center justify-center hover:bg-gray-100 transition-colors relative">
-          <Bell className="w-5 h-5" />
-          <span className="absolute top-1 right-1.5 w-2 h-2 bg-primary rounded-full" />
-        </button>
+      <div className="flex items-center justify-between mb-2">
+        <DeliveryWindow />
         
-        <button className="w-9 h-9 rounded-full flex items-center justify-center bg-gray-100 hover:bg-gray-200 transition-colors">
-          <User className="w-5 h-5" />
-        </button>
+        <div className="flex items-center space-x-3">
+          <button className="w-9 h-9 rounded-full flex items-center justify-center hover:bg-gray-100 transition-colors relative">
+            <Bell className="w-5 h-5" />
+            <span className="absolute top-1 right-1.5 w-2 h-2 bg-primary rounded-full" />
+          </button>
+          
+          <button className="w-9 h-9 rounded-full flex items-center justify-center hover:bg-gray-100 transition-colors relative">
+            <ShoppingCart className="w-5 h-5" />
+            <span className="absolute top-0 right-0 w-4 h-4 bg-primary text-white rounded-full text-xs flex items-center justify-center">3</span>
+          </button>
+          
+          <button className="w-9 h-9 rounded-full flex items-center justify-center bg-gray-100 hover:bg-gray-200 transition-colors">
+            <User className="w-5 h-5" />
+          </button>
+        </div>
+      </div>
+      
+      {/* Embedded SearchBar */}
+      <div className="w-full">
+        <SearchBar inHeader={true} />
       </div>
     </header>
   );

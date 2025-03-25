@@ -1,8 +1,6 @@
-
 import { useState, useEffect, useRef } from 'react';
 import { cn } from '@/lib/utils';
 import Header from '@/components/Header';
-import SearchBar from '@/components/SearchBar';
 import StoryScroller from '@/components/StoryScroller';
 import CategoryBelt from '@/components/CategoryBelt';
 import PinterestGrid from '@/components/PinterestGrid';
@@ -14,18 +12,6 @@ import ScrollDownIndicator from '@/components/ScrollDownIndicator';
 import ShoppableImage from '@/components/ShoppableImage';
 import { Haptics } from '@capacitor/haptics';
 import { Toaster } from '@/components/ui/toaster';
-
-// Initialize Capacitor if available
-const initializeCapacitor = async () => {
-  try {
-    // Check if running in Capacitor environment (on a device)
-    if (typeof (window as any).Capacitor !== 'undefined') {
-      console.log('Capacitor initialized');
-    }
-  } catch (error) {
-    console.error('Error initializing Capacitor:', error);
-  }
-};
 
 const pillButtons = [
   { id: 'favorites', label: 'Favorites', color: 'bg-purple-100 text-purple-700' },
@@ -42,10 +28,8 @@ const Index = () => {
   const [isAtBottom, setIsAtBottom] = useState(false);
 
   useEffect(() => {
-    // Initialize Capacitor
     initializeCapacitor();
     
-    // Clear timer on component unmount
     return () => {
       if (scrollTimerRef.current) {
         clearTimeout(scrollTimerRef.current);
@@ -58,36 +42,29 @@ const Index = () => {
     const position = container.scrollTop;
     setScrollPosition(position);
     
-    // Check if we're at the bottom of the page
     const isBottom = 
       Math.abs(
         (container.scrollHeight - container.scrollTop) - 
         container.clientHeight
-      ) < 5; // Small threshold for rounding errors
+      ) < 5;
     
     setIsAtBottom(isBottom);
     
-    // If at the top of the page, show the indicator
     if (position === 0) {
       setShowScrollIndicator(true);
-      // Clear any existing timers
       if (scrollTimerRef.current) {
         clearTimeout(scrollTimerRef.current);
         scrollTimerRef.current = null;
       }
     } 
-    // If we start scrolling, hide the indicator and set a timer to show it again after 30 seconds
     else if (position > 0 && showScrollIndicator) {
       setShowScrollIndicator(false);
       
-      // Clear any existing timers before setting a new one
       if (scrollTimerRef.current) {
         clearTimeout(scrollTimerRef.current);
       }
       
-      // Set timer to show indicator again after 30 seconds (30000ms)
       scrollTimerRef.current = window.setTimeout(() => {
-        // Only show if we're not at the bottom
         if (!isAtBottom) {
           setShowScrollIndicator(true);
         }
@@ -97,22 +74,18 @@ const Index = () => {
   };
 
   const handleIndicatorClick = () => {
-    // Hide the indicator when clicked
     setShowScrollIndicator(false);
     
-    // Clear any existing timers
     if (scrollTimerRef.current) {
       clearTimeout(scrollTimerRef.current);
     }
     
-    // Set a new timer to show the indicator again after 60 seconds
     scrollTimerRef.current = window.setTimeout(() => {
-      // Only show if we're not at the bottom
       if (!isAtBottom) {
         setShowScrollIndicator(true);
       }
       scrollTimerRef.current = null;
-    }, 60000); // 60 seconds
+    }, 60000);
   };
 
   return (
@@ -124,8 +97,6 @@ const Index = () => {
       <Header />
       
       <main className="flex-1 pb-20">
-        <SearchBar />
-        
         <StoryScroller />
         
         <CategoryBelt />
@@ -148,57 +119,49 @@ const Index = () => {
           <div className="h-[1px] bg-gradient-to-r from-transparent via-gray-200 to-transparent" />
         </div>
         
-        {/* Weekly Topics */}
         <IkeaBelt />
         
         <div className="py-2">
           <div className="h-[1px] bg-gradient-to-r from-transparent via-gray-200 to-transparent" />
         </div>
         
-        {/* BrandsBelt */}
         <BrandsBelt />
         
         <div className="py-2">
           <div className="h-[1px] bg-gradient-to-r from-transparent via-gray-200 to-transparent" />
         </div>
         
-        {/* Pinterest Grid */}
         <PinterestGrid />
         
         <div className="py-2">
           <div className="h-[1px] bg-gradient-to-r from-transparent via-gray-200 to-transparent" />
         </div>
         
-        {/* Price Hits section moved below Pinterest grid */}
         <PriceHitsBelt />
         
         <div className="py-2">
           <div className="h-[1px] bg-gradient-to-r from-transparent via-gray-200 to-transparent" />
         </div>
         
-        {/* ShoppableImage */}
         <ShoppableImage />
         
         <div className="py-2">
           <div className="h-[1px] bg-gradient-to-r from-transparent via-gray-200 to-transparent" />
         </div>
         
-        {/* Discount Code Section */}
         <DiscountCode 
           code="XHAU8254" 
           description="Your unique discount code for free delivery:" 
         />
       </main>
       
-      {/* Scroll Down Indicator - hide if at bottom */}
       {!isAtBottom && (
         <ScrollDownIndicator 
           show={showScrollIndicator} 
           onClick={handleIndicatorClick}
         />
       )}
-
-      {/* Toast notifications */}
+      
       <Toaster />
     </div>
   );

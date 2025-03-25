@@ -3,11 +3,17 @@ import { Search } from 'lucide-react';
 import { useState } from 'react';
 import { cn } from '@/lib/utils';
 
-const SearchBar = () => {
+interface SearchBarProps {
+  inHeader?: boolean;
+}
+
+const SearchBar = ({ inHeader = false }: SearchBarProps) => {
   const [isFocused, setIsFocused] = useState(false);
 
   return (
-    <div className="px-4 py-3">
+    <div className={cn(
+      inHeader ? "py-0" : "px-4 py-3"
+    )}>
       <div 
         className={cn(
           "relative w-full h-11 px-4 bg-gray-100 rounded-full flex items-center",
