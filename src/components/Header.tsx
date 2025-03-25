@@ -28,6 +28,8 @@ const Header = () => {
         <DeliveryWindow />
         
         <div className="flex items-center space-x-3">
+          <SearchBar inHeader={true} />
+          
           <button className="w-9 h-9 rounded-full flex items-center justify-center hover:bg-gray-100 transition-colors relative">
             <Bell className="w-5 h-5" />
             <span className="absolute top-1 right-1.5 w-2 h-2 bg-primary rounded-full" />
@@ -42,11 +44,6 @@ const Header = () => {
             <User className="w-5 h-5" />
           </button>
         </div>
-      </div>
-      
-      {/* Embedded SearchBar */}
-      <div className="w-full">
-        <SearchBar inHeader={true} />
       </div>
     </header>
   );
