@@ -1,4 +1,3 @@
-
 import { useRef, useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import AnimatedImage from './AnimatedImage';
@@ -6,8 +5,8 @@ import { ListTodo } from 'lucide-react';
 import { useHapticFeedback } from '@/hooks/use-haptic';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { Badge } from '@/components/ui/badge';
+import ContentPreview from './ContentPreview';
 
-// Weekly offers sections
 const weeklyOffers = {
   id: 1,
   title: "Weekly Topics",
@@ -57,7 +56,6 @@ const IkeaBelt = () => {
   const weeklyItemRefs = useRef<(HTMLDivElement | null)[]>([]);
   const lastHapticTime = useRef<number>(0);
 
-  // Set up intersection observer for weekly offers
   useEffect(() => {
     if (!isMobile || !weeklyScrollRef.current) return;
     
@@ -68,7 +66,6 @@ const IkeaBelt = () => {
     };
     
     const handleIntersection = (entries: IntersectionObserverEntry[]) => {
-      // Find the leftmost visible item
       const visibleEntries = entries.filter(entry => entry.isIntersecting)
         .sort((a, b) => {
           const rectA = a.boundingClientRect;
@@ -83,7 +80,6 @@ const IkeaBelt = () => {
         if (focusedWeeklyIndex !== index) {
           setFocusedWeeklyIndex(index);
           
-          // Trigger haptic feedback with throttling
           const now = Date.now();
           if (now - lastHapticTime.current > 150) {
             triggerHaptic();
@@ -104,9 +100,84 @@ const IkeaBelt = () => {
     };
   }, [isMobile, focusedWeeklyIndex, triggerHaptic]);
 
+  const renderWeeklyItem = (item: typeof weeklyOffers.items[0], index: number) => {
+    const itemContent = (
+      <div className="relative">
+        <AnimatedImage
+          src={item.image}
+          fallbackSrc={item.fallbackSrc}
+          alt={item.title}
+          className="w-full"
+          aspectRatio="aspect-[3/4]"
+          objectFit="cover"
+        />
+        {item.badge && (
+          <div className="absolute top-4 left-4 z-10">
+            <Badge variant="secondary" className="px-2 py-1 bg-white/90 text-primary shadow-sm backdrop-blur-sm flex items-center gap-1.5">
+              <ListTodo className="w-3.5 h-3.5" />
+              <span className="text-xs font-medium">{item.badge.text}</span>
+            </Badge>
+          </div>
+        )}
+        <div className={cn(
+          "absolute inset-0 bg-gradient-to-b from-black/10 to-black/70 transition-opacity duration-200",
+          focusedWeeklyIndex === index ? "opacity-90" : "opacity-100"
+        )}></div>
+        <div className="absolute bottom-0 left-0 right-0 p-4 text-white">
+          <h3 className="font-medium text-lg">{item.title}</h3>
+          {item.description && (
+            <p className="text-sm text-white/90 mt-1">{item.description}</p>
+          )}
+        </div>
+      </div>
+    );
+
+    const previewContent = (
+      <div className="relative rounded overflow-hidden">
+        <img 
+          src={item.image} 
+          alt={item.title} 
+          className="w-full aspect-video object-cover" 
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/10 to-black/70 flex flex-col justify-end p-4">
+          <h3 className="text-white font-medium text-lg">{item.title}</h3>
+          {item.description && (
+            <p className="text-white/90 text-sm mt-1">{item.description}</p>
+          )}
+          <div className="mt-3 bg-white/20 backdrop-blur-sm px-3 py-2 rounded-md inline-block">
+            <p className="text-white text-xs">Click to view shopping list</p>
+          </div>
+        </div>
+      </div>
+    );
+
+    return (
+      <div
+        key={item.id}
+        ref={el => weeklyItemRefs.current[index] = el}
+        data-index={index}
+        className={cn(
+          "flex-shrink-0 snap-start overflow-hidden shadow-sm w-[300px] md:w-[calc(33.333%-16px)] lg:w-[calc(25%-16px)] transition-all duration-200",
+          focusedWeeklyIndex === index && "scale-105 shadow-md" 
+        )}
+      >
+        {isMobile ? (
+          itemContent
+        ) : (
+          <ContentPreview
+            previewContent={previewContent}
+            previewTitle={`${item.title} Preview`}
+            openDelay={1000}
+          >
+            {itemContent}
+          </ContentPreview>
+        )}
+      </div>
+    );
+  };
+
   return (
     <div className="py-4">
-      {/* Weekly Topics section - larger panels */}
       <div className="mb-10">
         <div className="px-4 mb-3">
           <h2 className="text-lg font-medium">{weeklyOffers.title}</h2>
@@ -118,47 +189,7 @@ const IkeaBelt = () => {
             className="flex flex-nowrap overflow-x-auto snap-x snap-mandatory gap-4 pb-4 scrollbar-hide"
             style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
           >
-            {weeklyOffers.items.map((item, index) => (
-              <div
-                key={item.id}
-                ref={el => weeklyItemRefs.current[index] = el}
-                data-index={index}
-                className={cn(
-                  "flex-shrink-0 snap-start overflow-hidden shadow-sm w-[300px] md:w-[calc(33.333%-16px)] lg:w-[calc(25%-16px)] transition-all duration-200",
-                  focusedWeeklyIndex === index && "scale-105 shadow-md" 
-                )}
-              >
-                <div className="relative">
-                  <AnimatedImage
-                    src={item.image}
-                    fallbackSrc={item.fallbackSrc}
-                    alt={item.title}
-                    className="w-full"
-                    aspectRatio="aspect-[3/4]"
-                    objectFit="cover"
-                  />
-                  {/* Shopping list badge with increased padding */}
-                  {item.badge && (
-                    <div className="absolute top-4 left-4 z-10">
-                      <Badge variant="secondary" className="px-2 py-1 bg-white/90 text-primary shadow-sm backdrop-blur-sm flex items-center gap-1.5">
-                        <ListTodo className="w-3.5 h-3.5" />
-                        <span className="text-xs font-medium">{item.badge.text}</span>
-                      </Badge>
-                    </div>
-                  )}
-                  <div className={cn(
-                    "absolute inset-0 bg-gradient-to-b from-black/10 to-black/70 transition-opacity duration-200",
-                    focusedWeeklyIndex === index ? "opacity-90" : "opacity-100"
-                  )}></div>
-                  <div className="absolute bottom-0 left-0 right-0 p-4 text-white">
-                    <h3 className="font-medium text-lg">{item.title}</h3>
-                    {item.description && (
-                      <p className="text-sm text-white/90 mt-1">{item.description}</p>
-                    )}
-                  </div>
-                </div>
-              </div>
-            ))}
+            {weeklyOffers.items.map((item, index) => renderWeeklyItem(item, index))}
           </div>
         </div>
       </div>
