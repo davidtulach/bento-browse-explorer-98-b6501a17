@@ -5,6 +5,7 @@ import { cn } from '@/lib/utils';
 import AnimatedImage from './AnimatedImage';
 import { SheetHeader, SheetTitle } from '@/components/ui/sheet';
 import { categorySubcategories, categoryBrandMessages, BrandMessage } from '@/data/categoryData';
+import { Badge } from '@/components/ui/badge';
 
 interface CategoryContentProps {
   category: string;
@@ -68,15 +69,27 @@ const CategoryContent: React.FC<CategoryContentProps> = ({ category, onClose, is
                 href="#"
                 className="text-sm hover:underline py-1 flex items-center justify-between group relative"
               >
-                <div className="flex items-center">
+                <div className="flex items-center flex-wrap">
                   <span>{subcat}</span>
                   
                   {/* New arrival badge for specific subcategories */}
                   {hasNewArrival(category, subcat) && (
                     <div className="ml-2">
-                      <div className="px-2 py-0.5 bg-purple-100 text-purple-800 text-xs font-medium rounded-full">
-                        New Arrivals
-                      </div>
+                      {isMobile ? (
+                        <div className="flex items-center">
+                          <div className="w-4 h-4 rounded-full bg-purple-500 flex items-center justify-center">
+                            <Star 
+                              className="text-white fill-current" 
+                              size={10} 
+                              strokeWidth={0}
+                            />
+                          </div>
+                        </div>
+                      ) : (
+                        <div className="px-2 py-0.5 bg-purple-100 text-purple-800 text-xs font-medium rounded-full">
+                          New Arrivals
+                        </div>
+                      )}
                     </div>
                   )}
                 </div>
