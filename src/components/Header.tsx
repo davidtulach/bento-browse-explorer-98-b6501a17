@@ -1,4 +1,3 @@
-
 import { Bell, ChevronDown, Clock, ShoppingCart, User } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import SearchBar from './SearchBar';
@@ -24,12 +23,14 @@ const Header = () => {
       "px-4 py-3",
       "transition-all duration-300 ease-in-out"
     )}>
-      <div className="flex items-center justify-between mb-2">
+      <div className="flex items-center justify-between">
         <DeliveryWindow />
         
-        <div className="flex items-center space-x-3">
+        <div className="flex items-center flex-1 space-x-3 mx-3">
           <SearchBar inHeader={true} />
-          
+        </div>
+        
+        <div className="flex items-center space-x-3">
           <button className="w-9 h-9 rounded-full flex items-center justify-center hover:bg-gray-100 transition-colors relative">
             <Bell className="w-5 h-5" />
             <span className="absolute top-1 right-1.5 w-2 h-2 bg-primary rounded-full" />

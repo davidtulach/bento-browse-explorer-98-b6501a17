@@ -12,11 +12,12 @@ const SearchBar = ({ inHeader = false }: SearchBarProps) => {
 
   return (
     <div className={cn(
+      "w-full",
       inHeader ? "py-0" : "px-4 py-3"
     )}>
       <div 
         className={cn(
-          "relative w-full h-11 px-4 bg-gray-100 rounded-full flex items-center",
+          "relative w-full h-9 px-4 bg-gray-100 rounded-full flex items-center",
           "transition-all duration-300 ease-in-out",
           isFocused && "bg-white shadow ring-1 ring-gray-200"
         )}
