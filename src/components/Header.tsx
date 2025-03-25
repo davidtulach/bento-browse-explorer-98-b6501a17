@@ -2,6 +2,7 @@
 import { cn } from '@/lib/utils';
 import SearchBar from './SearchBar';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { Bell, ShoppingCart, User } from 'lucide-react';
 
 const Header = () => {
   const isMobile = useIsMobile();
