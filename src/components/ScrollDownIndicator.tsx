@@ -1,6 +1,5 @@
 
 import { useEffect, useState, useRef } from 'react';
-import { useIsMobile } from '@/hooks/use-mobile';
 
 // Add declaration for dotlottie-player custom element
 declare global {
@@ -26,7 +25,6 @@ interface ScrollDownIndicatorProps {
 const ScrollDownIndicator = ({ show, onClick }: ScrollDownIndicatorProps) => {
   const [isVisible, setIsVisible] = useState(show);
   const playerRef = useRef<HTMLElement | null>(null);
-  const isMobile = useIsMobile();
 
   useEffect(() => {
     // Create script if it doesn't exist
@@ -60,9 +58,9 @@ const ScrollDownIndicator = ({ show, onClick }: ScrollDownIndicatorProps) => {
 
   return (
     <div 
-      className={`fixed left-1/2 -translate-x-1/2 z-50 flex flex-col items-center transition-all duration-300 ${
+      className={`fixed bottom-10 left-1/2 -translate-x-1/2 z-50 flex flex-col items-center transition-all duration-300 ${
         show ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
-      } ${isMobile ? 'bottom-24' : 'bottom-10'}`}
+      }`}
       onClick={onClick}
     >
       {/* Removed the background circle, now just rendering the player directly */}

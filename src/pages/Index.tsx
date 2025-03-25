@@ -1,4 +1,3 @@
-
 import { useState, useEffect, useRef } from 'react';
 import { cn } from '@/lib/utils';
 import Header from '@/components/Header';
@@ -11,10 +10,10 @@ import PriceHitsBelt from '@/components/PriceHitsBelt';
 import DiscountCode from '@/components/DiscountCode';
 import ScrollDownIndicator from '@/components/ScrollDownIndicator';
 import ShoppableImage from '@/components/ShoppableImage';
+import { Haptics } from '@capacitor/haptics';
 import { Toaster } from '@/components/ui/toaster';
 import { useHapticFeedback } from '@/hooks/use-haptic';
 import { useIsMobile } from '@/hooks/use-mobile';
-import MobileNavBar from '@/components/MobileNavBar';
 
 const pillButtons = [
   { id: 'favorites', label: 'Favorites', color: 'bg-green-100 text-green-700' },
@@ -103,10 +102,7 @@ const Index = () => {
 
   return (
     <div 
-      className={cn(
-        "min-h-screen bg-gray-50 flex flex-col overflow-auto",
-        isMobile && "pb-20"
-      )}
+      className="min-h-screen bg-gray-50 flex flex-col overflow-auto"
       onScroll={handleScroll}
       ref={containerRef}
     >
@@ -114,7 +110,7 @@ const Index = () => {
       
       <main className={cn(
         "flex-1 pb-20",
-        isMobile && "pt-16" // Add padding at top to account for fixed search bar
+        isMobile && "pt-0"
       )}>
         <StoryScroller />
         
@@ -173,8 +169,6 @@ const Index = () => {
           description="Your unique discount code for free delivery:" 
         />
       </main>
-      
-      {isMobile && <MobileNavBar />}
       
       {!isAtBottom && (
         <ScrollDownIndicator 
