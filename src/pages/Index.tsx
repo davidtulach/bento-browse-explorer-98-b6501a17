@@ -13,6 +13,7 @@ import ShoppableImage from '@/components/ShoppableImage';
 import { Haptics } from '@capacitor/haptics';
 import { Toaster } from '@/components/ui/toaster';
 import { useHapticFeedback } from '@/hooks/use-haptic';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 const pillButtons = [
   { id: 'favorites', label: 'Favorites', color: 'bg-green-100 text-green-700' },
@@ -28,6 +29,7 @@ const Index = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [isAtBottom, setIsAtBottom] = useState(false);
   const { triggerHaptic } = useHapticFeedback();
+  const isMobile = useIsMobile();
 
   useEffect(() => {
     const initCapacitorFeatures = async () => {
@@ -106,7 +108,10 @@ const Index = () => {
     >
       <Header />
       
-      <main className="flex-1 pb-20">
+      <main className={cn(
+        "flex-1 pb-20",
+        isMobile && "pt-0"
+      )}>
         <StoryScroller />
         
         <CategoryBelt />
