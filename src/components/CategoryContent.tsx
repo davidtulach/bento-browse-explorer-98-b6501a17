@@ -92,15 +92,15 @@ const CategoryContent: React.FC<CategoryContentProps> = ({ category, onClose, is
 
   const CosmeticsDiscountCard = () => {
     return (
-      <div className="bg-[#fde7f4] rounded-lg p-4 mb-4">
-        <div className="flex items-center justify-between mb-3">
+      <div className="border border-gray-200 rounded-lg p-3 mb-4 bg-white">
+        <div className="flex items-center justify-between mb-2">
           <div className="flex items-center gap-2">
-            <Badge variant="default" className="bg-[#de3031]">SALE</Badge>
-            <span className="font-medium text-[#de3031]">15% OFF COSMETICS</span>
+            <Badge variant="outline">15% OFF</Badge>
+            <span className="text-sm">Limited time offer</span>
           </div>
           
-          <Badge variant="outline" className="bg-white/80 text-[#de3031] border-[#de3031]">
-            {timeRemaining.days}d {timeRemaining.hours}h {timeRemaining.minutes}m
+          <Badge variant="outline" className="text-xs">
+            {timeRemaining.days}d {timeRemaining.hours}h
           </Badge>
         </div>
         
@@ -109,22 +109,18 @@ const CategoryContent: React.FC<CategoryContentProps> = ({ category, onClose, is
             type="text" 
             value="BEAUTY15" 
             readOnly
-            className="flex-1 bg-white py-2 px-3 rounded font-mono text-sm border border-[#de3031] text-[#de3031]"
+            className="flex-1 bg-gray-50 py-1.5 px-3 rounded text-xs font-mono border border-gray-200"
           />
           <Button 
             onClick={handleApplyDiscount}
             disabled={codeApplied}
-            className={cn(
-              "whitespace-nowrap", 
-              codeApplied 
-                ? "bg-white text-[#de3031] border border-[#de3031]" 
-                : "bg-[#de3031] text-white"
-            )}
+            className="text-xs h-8"
             variant={codeApplied ? "outline" : "default"}
+            size="sm"
           >
             {codeApplied ? (
               <>
-                <CheckCircle className="h-4 w-4 mr-1" />
+                <CheckCircle className="h-3 w-3 mr-1" />
                 Applied
               </>
             ) : (
@@ -180,20 +176,14 @@ const CategoryContent: React.FC<CategoryContentProps> = ({ category, onClose, is
                   {category === 'Cosmetics' && (
                     <div className="ml-2">
                       {isMobile ? (
-                        <div className={cn(
-                          "w-4 h-4 rounded-full flex items-center justify-center",
-                          "bg-[#de3031]"
-                        )}>
+                        <div className="w-4 h-4 rounded-full flex items-center justify-center bg-gray-200">
                           <BadgePercent 
-                            className="text-white" 
+                            className="text-gray-700" 
                             size={10}
                           />
                         </div>
                       ) : (
-                        <div className={cn(
-                          "px-2 py-0.5 text-xs font-medium rounded-full",
-                          "bg-[#de3031] text-white"
-                        )}>
+                        <div className="px-2 py-0.5 text-xs font-medium rounded-full bg-gray-200 text-gray-700">
                           15% OFF
                         </div>
                       )}
@@ -220,11 +210,13 @@ const CategoryContent: React.FC<CategoryContentProps> = ({ category, onClose, is
           </div>
           
           <div className="md:w-2/5">
+            {category === 'Cosmetics' && <CosmeticsDiscountCard />}
+            
             <div className="relative overflow-hidden bg-white">
               {category === 'Cosmetics' ? (
                 <>
                   <div className="absolute top-2 right-2 z-10">
-                    <Badge variant="default" className="bg-[#de3031]">15% OFF</Badge>
+                    <Badge variant="outline" className="bg-white/80">15% OFF</Badge>
                   </div>
                   <AnimatedImage 
                     src={brandMessage.imageSrc}
@@ -240,8 +232,6 @@ const CategoryContent: React.FC<CategoryContentProps> = ({ category, onClose, is
                       For a limited time only, enjoy 15% off on all Cosmetics products. 
                       Treat yourself to premium skincare, makeup, and more at special prices.
                     </p>
-                    
-                    <CosmeticsDiscountCard />
                     
                     <button className="text-sm font-medium text-primary underline flex items-center group">
                       <span>Explore the sale</span>
