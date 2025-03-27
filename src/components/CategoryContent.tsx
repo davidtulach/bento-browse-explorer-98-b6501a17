@@ -1,6 +1,5 @@
-
 import React, { useState, useEffect } from 'react';
-import { X, ChevronRight, Star, PercentIcon, CheckCircle } from 'lucide-react';
+import { X, ChevronRight, PercentIcon } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import AnimatedImage from './AnimatedImage';
 import { SheetHeader, SheetTitle } from '@/components/ui/sheet';
@@ -15,7 +14,6 @@ interface CategoryContentProps {
   isMobile: boolean;
 }
 
-// New subcategory data with new arrivals flag
 const newArrivalSubcategories = {
   'Bakery': ['Bread', 'Pastries'],
   'Cosmetics': ['Skincare', 'Makeup', 'Natural & Organic'],
@@ -23,7 +21,6 @@ const newArrivalSubcategories = {
   'Snacks': ['Chips', 'Protein Bars']
 };
 
-// Special discounted categories
 const discountedCategories = ['Cosmetics'];
 
 const CategoryContent: React.FC<CategoryContentProps> = ({ category, onClose, isMobile }) => {
@@ -38,17 +35,14 @@ const CategoryContent: React.FC<CategoryContentProps> = ({ category, onClose, is
   });
   const [codeApplied, setCodeApplied] = useState(false);
 
-  // Check if a subcategory has new arrivals
   const hasNewArrival = (category: string, subcategory: string) => {
     return newArrivalSubcategories[category]?.includes(subcategory) || false;
   };
 
-  // Check if category has discount
   const hasDiscount = (category: string) => {
     return discountedCategories.includes(category);
   };
 
-  // Timer countdown effect
   useEffect(() => {
     if (!hasDiscount(category)) return;
 
@@ -75,7 +69,6 @@ const CategoryContent: React.FC<CategoryContentProps> = ({ category, onClose, is
           return { ...prev, days: newDays, hours: 23, minutes: 59, seconds: 59 };
         }
         
-        // Timer finished
         clearInterval(timer);
         return { days: 0, hours: 0, minutes: 0, seconds: 0 };
       });
@@ -84,7 +77,6 @@ const CategoryContent: React.FC<CategoryContentProps> = ({ category, onClose, is
     return () => clearInterval(timer);
   }, [category]);
 
-  // Apply discount code handler
   const handleApplyDiscount = () => {
     setCodeApplied(true);
     toast({
@@ -94,7 +86,6 @@ const CategoryContent: React.FC<CategoryContentProps> = ({ category, onClose, is
     });
   };
 
-  // Custom discount component for Cosmetics
   const CosmeticsDiscountCard = () => {
     return (
       <div className="bg-orange-50 rounded-lg p-4 mb-4">
@@ -170,9 +161,7 @@ const CategoryContent: React.FC<CategoryContentProps> = ({ category, onClose, is
         )}
         
         <div className="flex flex-col md:flex-row gap-8">
-          {/* Left side - Categories in two columns */}
           <div className="md:w-3/5 grid grid-cols-2 gap-x-8 gap-y-2">
-            {/* "Browse all" option */}
             <a 
               href="#"
               className="text-sm font-bold hover:underline col-span-2 mb-2 flex items-center group"
@@ -193,37 +182,26 @@ const CategoryContent: React.FC<CategoryContentProps> = ({ category, onClose, is
                 <div className="flex items-center flex-wrap">
                   <span>{subcat}</span>
                   
-                  {/* Changed badge for Cosmetics to use discount icon */}
                   {hasNewArrival(category, subcat) && (
                     <div className="ml-2">
                       {isMobile ? (
                         <div className="flex items-center">
                           <div className={cn(
                             "w-4 h-4 rounded-full flex items-center justify-center",
-                            category === 'Cosmetics' ? "bg-orange-500" : "bg-purple-500"
+                            "bg-orange-500"
                           )}>
-                            {category === 'Cosmetics' ? (
-                              <PercentIcon 
-                                className="text-white" 
-                                size={10}
-                              />
-                            ) : (
-                              <Star 
-                                className="text-white fill-current" 
-                                size={10} 
-                                strokeWidth={0}
-                              />
-                            )}
+                            <PercentIcon 
+                              className="text-white" 
+                              size={10}
+                            />
                           </div>
                         </div>
                       ) : (
                         <div className={cn(
                           "px-2 py-0.5 text-xs font-medium rounded-full",
-                          category === 'Cosmetics' 
-                            ? "bg-orange-500 text-white" 
-                            : "bg-purple-100 text-purple-800"
+                          "bg-orange-500 text-white"
                         )}>
-                          {category === 'Cosmetics' ? "15% OFF" : "New Arrivals"}
+                          15% OFF
                         </div>
                       )}
                     </div>
@@ -237,7 +215,6 @@ const CategoryContent: React.FC<CategoryContentProps> = ({ category, onClose, is
             ))}
           </div>
           
-          {/* Right side - Image and promotion */}
           <div className="md:w-2/5">
             <div className="relative overflow-hidden bg-white">
               {category === 'Cosmetics' ? (
@@ -260,7 +237,6 @@ const CategoryContent: React.FC<CategoryContentProps> = ({ category, onClose, is
                       Treat yourself to premium skincare, makeup, and more at special prices.
                     </p>
                     
-                    {/* Moving discount card to brand content area */}
                     <CosmeticsDiscountCard />
                     
                     <button className="text-sm font-medium text-primary underline flex items-center group">
