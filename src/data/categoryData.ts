@@ -42,9 +42,9 @@ export const categoryBrandMessages: Record<string, BrandMessage> = {
   },
   'Cosmetics': {
     title: 'Beauty Sale - Up to 30% OFF',
-    description: 'Discover premium beauty products from top brands with our special promotion.',
-    imageSrc: '/lovable-uploads/ca65b4a0-7881-443f-8c81-98dc13a0c896.png',
-    fallbackSrc: 'https://images.unsplash.com/photo-1596462502278-27bfdc403348',
+    description: 'Our luxury brand partners have enabled this exclusive offer for a limited time.',
+    imageSrc: '/lovable-uploads/a9f8278d-4c03-40ad-9466-9da0625a2f1d.png',
+    fallbackSrc: '/lovable-uploads/a9f8278d-4c03-40ad-9466-9da0625a2f1d.png',
   },
   'Dairy': {
     title: 'Farm to Table',
