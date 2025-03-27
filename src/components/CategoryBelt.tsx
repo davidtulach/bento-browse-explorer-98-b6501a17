@@ -1,8 +1,7 @@
-
 import { useState, useRef, useEffect } from 'react';
 import { ChevronLeft, ChevronRight, Apple, Wheat, Milk, Beef, GlassWater, Snowflake, 
   Candy, House, Package, Egg, Droplet, CookingPot, LeafyGreen, Globe, 
-  IceCream, Dog, Baby, Scissors } from 'lucide-react';
+  IceCream, Dog, Baby, Scissors, BadgePercent } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import CategoryOverlay from './CategoryOverlay';
 import { useIsMobile } from '@/hooks/use-mobile';
@@ -11,7 +10,7 @@ import { Badge } from './ui/badge';
 const categories = [
   { id: 1, name: "Fruit & Veg", icon: Apple },
   { id: 2, name: "Bakery", icon: Wheat, hasNewItems: true },
-  { id: 3, name: "Cosmetics", icon: Scissors, hasNewItems: true }, // Added new Cosmetics category
+  { id: 3, name: "Cosmetics", icon: Scissors, hasDiscount: true },
   { id: 4, name: "Dairy", icon: Milk },
   { id: 5, name: "Meat", icon: Beef },
   { id: 6, name: "Drinks", icon: GlassWater },
@@ -140,6 +139,15 @@ const CategoryBelt = () => {
                         aria-label="New items available"
                       >
                         ★
+                      </Badge>
+                    )}
+                    
+                    {category.hasDiscount && (
+                      <Badge 
+                        className="absolute -top-1 -right-1 bg-orange-500 text-white border-2 border-white p-1 rounded-full w-6 h-6 flex items-center justify-center"
+                        aria-label="Discount available"
+                      >
+                        <BadgePercent className="w-3 h-3" />
                       </Badge>
                     )}
                   </div>
