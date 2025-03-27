@@ -1,5 +1,6 @@
+
 import React, { useState, useEffect } from 'react';
-import { X, ChevronRight, PercentIcon, CheckCircle, BadgePercent } from 'lucide-react';
+import { X, ChevronRight, CheckCircle, BadgePercent } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import AnimatedImage from './AnimatedImage';
 import { SheetHeader, SheetTitle } from '@/components/ui/sheet';
@@ -92,58 +93,44 @@ const CategoryContent: React.FC<CategoryContentProps> = ({ category, onClose, is
   const CosmeticsDiscountCard = () => {
     return (
       <div className="bg-[#fde7f4] rounded-lg p-4 mb-4">
-        <div className="flex flex-col">
-          <div className="flex items-center gap-2 mb-2">
+        <div className="flex items-center justify-between mb-3">
+          <div className="flex items-center gap-2">
             <Badge variant="default" className="bg-[#de3031]">SALE</Badge>
-            <span className="font-semibold text-[#de3031]">15% OFF ALL COSMETICS</span>
+            <span className="font-medium text-[#de3031]">15% OFF COSMETICS</span>
           </div>
           
-          <div className="grid grid-cols-4 gap-2 mb-3 text-center">
-            <div className="bg-white p-2 rounded shadow-sm">
-              <div className="text-lg font-bold text-[#de3031]">{timeRemaining.days}</div>
-              <div className="text-xs text-gray-600">days</div>
-            </div>
-            <div className="bg-white p-2 rounded shadow-sm">
-              <div className="text-lg font-bold text-[#de3031]">{timeRemaining.hours}</div>
-              <div className="text-xs text-gray-600">hours</div>
-            </div>
-            <div className="bg-white p-2 rounded shadow-sm">
-              <div className="text-lg font-bold text-[#de3031]">{timeRemaining.minutes}</div>
-              <div className="text-xs text-gray-600">mins</div>
-            </div>
-            <div className="bg-white p-2 rounded shadow-sm">
-              <div className="text-lg font-bold text-[#de3031]">{timeRemaining.seconds}</div>
-              <div className="text-xs text-gray-600">secs</div>
-            </div>
-          </div>
-          
-          <div className="flex items-center gap-2 mb-3">
-            <div className="flex-1 bg-white py-2 px-3 rounded font-mono text-sm border border-[#de3031]">BEAUTY15</div>
-            <Button 
-              onClick={handleApplyDiscount}
-              disabled={codeApplied}
-              className={cn(
-                "whitespace-nowrap", 
-                codeApplied 
-                  ? "bg-white text-[#de3031] border border-[#de3031]" 
-                  : "bg-[#de3031] text-white"
-              )}
-              variant={codeApplied ? "outline" : "default"}
-            >
-              {codeApplied ? (
-                <>
-                  <CheckCircle className="h-4 w-4 mr-1 text-[#de3031]" />
-                  Applied
-                </>
-              ) : (
-                "Apply"
-              )}
-            </Button>
-          </div>
-          
-          <p className="text-xs text-[#de3031]">
-            Apply this code to get 15% off on all Cosmetics products in your basket.
-          </p>
+          <Badge variant="outline" className="bg-white/80 text-[#de3031] border-[#de3031]">
+            {timeRemaining.days}d {timeRemaining.hours}h {timeRemaining.minutes}m
+          </Badge>
+        </div>
+        
+        <div className="flex items-center gap-2">
+          <input 
+            type="text" 
+            value="BEAUTY15" 
+            readOnly
+            className="flex-1 bg-white py-2 px-3 rounded font-mono text-sm border border-[#de3031] text-[#de3031]"
+          />
+          <Button 
+            onClick={handleApplyDiscount}
+            disabled={codeApplied}
+            className={cn(
+              "whitespace-nowrap", 
+              codeApplied 
+                ? "bg-white text-[#de3031] border border-[#de3031]" 
+                : "bg-[#de3031] text-white"
+            )}
+            variant={codeApplied ? "outline" : "default"}
+          >
+            {codeApplied ? (
+              <>
+                <CheckCircle className="h-4 w-4 mr-1" />
+                Applied
+              </>
+            ) : (
+              "Apply"
+            )}
+          </Button>
         </div>
       </div>
     );
@@ -213,7 +200,7 @@ const CategoryContent: React.FC<CategoryContentProps> = ({ category, onClose, is
                     </div>
                   )}
                   
-                  {hasNewArrival(category, subcat) && category !== 'Cosmetics' && (
+                  {hasNewArrival(category, subcat) && (
                     <div className="ml-2">
                       <div className={cn(
                         "px-2 py-0.5 text-xs font-medium rounded-full",
