@@ -97,28 +97,28 @@ const CategoryContent: React.FC<CategoryContentProps> = ({ category, onClose, is
   // Custom discount component for Cosmetics
   const CosmeticsDiscountCard = () => {
     return (
-      <div className="bg-purple-50 rounded-lg p-4 mb-4">
+      <div className="bg-orange-50 rounded-lg p-4 mb-4">
         <div className="flex flex-col">
           <div className="flex items-center gap-2 mb-2">
-            <Badge variant="default" className="bg-purple-500">SALE</Badge>
-            <span className="font-semibold text-purple-800">15% OFF ALL COSMETICS</span>
+            <Badge variant="default" className="bg-orange-500">SALE</Badge>
+            <span className="font-semibold text-orange-800">15% OFF ALL COSMETICS</span>
           </div>
           
           <div className="grid grid-cols-4 gap-2 mb-3 text-center">
             <div className="bg-white p-2 rounded shadow-sm">
-              <div className="text-lg font-bold text-purple-800">{timeRemaining.days}</div>
+              <div className="text-lg font-bold text-orange-800">{timeRemaining.days}</div>
               <div className="text-xs text-gray-600">days</div>
             </div>
             <div className="bg-white p-2 rounded shadow-sm">
-              <div className="text-lg font-bold text-purple-800">{timeRemaining.hours}</div>
+              <div className="text-lg font-bold text-orange-800">{timeRemaining.hours}</div>
               <div className="text-xs text-gray-600">hours</div>
             </div>
             <div className="bg-white p-2 rounded shadow-sm">
-              <div className="text-lg font-bold text-purple-800">{timeRemaining.minutes}</div>
+              <div className="text-lg font-bold text-orange-800">{timeRemaining.minutes}</div>
               <div className="text-xs text-gray-600">mins</div>
             </div>
             <div className="bg-white p-2 rounded shadow-sm">
-              <div className="text-lg font-bold text-purple-800">{timeRemaining.seconds}</div>
+              <div className="text-lg font-bold text-orange-800">{timeRemaining.seconds}</div>
               <div className="text-xs text-gray-600">secs</div>
             </div>
           </div>
@@ -169,9 +169,6 @@ const CategoryContent: React.FC<CategoryContentProps> = ({ category, onClose, is
           </div>
         )}
         
-        {/* Show discount section for Cosmetics */}
-        {category === 'Cosmetics' && <CosmeticsDiscountCard />}
-        
         <div className="flex flex-col md:flex-row gap-8">
           {/* Left side - Categories in two columns */}
           <div className="md:w-3/5 grid grid-cols-2 gap-x-8 gap-y-2">
@@ -196,14 +193,14 @@ const CategoryContent: React.FC<CategoryContentProps> = ({ category, onClose, is
                 <div className="flex items-center flex-wrap">
                   <span>{subcat}</span>
                   
-                  {/* New arrival badge for specific subcategories, but show discount for Cosmetics */}
+                  {/* Changed badge for Cosmetics to use discount icon */}
                   {hasNewArrival(category, subcat) && (
                     <div className="ml-2">
                       {isMobile ? (
                         <div className="flex items-center">
                           <div className={cn(
                             "w-4 h-4 rounded-full flex items-center justify-center",
-                            category === 'Cosmetics' ? "bg-purple-700" : "bg-purple-500"
+                            category === 'Cosmetics' ? "bg-orange-500" : "bg-purple-500"
                           )}>
                             {category === 'Cosmetics' ? (
                               <PercentIcon 
@@ -223,7 +220,7 @@ const CategoryContent: React.FC<CategoryContentProps> = ({ category, onClose, is
                         <div className={cn(
                           "px-2 py-0.5 text-xs font-medium rounded-full",
                           category === 'Cosmetics' 
-                            ? "bg-purple-700 text-white" 
+                            ? "bg-orange-500 text-white" 
                             : "bg-purple-100 text-purple-800"
                         )}>
                           {category === 'Cosmetics' ? "15% OFF" : "New Arrivals"}
@@ -246,7 +243,7 @@ const CategoryContent: React.FC<CategoryContentProps> = ({ category, onClose, is
               {category === 'Cosmetics' ? (
                 <>
                   <div className="absolute top-2 right-2 z-10">
-                    <Badge variant="default" className="bg-purple-700">15% OFF</Badge>
+                    <Badge variant="default" className="bg-orange-500">15% OFF</Badge>
                   </div>
                   <AnimatedImage 
                     src={brandMessage.imageSrc}
@@ -262,6 +259,10 @@ const CategoryContent: React.FC<CategoryContentProps> = ({ category, onClose, is
                       For a limited time only, enjoy 15% off on all Cosmetics products. 
                       Treat yourself to premium skincare, makeup, and more at special prices.
                     </p>
+                    
+                    {/* Moving discount card to brand content area */}
+                    <CosmeticsDiscountCard />
+                    
                     <button className="text-sm font-medium text-primary underline flex items-center group">
                       <span>Explore the sale</span>
                       <ChevronRight className={cn(
