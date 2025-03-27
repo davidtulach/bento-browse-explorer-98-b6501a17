@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-import { X, ChevronRight, CheckCircle, BadgePercent, ArrowRight } from 'lucide-react';
+import { X, ChevronRight, CheckCircle, BadgePercent, ArrowRight, Timer } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import AnimatedImage from './AnimatedImage';
 import { SheetHeader, SheetTitle } from '@/components/ui/sheet';
@@ -29,7 +29,7 @@ const CategoryContent: React.FC<CategoryContentProps> = ({ category, onClose, is
   const { toast } = useToast();
   const [timeRemaining, setTimeRemaining] = useState({
     days: 3,
-    hours: 4,
+    hours: 10,
     minutes: 23,
     seconds: 59
   });
@@ -95,19 +95,45 @@ const CategoryContent: React.FC<CategoryContentProps> = ({ category, onClose, is
       <div className="mb-6">
         <div className="flex flex-col">
           <div className="text-3xl font-bold mb-2">Cosmetics</div>
-          <div className="flex flex-col gap-2">
-            <div className="text-2xl font-medium">15% off everything — use code <span className="font-bold">BEAUTY15</span></div>
-            <div className="flex items-center justify-between">
-              <div className="text-lg">Limited time offer • {timeRemaining.days} days left</div>
-              <Badge className="bg-yellow-300 text-black text-base px-4 py-2 rounded-full font-bold">
-                15%
-                <div className="text-xs">
-                  {timeRemaining.days} days left
-                </div>
-              </Badge>
+          
+          {/* Updated discount section with yellow highlight and emoji */}
+          <div className="flex flex-col gap-4 mb-4">
+            <div className="inline-flex items-center px-4 py-3 bg-yellow-100 rounded-lg">
+              <span className="text-2xl mr-2">🏷️</span>
+              <span className="text-xl font-bold">15% off everything — use code BEAUTY15</span>
             </div>
-            <button className="text-lg font-medium flex items-center mt-2 hover:underline">
-              Explore the sale <ArrowRight className="ml-1 h-5 w-5" />
+            
+            {/* Visual countdown timer */}
+            <div className="flex items-center">
+              <Timer className="h-5 w-5 mr-2" />
+              <span className="text-base font-medium mr-2">Ends in:</span>
+              <div className="flex space-x-2">
+                <div className="bg-gray-100 px-2 py-1 rounded-md">
+                  <span className="font-bold">{timeRemaining.days}d</span>
+                </div>
+                <div className="bg-gray-100 px-2 py-1 rounded-md">
+                  <span className="font-bold">{timeRemaining.hours}h</span>
+                </div>
+                <div className="bg-gray-100 px-2 py-1 rounded-md">
+                  <span className="font-bold">{timeRemaining.minutes}m</span>
+                </div>
+                <div className="bg-gray-100 px-2 py-1 rounded-md">
+                  <span className="font-bold">{timeRemaining.seconds}s</span>
+                </div>
+              </div>
+            </div>
+            
+            <button onClick={handleApplyDiscount} className="text-lg font-medium flex items-center hover:underline text-primary">
+              {codeApplied ? (
+                <>
+                  <CheckCircle className="mr-1 h-5 w-5" />
+                  Code applied
+                </>
+              ) : (
+                <>
+                  Apply discount <ArrowRight className="ml-1 h-5 w-5" />
+                </>
+              )}
             </button>
           </div>
         </div>
@@ -168,7 +194,7 @@ const CategoryContent: React.FC<CategoryContentProps> = ({ category, onClose, is
                           />
                         </div>
                       ) : (
-                        <div className="px-2 py-0.5 text-xs font-medium rounded-full bg-gray-200 text-gray-700">
+                        <div className="px-2 py-0.5 text-xs font-medium rounded-full bg-yellow-200 text-gray-700">
                           15% OFF
                         </div>
                       )}
@@ -199,7 +225,7 @@ const CategoryContent: React.FC<CategoryContentProps> = ({ category, onClose, is
               {category === 'Cosmetics' ? (
                 <>
                   <AnimatedImage 
-                    src="/lovable-uploads/1084a2c6-edaf-46b6-b354-88ad75fcbe80.png"
+                    src="/lovable-uploads/beeec256-0207-49f6-964e-97f45636a18b.png"
                     fallbackSrc={brandMessage.fallbackSrc}
                     alt="Cosmetics Sale"
                     aspectRatio="aspect-[16/10]"
