@@ -42,9 +42,9 @@ export const categoryBrandMessages: Record<string, BrandMessage> = {
     fallbackSrc: 'https://images.unsplash.com/photo-1509440159596-0249088772ff',
   },
   'Cosmetics': {
-    title: 'Beauty Sale - 15% OFF',
-    description: 'Discover premium beauty products with 15% discount. Use code BEAUTY15 at checkout.',
-    imageSrc: '/lovable-uploads/c5c3b759-e094-4656-acfb-3b08addf00f6.png',
+    title: 'Beauty Sale - Up to 30% OFF',
+    description: 'Discover premium beauty products from top brands with our special promotion.',
+    imageSrc: '/lovable-uploads/bdd60f93-845d-468a-84d2-6422e9d818dc.png',
     fallbackSrc: 'https://images.unsplash.com/photo-1596462502278-27bfdc403348',
   },
   'Dairy': {

@@ -217,14 +217,24 @@ const CategoryContent: React.FC<CategoryContentProps> = ({ category, onClose, is
           <div className="md:w-2/5">
             <div className="relative overflow-hidden">
               {category === 'Cosmetics' ? (
-                <AnimatedImage 
-                  src={brandMessage.imageSrc}
-                  fallbackSrc={brandMessage.fallbackSrc}
-                  alt="Cosmetics Sale"
-                  aspectRatio="aspect-[16/10]"
-                  objectFit="cover"
-                  className="w-full rounded-lg"
-                />
+                <div className="flex flex-col">
+                  <AnimatedImage 
+                    src={brandMessage.imageSrc}
+                    fallbackSrc={brandMessage.fallbackSrc}
+                    alt="Cosmetics Sale"
+                    aspectRatio="aspect-[16/10]"
+                    objectFit="cover"
+                    className="w-full rounded-lg"
+                  />
+                  <div className="mt-4 bg-white p-3 rounded-lg border border-purple-100">
+                    <p className="text-sm text-gray-700 mb-2">
+                      <span className="font-medium">Special partner promotion!</span> Our luxury brand partners have enabled this exclusive offer for a limited time.
+                    </p>
+                    <a href="#" className="text-sm font-medium text-purple-600 hover:underline flex items-center">
+                      See all partner offers <ChevronRight className="h-4 w-4 ml-1" />
+                    </a>
+                  </div>
+                </div>
               ) : (
                 <>
                   <AnimatedImage 
