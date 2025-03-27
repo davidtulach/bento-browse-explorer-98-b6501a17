@@ -43,7 +43,7 @@ export const categoryBrandMessages: Record<string, BrandMessage> = {
   'Cosmetics': {
     title: 'Beauty Sale - Up to 30% OFF',
     description: 'Our luxury brand partners have enabled this exclusive offer for a limited time.',
-    imageSrc: '/lovable-uploads/8a4d7052-4be6-434e-8cc9-cae294144b73.png',
+    imageSrc: '/lovable-uploads/d1bbcbd7-3b06-49f4-ad1c-6ed53dc23e01.png',
     fallbackSrc: 'https://images.unsplash.com/photo-1596462502278-27bfdc403348',
   },
   'Dairy': {
