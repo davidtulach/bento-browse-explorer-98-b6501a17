@@ -1,4 +1,3 @@
-
 import { useState, useRef, useEffect } from 'react';
 import { ChevronLeft, ChevronRight, Apple, Wheat, Milk, Beef, GlassWater, Snowflake, 
   Candy, House, Package, Egg, Droplet, CookingPot, LeafyGreen, Globe, 
@@ -107,20 +106,20 @@ const CategoryBelt = () => {
   return (
     <div className="relative" ref={beltRef}>
       <div className="px-4 py-6">
-        <h2 className="text-2xl font-bold mb-6">Categories</h2>
+        <h2 className="text-xl font-medium mb-4">Categories</h2>
         
         <div className="relative">
           <button 
             onClick={() => scroll('left')}
-            className="absolute left-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full flex items-center justify-center bg-black text-white hover:bg-black/90 transition-colors"
+            className="absolute left-0 top-1/2 -translate-y-1/2 z-10 w-9 h-9 rounded-full flex items-center justify-center bg-black text-white hover:bg-black/90 transition-colors"
             aria-label="Scroll left"
           >
-            <ChevronLeft className="w-6 h-6" />
+            <ChevronLeft className="w-5 h-5" />
           </button>
           
           <div 
             ref={scrollRef}
-            className="flex overflow-x-auto snap-x snap-mandatory gap-4 pb-6 px-6 scrollbar-hide"
+            className="flex overflow-x-auto snap-x snap-mandatory gap-3 pb-4 px-6 scrollbar-hide"
             style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
           >
             {categories.map((category) => {
@@ -131,8 +130,8 @@ const CategoryBelt = () => {
                   className="flex-shrink-0 snap-start text-center cursor-pointer"
                   onClick={(e) => handleCategoryClick(category.name, e)}
                 >
-                  <div className="w-[100px] h-[100px] mb-2 mx-auto relative flex items-center justify-center transition-transform hover:scale-110 duration-300">
-                    <IconComponent className="w-14 h-14 text-primary" strokeWidth={1.5} />
+                  <div className="w-[90px] h-[90px] mb-1 mx-auto relative flex items-center justify-center transition-transform hover:scale-105 duration-200">
+                    <IconComponent className="w-12 h-12 text-primary" strokeWidth={1.5} />
                     
                     {category.hasNewItems && (
                       <Badge 
@@ -145,14 +144,14 @@ const CategoryBelt = () => {
                     
                     {category.hasDiscount && (
                       <Badge 
-                        className="absolute -top-1 -right-1 bg-background text-foreground border border-foreground p-1 rounded-full w-6 h-6 flex items-center justify-center"
+                        className="absolute -top-1 -right-1 bg-[#fde7f4] text-[#de3031] border-2 border-[#de3031] p-1 rounded-full w-6 h-6 flex items-center justify-center"
                         aria-label="Discount available"
                       >
                         <Percent className="w-3 h-3" />
                       </Badge>
                     )}
                   </div>
-                  <p className="text-sm font-medium mt-0 text-center">{category.name}</p>
+                  <p className="text-sm font-normal mt-0 text-center">{category.name}</p>
                 </div>
               );
             })}
@@ -160,10 +159,10 @@ const CategoryBelt = () => {
           
           <button 
             onClick={() => scroll('right')}
-            className="absolute right-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full flex items-center justify-center bg-black text-white hover:bg-black/90 transition-colors"
+            className="absolute right-0 top-1/2 -translate-y-1/2 z-10 w-9 h-9 rounded-full flex items-center justify-center bg-black text-white hover:bg-black/90 transition-colors"
             aria-label="Scroll right"
           >
-            <ChevronRight className="w-6 h-6" />
+            <ChevronRight className="w-5 h-5" />
           </button>
         </div>
       </div>

@@ -43,6 +43,10 @@ const CategoryContent: React.FC<CategoryContentProps> = ({ category, onClose, is
     return discountedCategories.includes(category);
   };
 
+  const isDiscountedSubcategory = (category: string, subcategory: string) => {
+    return category === 'Cosmetics';
+  };
+
   useEffect(() => {
     if (!hasDiscount(category)) return;
 
@@ -86,27 +90,44 @@ const CategoryContent: React.FC<CategoryContentProps> = ({ category, onClose, is
     });
   };
 
-  const DiscountBadge = () => {
+  const CosmeticsDiscountCard = () => {
     return (
-      <div className="flex items-center gap-2 mb-3">
-        <Badge variant="outline" className="text-xs">
-          {timeRemaining.days}d {timeRemaining.hours}h left
-        </Badge>
-        {!codeApplied ? (
+      <div className="border border-gray-200 rounded-lg p-3 mb-4 bg-white">
+        <div className="flex items-center justify-between mb-2">
+          <div className="flex items-center gap-2">
+            <Badge variant="outline">15% OFF</Badge>
+            <span className="text-sm">Limited time offer</span>
+          </div>
+          
+          <Badge variant="outline" className="text-xs">
+            {timeRemaining.days}d {timeRemaining.hours}h
+          </Badge>
+        </div>
+        
+        <div className="flex items-center gap-2">
+          <input 
+            type="text" 
+            value="BEAUTY15" 
+            readOnly
+            className="flex-1 bg-gray-50 py-1.5 px-3 rounded text-xs font-mono border border-gray-200"
+          />
           <Button 
             onClick={handleApplyDiscount}
-            variant="outline"
+            disabled={codeApplied}
+            className="text-xs h-8"
+            variant={codeApplied ? "outline" : "default"}
             size="sm"
-            className="text-xs h-7 px-2 font-normal"
           >
-            Apply BEAUTY15
+            {codeApplied ? (
+              <>
+                <CheckCircle className="h-3 w-3 mr-1" />
+                Applied
+              </>
+            ) : (
+              "Apply"
+            )}
           </Button>
-        ) : (
-          <Badge variant="outline" className="bg-background flex items-center gap-1">
-            <CheckCircle className="h-3 w-3" />
-            <span className="text-xs">Applied</span>
-          </Badge>
-        )}
+        </div>
       </div>
     );
   };
@@ -155,23 +176,26 @@ const CategoryContent: React.FC<CategoryContentProps> = ({ category, onClose, is
                   {category === 'Cosmetics' && (
                     <div className="ml-2">
                       {isMobile ? (
-                        <div className="w-4 h-4 rounded-full flex items-center justify-center bg-background">
+                        <div className="w-4 h-4 rounded-full flex items-center justify-center bg-gray-200">
                           <BadgePercent 
-                            className="text-foreground" 
+                            className="text-gray-700" 
                             size={10}
                           />
                         </div>
                       ) : (
-                        <Badge variant="outline" className="text-xs h-5 px-1.5 font-normal">
+                        <div className="px-2 py-0.5 text-xs font-medium rounded-full bg-gray-200 text-gray-700">
                           15% OFF
-                        </Badge>
+                        </div>
                       )}
                     </div>
                   )}
                   
                   {hasNewArrival(category, subcat) && (
                     <div className="ml-2">
-                      <div className="px-2 py-0.5 text-xs font-medium rounded-full bg-purple-100 text-purple-700">
+                      <div className={cn(
+                        "px-2 py-0.5 text-xs font-medium rounded-full",
+                        "bg-purple-500 text-white"
+                      )}>
                         NEW
                       </div>
                     </div>
@@ -185,12 +209,15 @@ const CategoryContent: React.FC<CategoryContentProps> = ({ category, onClose, is
             ))}
           </div>
           
-          <div className="md:w-2/5">            
+          <div className="md:w-2/5">
+            {category === 'Cosmetics' && <CosmeticsDiscountCard />}
+            
             <div className="relative overflow-hidden bg-white">
-              {category === 'Cosmetics' && <DiscountBadge />}
-              
               {category === 'Cosmetics' ? (
                 <>
+                  <div className="absolute top-2 right-2 z-10">
+                    <Badge variant="outline" className="bg-white/80">15% OFF</Badge>
+                  </div>
                   <AnimatedImage 
                     src={brandMessage.imageSrc}
                     fallbackSrc={brandMessage.fallbackSrc}
@@ -200,7 +227,7 @@ const CategoryContent: React.FC<CategoryContentProps> = ({ category, onClose, is
                     className="w-full"
                   />
                   <div className="mt-4">
-                    <h3 className="font-bold text-xl mb-1">15% OFF Beauty Products</h3>
+                    <h3 className="font-semibold text-lg mb-1">Limited Time Beauty Sale!</h3>
                     <p className="text-sm text-gray-600 mb-2">
                       For a limited time only, enjoy 15% off on all Cosmetics products. 
                       Treat yourself to premium skincare, makeup, and more at special prices.
@@ -226,7 +253,7 @@ const CategoryContent: React.FC<CategoryContentProps> = ({ category, onClose, is
                     className="w-full"
                   />
                   <div className="mt-4">
-                    <h3 className="font-bold text-xl mb-1">{brandMessage.title}</h3>
+                    <h3 className="font-semibold text-lg mb-1">{brandMessage.title}</h3>
                     <p className="text-sm text-gray-600 mb-2">{brandMessage.description}</p>
                     <button className="text-sm font-medium text-primary underline flex items-center group">
                       <span>Read more</span>
