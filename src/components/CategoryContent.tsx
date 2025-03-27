@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { X, ChevronRight, CheckCircle, BadgePercent, ArrowRight, Timer } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -96,14 +95,12 @@ const CategoryContent: React.FC<CategoryContentProps> = ({ category, onClose, is
         <div className="flex flex-col">
           <div className="text-3xl font-bold mb-2">Cosmetics</div>
           
-          {/* Updated discount section with yellow highlight and emoji */}
           <div className="flex flex-col gap-3">
             <div className="inline-flex items-center px-4 py-3 bg-yellow-100 rounded-lg w-full">
               <span className="text-xl mr-2">🏷️</span>
               <span className="text-lg font-bold">15% off everything — use code BEAUTY15</span>
             </div>
             
-            {/* Visual countdown timer */}
             <div className="flex items-center mb-3">
               <Timer className="h-5 w-5 mr-2" />
               <span className="text-base font-medium mr-2">Ends in:</span>
@@ -224,9 +221,9 @@ const CategoryContent: React.FC<CategoryContentProps> = ({ category, onClose, is
                     alt="Cosmetics Sale"
                     aspectRatio="aspect-[16/10]"
                     objectFit="cover"
-                    className="w-full rounded-lg"
+                    className="w-full"
                   />
-                  <div className="mt-4 bg-white p-3 rounded-lg border border-purple-100">
+                  <div className="mt-4 bg-white p-3 rounded-lg">
                     <p className="text-sm text-gray-700 mb-2">
                       <span className="font-medium">Special partner promotion!</span> Our luxury brand partners have enabled this exclusive offer for a limited time.
                     </p>
