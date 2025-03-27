@@ -195,7 +195,7 @@ const CategoryContent: React.FC<CategoryContentProps> = ({ category, onClose, is
                       {isMobile ? (
                         <div className={cn(
                           "w-4 h-4 rounded-full flex items-center justify-center",
-                          "bg-orange-500"
+                          "bg-[#de3031]"
                         )}>
                           <BadgePercent 
                             className="text-white" 
@@ -205,7 +205,7 @@ const CategoryContent: React.FC<CategoryContentProps> = ({ category, onClose, is
                       ) : (
                         <div className={cn(
                           "px-2 py-0.5 text-xs font-medium rounded-full",
-                          "bg-orange-500 text-white"
+                          "bg-[#de3031] text-white"
                         )}>
                           15% OFF
                         </div>
@@ -237,7 +237,7 @@ const CategoryContent: React.FC<CategoryContentProps> = ({ category, onClose, is
               {category === 'Cosmetics' ? (
                 <>
                   <div className="absolute top-2 right-2 z-10">
-                    <Badge variant="default" className="bg-orange-500">15% OFF</Badge>
+                    <Badge variant="default" className="bg-[#de3031]">15% OFF</Badge>
                   </div>
                   <AnimatedImage 
                     src={brandMessage.imageSrc}
