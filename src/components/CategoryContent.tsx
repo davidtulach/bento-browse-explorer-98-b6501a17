@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { X, ChevronRight, PercentIcon } from 'lucide-react';
+import { X, ChevronRight, PercentIcon, CheckCircle } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import AnimatedImage from './AnimatedImage';
 import { SheetHeader, SheetTitle } from '@/components/ui/sheet';
