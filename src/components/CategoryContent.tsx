@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-import { X, ChevronRight, CheckCircle, BadgePercent } from 'lucide-react';
+import { X, ChevronRight, CheckCircle, BadgePercent, ArrowRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import AnimatedImage from './AnimatedImage';
 import { SheetHeader, SheetTitle } from '@/components/ui/sheet';
@@ -90,43 +90,26 @@ const CategoryContent: React.FC<CategoryContentProps> = ({ category, onClose, is
     });
   };
 
-  const CosmeticsDiscountCard = () => {
+  const CosmeticsDiscountBanner = () => {
     return (
-      <div className="border border-gray-200 rounded-lg p-3 mb-4 bg-white">
-        <div className="flex items-center justify-between mb-2">
-          <div className="flex items-center gap-2">
-            <Badge variant="outline">15% OFF</Badge>
-            <span className="text-sm">Limited time offer</span>
+      <div className="mb-6">
+        <div className="flex flex-col">
+          <div className="text-3xl font-bold mb-2">Cosmetics</div>
+          <div className="flex flex-col gap-2">
+            <div className="text-2xl font-medium">15% off everything — use code <span className="font-bold">BEAUTY15</span></div>
+            <div className="flex items-center justify-between">
+              <div className="text-lg">Limited time offer • {timeRemaining.days} days left</div>
+              <Badge className="bg-yellow-300 text-black text-base px-4 py-2 rounded-full font-bold">
+                15%
+                <div className="text-xs">
+                  {timeRemaining.days} days left
+                </div>
+              </Badge>
+            </div>
+            <button className="text-lg font-medium flex items-center mt-2 hover:underline">
+              Explore the sale <ArrowRight className="ml-1 h-5 w-5" />
+            </button>
           </div>
-          
-          <Badge variant="outline" className="text-xs">
-            {timeRemaining.days}d {timeRemaining.hours}h
-          </Badge>
-        </div>
-        
-        <div className="flex items-center gap-2">
-          <input 
-            type="text" 
-            value="BEAUTY15" 
-            readOnly
-            className="flex-1 bg-gray-50 py-1.5 px-3 rounded text-xs font-mono border border-gray-200"
-          />
-          <Button 
-            onClick={handleApplyDiscount}
-            disabled={codeApplied}
-            className="text-xs h-8"
-            variant={codeApplied ? "outline" : "default"}
-            size="sm"
-          >
-            {codeApplied ? (
-              <>
-                <CheckCircle className="h-3 w-3 mr-1" />
-                Applied
-              </>
-            ) : (
-              "Apply"
-            )}
-          </Button>
         </div>
       </div>
     );
@@ -150,6 +133,8 @@ const CategoryContent: React.FC<CategoryContentProps> = ({ category, onClose, is
             </button>
           </div>
         )}
+        
+        {category === 'Cosmetics' && <CosmeticsDiscountBanner />}
         
         <div className="flex flex-col md:flex-row gap-8">
           <div className="md:w-3/5 grid grid-cols-2 gap-x-8 gap-y-2">
@@ -210,37 +195,17 @@ const CategoryContent: React.FC<CategoryContentProps> = ({ category, onClose, is
           </div>
           
           <div className="md:w-2/5">
-            {category === 'Cosmetics' && <CosmeticsDiscountCard />}
-            
-            <div className="relative overflow-hidden bg-white">
+            <div className="relative overflow-hidden">
               {category === 'Cosmetics' ? (
                 <>
-                  <div className="absolute top-2 right-2 z-10">
-                    <Badge variant="outline" className="bg-white/80">15% OFF</Badge>
-                  </div>
                   <AnimatedImage 
-                    src={brandMessage.imageSrc}
+                    src="/lovable-uploads/1084a2c6-edaf-46b6-b354-88ad75fcbe80.png"
                     fallbackSrc={brandMessage.fallbackSrc}
                     alt="Cosmetics Sale"
                     aspectRatio="aspect-[16/10]"
                     objectFit="cover"
-                    className="w-full"
+                    className="w-full rounded-lg"
                   />
-                  <div className="mt-4">
-                    <h3 className="font-semibold text-lg mb-1">Limited Time Beauty Sale!</h3>
-                    <p className="text-sm text-gray-600 mb-2">
-                      For a limited time only, enjoy 15% off on all Cosmetics products. 
-                      Treat yourself to premium skincare, makeup, and more at special prices.
-                    </p>
-                    
-                    <button className="text-sm font-medium text-primary underline flex items-center group">
-                      <span>Explore the sale</span>
-                      <ChevronRight className={cn(
-                        "h-4 w-4 ml-1 transition-all",
-                        isMobile ? "opacity-70" : "opacity-70 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0"
-                      )} />
-                    </button>
-                  </div>
                 </>
               ) : (
                 <>

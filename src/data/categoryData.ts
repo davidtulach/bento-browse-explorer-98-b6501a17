@@ -1,3 +1,4 @@
+
 export const categorySubcategories: Record<string, string[]> = {
   'Fruit & Veg': ['Apples', 'Bananas', 'Berries', 'Citrus', 'Tropical Fruits', 'Salad & Leafy Greens', 'Root Vegetables', 'Herbs'],
   'Bakery': ['Bread', 'Buns & Rolls', 'Cakes', 'Pastries', 'Cookies', 'Gluten-free'],
@@ -41,9 +42,9 @@ export const categoryBrandMessages: Record<string, BrandMessage> = {
     fallbackSrc: 'https://images.unsplash.com/photo-1509440159596-0249088772ff',
   },
   'Cosmetics': {
-    title: 'Beauty & Self-Care',
-    description: 'Discover premium beauty products and self-care essentials for your daily routine.',
-    imageSrc: 'https://images.pexels.com/photos/2533266/pexels-photo-2533266.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+    title: 'Beauty Sale - 15% OFF',
+    description: 'Discover premium beauty products with 15% discount. Use code BEAUTY15 at checkout.',
+    imageSrc: '/lovable-uploads/1084a2c6-edaf-46b6-b354-88ad75fcbe80.png',
     fallbackSrc: 'https://images.unsplash.com/photo-1596462502278-27bfdc403348',
   },
   'Dairy': {
