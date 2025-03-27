@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { ChevronLeft, ChevronRight, Apple, Wheat, Milk, Beef, GlassWater, Snowflake, 
   Candy, House, Package, Egg, Droplet, CookingPot, LeafyGreen, Globe, 
-  IceCream, Dog, Baby, Scissors, BadgePercent } from 'lucide-react';
+  IceCream, Dog, Baby, Scissors, DollarSign } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import CategoryOverlay from './CategoryOverlay';
 import { useIsMobile } from '@/hooks/use-mobile';
@@ -133,21 +133,12 @@ const CategoryBelt = () => {
                   <div className="w-[90px] h-[90px] mb-1 mx-auto relative flex items-center justify-center transition-transform hover:scale-105 duration-200">
                     <IconComponent className="w-12 h-12 text-primary" strokeWidth={1.5} />
                     
-                    {category.hasNewItems && (
-                      <Badge 
-                        className="absolute -top-1 -right-1 bg-purple-500 text-white border-2 border-white p-1 rounded-full w-6 h-6 flex items-center justify-center"
-                        aria-label="New items available"
-                      >
-                        ★
-                      </Badge>
-                    )}
-                    
                     {category.hasDiscount && (
                       <Badge 
-                        className="absolute -top-1 -right-1 bg-orange-500 text-white border-2 border-white p-1 rounded-full w-6 h-6 flex items-center justify-center"
+                        className="absolute -top-1 -right-1 bg-red-500 text-white border-2 border-white p-1 rounded-full w-6 h-6 flex items-center justify-center"
                         aria-label="Discount available"
                       >
-                        <BadgePercent className="w-3 h-3" />
+                        <DollarSign className="w-3 h-3" />
                       </Badge>
                     )}
                   </div>
