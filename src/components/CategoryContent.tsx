@@ -16,6 +16,7 @@ interface CategoryContentProps {
 // New subcategory data with new arrivals flag
 const newArrivalSubcategories = {
   'Bakery': ['Bread', 'Pastries'],
+  'Cosmetics': ['Skincare', 'Makeup', 'Natural & Organic'],
   'Frozen': ['Frozen Fruits'],
   'Snacks': ['Chips', 'Protein Bars']
 };

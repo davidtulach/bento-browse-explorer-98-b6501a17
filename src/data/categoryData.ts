@@ -1,7 +1,7 @@
-
 export const categorySubcategories: Record<string, string[]> = {
   'Fruit & Veg': ['Apples', 'Bananas', 'Berries', 'Citrus', 'Tropical Fruits', 'Salad & Leafy Greens', 'Root Vegetables', 'Herbs'],
   'Bakery': ['Bread', 'Buns & Rolls', 'Cakes', 'Pastries', 'Cookies', 'Gluten-free'],
+  'Cosmetics': ['Skincare', 'Makeup', 'Hair Care', 'Bath & Body', 'Fragrances', 'Natural & Organic'],
   'Dairy': ['Milk', 'Cheese', 'Yogurt', 'Butter', 'Cream', 'Plant-based Alternatives'],
   'Meat': ['Beef', 'Pork', 'Chicken', 'Turkey', 'Lamb', 'Sausages', 'Deli Meats'],
   'Drinks': ['Water', 'Soda', 'Juice', 'Coffee', 'Tea', 'Energy Drinks', 'Alcoholic Beverages'],
@@ -39,6 +39,12 @@ export const categoryBrandMessages: Record<string, BrandMessage> = {
     description: 'Our bakery products are made fresh daily using traditional recipes and quality ingredients.',
     imageSrc: 'https://images.pexels.com/photos/31140365/pexels-photo-31140365/free-photo-of-traditional-bread-baking-in-wood-fired-oven.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
     fallbackSrc: 'https://images.unsplash.com/photo-1509440159596-0249088772ff',
+  },
+  'Cosmetics': {
+    title: 'Beauty & Self-Care',
+    description: 'Discover premium beauty products and self-care essentials for your daily routine.',
+    imageSrc: 'https://images.pexels.com/photos/2533266/pexels-photo-2533266.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+    fallbackSrc: 'https://images.unsplash.com/photo-1596462502278-27bfdc403348',
   },
   'Dairy': {
     title: 'Farm to Table',

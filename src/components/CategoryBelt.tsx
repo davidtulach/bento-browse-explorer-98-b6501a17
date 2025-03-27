@@ -1,7 +1,8 @@
+
 import { useState, useRef, useEffect } from 'react';
 import { ChevronLeft, ChevronRight, Apple, Wheat, Milk, Beef, GlassWater, Snowflake, 
   Candy, House, Package, Egg, Droplet, CookingPot, LeafyGreen, Globe, 
-  IceCream, Dog, Baby } from 'lucide-react';
+  IceCream, Dog, Baby, Scissors } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import CategoryOverlay from './CategoryOverlay';
 import { useIsMobile } from '@/hooks/use-mobile';
@@ -9,23 +10,24 @@ import { Badge } from './ui/badge';
 
 const categories = [
   { id: 1, name: "Fruit & Veg", icon: Apple },
-  { id: 2, name: "Bakery", icon: Wheat, hasNewItems: true },  // Added hasNewItems flag
-  { id: 3, name: "Dairy", icon: Milk },
-  { id: 4, name: "Meat", icon: Beef },
-  { id: 5, name: "Drinks", icon: GlassWater },
-  { id: 6, name: "Frozen", icon: Snowflake, hasNewItems: true },  // Added hasNewItems flag
-  { id: 7, name: "Snacks", icon: Candy, hasNewItems: true },  // Added hasNewItems flag
-  { id: 8, name: "Household", icon: House },
-  { id: 9, name: "Pasta & Rice", icon: Wheat },
-  { id: 10, name: "Canned Goods", icon: Package },
-  { id: 11, name: "Breakfast", icon: Egg },
-  { id: 12, name: "Condiments", icon: Droplet },
-  { id: 13, name: "Baking", icon: CookingPot },
-  { id: 14, name: "Health Foods", icon: LeafyGreen },
-  { id: 15, name: "International", icon: Globe },
-  { id: 16, name: "Sweets", icon: IceCream },
-  { id: 17, name: "Pet Supplies", icon: Dog },
-  { id: 18, name: "Baby Products", icon: Baby },
+  { id: 2, name: "Bakery", icon: Wheat, hasNewItems: true },
+  { id: 3, name: "Cosmetics", icon: Scissors, hasNewItems: true }, // Added new Cosmetics category
+  { id: 4, name: "Dairy", icon: Milk },
+  { id: 5, name: "Meat", icon: Beef },
+  { id: 6, name: "Drinks", icon: GlassWater },
+  { id: 7, name: "Frozen", icon: Snowflake, hasNewItems: true },
+  { id: 8, name: "Snacks", icon: Candy, hasNewItems: true },
+  { id: 9, name: "Household", icon: House },
+  { id: 10, name: "Pasta & Rice", icon: Wheat },
+  { id: 11, name: "Canned Goods", icon: Package },
+  { id: 12, name: "Breakfast", icon: Egg },
+  { id: 13, name: "Condiments", icon: Droplet },
+  { id: 14, name: "Baking", icon: CookingPot },
+  { id: 15, name: "Health Foods", icon: LeafyGreen },
+  { id: 16, name: "International", icon: Globe },
+  { id: 17, name: "Sweets", icon: IceCream },
+  { id: 18, name: "Pet Supplies", icon: Dog },
+  { id: 19, name: "Baby Products", icon: Baby },
 ];
 
 const CategoryBelt = () => {
