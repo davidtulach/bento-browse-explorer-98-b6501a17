@@ -97,14 +97,14 @@ const CategoryContent: React.FC<CategoryContentProps> = ({ category, onClose, is
           <div className="text-3xl font-bold mb-2">Cosmetics</div>
           
           {/* Updated discount section with yellow highlight and emoji */}
-          <div className="flex flex-col gap-4 mb-4">
-            <div className="inline-flex items-center px-4 py-3 bg-yellow-100 rounded-lg">
-              <span className="text-2xl mr-2">🏷️</span>
-              <span className="text-xl font-bold">15% off everything — use code BEAUTY15</span>
+          <div className="flex flex-col gap-3">
+            <div className="inline-flex items-center px-4 py-3 bg-yellow-100 rounded-lg w-full">
+              <span className="text-xl mr-2">🏷️</span>
+              <span className="text-lg font-bold">15% off everything — use code BEAUTY15</span>
             </div>
             
             {/* Visual countdown timer */}
-            <div className="flex items-center">
+            <div className="flex items-center mb-3">
               <Timer className="h-5 w-5 mr-2" />
               <span className="text-base font-medium mr-2">Ends in:</span>
               <div className="flex space-x-2">
@@ -123,7 +123,10 @@ const CategoryContent: React.FC<CategoryContentProps> = ({ category, onClose, is
               </div>
             </div>
             
-            <button onClick={handleApplyDiscount} className="text-lg font-medium flex items-center hover:underline text-primary">
+            <button 
+              onClick={handleApplyDiscount} 
+              className="text-lg font-medium flex items-center hover:underline text-primary mb-4"
+            >
               {codeApplied ? (
                 <>
                   <CheckCircle className="mr-1 h-5 w-5" />
@@ -184,20 +187,11 @@ const CategoryContent: React.FC<CategoryContentProps> = ({ category, onClose, is
                 <div className="flex items-center flex-wrap">
                   <span>{subcat}</span>
                   
-                  {category === 'Cosmetics' && (
+                  {isDiscountedSubcategory(category, subcat) && (
                     <div className="ml-2">
-                      {isMobile ? (
-                        <div className="w-4 h-4 rounded-full flex items-center justify-center bg-gray-200">
-                          <BadgePercent 
-                            className="text-gray-700" 
-                            size={10}
-                          />
-                        </div>
-                      ) : (
-                        <div className="px-2 py-0.5 text-xs font-medium rounded-full bg-yellow-200 text-gray-700">
-                          15% OFF
-                        </div>
-                      )}
+                      <div className="px-2 py-0.5 text-xs font-medium rounded-full bg-yellow-200 text-gray-700">
+                        15% OFF
+                      </div>
                     </div>
                   )}
                   
@@ -223,16 +217,14 @@ const CategoryContent: React.FC<CategoryContentProps> = ({ category, onClose, is
           <div className="md:w-2/5">
             <div className="relative overflow-hidden">
               {category === 'Cosmetics' ? (
-                <>
-                  <AnimatedImage 
-                    src="/lovable-uploads/beeec256-0207-49f6-964e-97f45636a18b.png"
-                    fallbackSrc={brandMessage.fallbackSrc}
-                    alt="Cosmetics Sale"
-                    aspectRatio="aspect-[16/10]"
-                    objectFit="cover"
-                    className="w-full rounded-lg"
-                  />
-                </>
+                <AnimatedImage 
+                  src={brandMessage.imageSrc}
+                  fallbackSrc={brandMessage.fallbackSrc}
+                  alt="Cosmetics Sale"
+                  aspectRatio="aspect-[16/10]"
+                  objectFit="cover"
+                  className="w-full rounded-lg"
+                />
               ) : (
                 <>
                   <AnimatedImage 
