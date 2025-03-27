@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { X, ChevronRight, PercentIcon, CheckCircle } from 'lucide-react';
+import { X, ChevronRight, PercentIcon, CheckCircle, BadgePercent } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import AnimatedImage from './AnimatedImage';
 import { SheetHeader, SheetTitle } from '@/components/ui/sheet';
@@ -16,7 +16,6 @@ interface CategoryContentProps {
 
 const newArrivalSubcategories = {
   'Bakery': ['Bread', 'Pastries'],
-  'Cosmetics': ['Skincare', 'Makeup', 'Natural & Organic'],
   'Frozen': ['Frozen Fruits'],
   'Snacks': ['Chips', 'Protein Bars']
 };
@@ -41,6 +40,10 @@ const CategoryContent: React.FC<CategoryContentProps> = ({ category, onClose, is
 
   const hasDiscount = (category: string) => {
     return discountedCategories.includes(category);
+  };
+
+  const isDiscountedSubcategory = (category: string, subcategory: string) => {
+    return category === 'Cosmetics';
   };
 
   useEffect(() => {
@@ -182,19 +185,17 @@ const CategoryContent: React.FC<CategoryContentProps> = ({ category, onClose, is
                 <div className="flex items-center flex-wrap">
                   <span>{subcat}</span>
                   
-                  {hasNewArrival(category, subcat) && (
+                  {category === 'Cosmetics' && (
                     <div className="ml-2">
                       {isMobile ? (
-                        <div className="flex items-center">
-                          <div className={cn(
-                            "w-4 h-4 rounded-full flex items-center justify-center",
-                            "bg-orange-500"
-                          )}>
-                            <PercentIcon 
-                              className="text-white" 
-                              size={10}
-                            />
-                          </div>
+                        <div className={cn(
+                          "w-4 h-4 rounded-full flex items-center justify-center",
+                          "bg-orange-500"
+                        )}>
+                          <BadgePercent 
+                            className="text-white" 
+                            size={10}
+                          />
                         </div>
                       ) : (
                         <div className={cn(
@@ -204,6 +205,17 @@ const CategoryContent: React.FC<CategoryContentProps> = ({ category, onClose, is
                           15% OFF
                         </div>
                       )}
+                    </div>
+                  )}
+                  
+                  {hasNewArrival(category, subcat) && category !== 'Cosmetics' && (
+                    <div className="ml-2">
+                      <div className={cn(
+                        "px-2 py-0.5 text-xs font-medium rounded-full",
+                        "bg-purple-500 text-white"
+                      )}>
+                        NEW
+                      </div>
                     </div>
                   )}
                 </div>
