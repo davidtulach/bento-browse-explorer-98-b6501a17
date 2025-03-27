@@ -1,4 +1,3 @@
-
 import { useState, useRef, useEffect } from 'react';
 import { ChevronLeft, ChevronRight, Apple, Wheat, Milk, Beef, GlassWater, Snowflake, 
   Candy, House, Package, Egg, Droplet, CookingPot, LeafyGreen, Globe, 
@@ -145,7 +144,7 @@ const CategoryBelt = () => {
                     
                     {category.hasDiscount && (
                       <Badge 
-                        className="absolute -top-1 -right-1 bg-[#ea384c] text-white border-2 border-white p-1 rounded-full w-6 h-6 flex items-center justify-center"
+                        className="absolute -top-1 -right-1 bg-[#fde7f4] text-[#de3031] border-2 border-[#de3031] p-1 rounded-full w-6 h-6 flex items-center justify-center"
                         aria-label="Discount available"
                       >
                         <Percent className="w-3 h-3" />

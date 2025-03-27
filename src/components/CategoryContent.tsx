@@ -91,43 +91,48 @@ const CategoryContent: React.FC<CategoryContentProps> = ({ category, onClose, is
 
   const CosmeticsDiscountCard = () => {
     return (
-      <div className="bg-orange-50 rounded-lg p-4 mb-4">
+      <div className="bg-[#fde7f4] rounded-lg p-4 mb-4">
         <div className="flex flex-col">
           <div className="flex items-center gap-2 mb-2">
-            <Badge variant="default" className="bg-orange-500">SALE</Badge>
-            <span className="font-semibold text-orange-800">15% OFF ALL COSMETICS</span>
+            <Badge variant="default" className="bg-[#de3031]">SALE</Badge>
+            <span className="font-semibold text-[#de3031]">15% OFF ALL COSMETICS</span>
           </div>
           
           <div className="grid grid-cols-4 gap-2 mb-3 text-center">
             <div className="bg-white p-2 rounded shadow-sm">
-              <div className="text-lg font-bold text-orange-800">{timeRemaining.days}</div>
+              <div className="text-lg font-bold text-[#de3031]">{timeRemaining.days}</div>
               <div className="text-xs text-gray-600">days</div>
             </div>
             <div className="bg-white p-2 rounded shadow-sm">
-              <div className="text-lg font-bold text-orange-800">{timeRemaining.hours}</div>
+              <div className="text-lg font-bold text-[#de3031]">{timeRemaining.hours}</div>
               <div className="text-xs text-gray-600">hours</div>
             </div>
             <div className="bg-white p-2 rounded shadow-sm">
-              <div className="text-lg font-bold text-orange-800">{timeRemaining.minutes}</div>
+              <div className="text-lg font-bold text-[#de3031]">{timeRemaining.minutes}</div>
               <div className="text-xs text-gray-600">mins</div>
             </div>
             <div className="bg-white p-2 rounded shadow-sm">
-              <div className="text-lg font-bold text-orange-800">{timeRemaining.seconds}</div>
+              <div className="text-lg font-bold text-[#de3031]">{timeRemaining.seconds}</div>
               <div className="text-xs text-gray-600">secs</div>
             </div>
           </div>
           
           <div className="flex items-center gap-2 mb-3">
-            <div className="flex-1 bg-gray-100 py-2 px-3 rounded font-mono text-sm">BEAUTY15</div>
+            <div className="flex-1 bg-white py-2 px-3 rounded font-mono text-sm border border-[#de3031]">BEAUTY15</div>
             <Button 
               onClick={handleApplyDiscount}
               disabled={codeApplied}
-              className="whitespace-nowrap"
+              className={cn(
+                "whitespace-nowrap", 
+                codeApplied 
+                  ? "bg-white text-[#de3031] border border-[#de3031]" 
+                  : "bg-[#de3031] text-white"
+              )}
               variant={codeApplied ? "outline" : "default"}
             >
               {codeApplied ? (
                 <>
-                  <CheckCircle className="h-4 w-4 mr-1" />
+                  <CheckCircle className="h-4 w-4 mr-1 text-[#de3031]" />
                   Applied
                 </>
               ) : (
@@ -136,7 +141,7 @@ const CategoryContent: React.FC<CategoryContentProps> = ({ category, onClose, is
             </Button>
           </div>
           
-          <p className="text-xs text-gray-600">
+          <p className="text-xs text-[#de3031]">
             Apply this code to get 15% off on all Cosmetics products in your basket.
           </p>
         </div>
