@@ -51,10 +51,9 @@ const CategoryBelt = () => {
     
     if (!isMobile && event && beltRef.current) {
       const beltRect = beltRef.current.getBoundingClientRect();
-      const scrollPosition = window.scrollY;
       
       setOverlayPosition({
-        top: beltRect.bottom + scrollPosition,
+        top: beltRect.bottom,
         left: 0,
         width: window.innerWidth
       });
@@ -72,10 +71,9 @@ const CategoryBelt = () => {
       if (isOverlayOpen && !isMobile) {
         if (beltRef.current) {
           const beltRect = beltRef.current.getBoundingClientRect();
-          const scrollPosition = window.scrollY;
           
           setOverlayPosition({
-            top: beltRect.bottom + scrollPosition,
+            top: beltRect.bottom,
             left: 0,
             width: window.innerWidth
           });
@@ -83,24 +81,9 @@ const CategoryBelt = () => {
       }
     };
 
-    const handleScroll = () => {
-      if (isOverlayOpen && !isMobile && beltRef.current) {
-        const beltRect = beltRef.current.getBoundingClientRect();
-        const scrollPosition = window.scrollY;
-        
-        setOverlayPosition({
-          top: beltRect.bottom + scrollPosition,
-          left: 0,
-          width: window.innerWidth
-        });
-      }
-    };
-
     window.addEventListener('resize', handleResize);
-    window.addEventListener('scroll', handleScroll);
     return () => {
       window.removeEventListener('resize', handleResize);
-      window.removeEventListener('scroll', handleScroll);
     };
   }, [isOverlayOpen, isMobile]);
 
