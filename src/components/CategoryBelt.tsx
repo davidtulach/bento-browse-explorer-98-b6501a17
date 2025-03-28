@@ -1,3 +1,4 @@
+
 import { useState, useRef, useEffect } from 'react';
 import { ChevronLeft, ChevronRight, Apple, Wheat, Milk, Beef, GlassWater, Snowflake, 
   Candy, House, Package, Egg, Droplet, CookingPot, LeafyGreen, Globe, 
@@ -48,12 +49,11 @@ const CategoryBelt = () => {
   const handleCategoryClick = (categoryName: string, event?: React.MouseEvent<HTMLDivElement>) => {
     setSelectedCategory(categoryName);
     
-    if (!isMobile && event && beltRef.current) {
+    if (!isMobile && beltRef.current) {
       const beltRect = beltRef.current.getBoundingClientRect();
-      const scrollPosition = window.scrollY;
       
       setOverlayPosition({
-        top: beltRect.bottom + scrollPosition,
+        top: beltRect.height,
         left: 0,
         width: window.innerWidth
       });
@@ -62,33 +62,23 @@ const CategoryBelt = () => {
     setIsOverlayOpen(true);
   };
 
+  const handleCategoryHover = (categoryName: string) => {
+    if (isOverlayOpen && !isMobile) {
+      setSelectedCategory(categoryName);
+    }
+  };
+
   const handleCloseOverlay = () => {
     setIsOverlayOpen(false);
   };
 
   useEffect(() => {
     const handleResize = () => {
-      if (isOverlayOpen && !isMobile) {
-        if (beltRef.current) {
-          const beltRect = beltRef.current.getBoundingClientRect();
-          const scrollPosition = window.scrollY;
-          
-          setOverlayPosition({
-            top: beltRect.bottom + scrollPosition,
-            left: 0,
-            width: window.innerWidth
-          });
-        }
-      }
-    };
-
-    const handleScroll = () => {
       if (isOverlayOpen && !isMobile && beltRef.current) {
         const beltRect = beltRef.current.getBoundingClientRect();
-        const scrollPosition = window.scrollY;
         
         setOverlayPosition({
-          top: beltRect.bottom + scrollPosition,
+          top: beltRect.height,
           left: 0,
           width: window.innerWidth
         });
@@ -96,10 +86,8 @@ const CategoryBelt = () => {
     };
 
     window.addEventListener('resize', handleResize);
-    window.addEventListener('scroll', handleScroll);
     return () => {
       window.removeEventListener('resize', handleResize);
-      window.removeEventListener('scroll', handleScroll);
     };
   }, [isOverlayOpen, isMobile]);
 
@@ -129,6 +117,7 @@ const CategoryBelt = () => {
                   key={category.id}
                   className="flex-shrink-0 snap-start text-center cursor-pointer"
                   onClick={(e) => handleCategoryClick(category.name, e)}
+                  onMouseEnter={() => handleCategoryHover(category.name)}
                 >
                   <div className="w-[90px] h-[90px] mb-1 mx-auto relative flex items-center justify-center transition-transform hover:scale-105 duration-200">
                     <IconComponent className="w-12 h-12 text-primary" strokeWidth={1.5} />

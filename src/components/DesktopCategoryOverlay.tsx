@@ -19,23 +19,23 @@ const DesktopCategoryOverlay: React.FC<DesktopCategoryOverlayProps> = ({
   return (
     <div 
       className={cn(
-        "fixed inset-0 z-50",
-        !isOpen && "pointer-events-none"
+        "absolute left-0 right-0 z-50",
+        !isOpen && "pointer-events-none hidden"
       )}
       onClick={(e) => {
         if (e.target === e.currentTarget) onClose();
       }}
+      style={{
+        top: position?.top || 0
+      }}
     >
       <div 
         className={cn(
-          "absolute bg-white rounded-lg shadow-xl border border-gray-200 transition-all duration-200 overflow-hidden",
+          "absolute left-0 bg-white rounded-lg shadow-xl border border-gray-200 transition-all duration-200 overflow-hidden w-full",
           !isOpen && "opacity-0 translate-y-[-10px]",
           isOpen && "opacity-100 translate-y-0"
         )}
         style={{
-          top: position?.top || 0,
-          left: position?.left || 0,
-          width: position?.width || '100%',
           maxWidth: '1200px',
           zIndex: 50
         }}
