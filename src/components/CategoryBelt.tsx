@@ -144,10 +144,8 @@ const CategoryBelt = () => {
                   onMouseEnter={() => handleCategoryHover(category.name)}
                 >
                   <div className="w-[90px] h-[90px] mb-1 mx-auto relative flex items-center justify-center transition-transform hover:scale-105 duration-200">
-                    <IconComponent className="w-12 h-12 text-primary" strokeWidth={1.5} />
-                    
                     {isCosmeticsCategory && showAnimation && (
-                      <div className="absolute left-1/2 -translate-x-1/2 -top-8 z-20 pointer-events-none">
+                      <div className="absolute left-1/2 -translate-x-1/2 -top-[60px] z-10 pointer-events-none">
                         <DotLottiePlayer
                           src="https://lottie.host/dc804401-5c3c-4d6c-98d6-674f041ae826/j1ft0Kz2V9.lottie"
                           background="transparent"
@@ -158,6 +156,8 @@ const CategoryBelt = () => {
                         />
                       </div>
                     )}
+                    
+                    <IconComponent className="w-12 h-12 text-primary z-20 relative" strokeWidth={1.5} />
                     
                     {category.hasNewItems && (
                       <Badge 
