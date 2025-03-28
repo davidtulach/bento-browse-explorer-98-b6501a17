@@ -25,6 +25,7 @@ const DesktopCategoryOverlay: React.FC<DesktopCategoryOverlayProps> = ({
       onClick={(e) => {
         if (e.target === e.currentTarget) onClose();
       }}
+      onMouseLeave={onClose}
       style={{
         top: position?.top || 0
       }}
