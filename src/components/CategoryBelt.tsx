@@ -1,3 +1,4 @@
+
 import { useState, useRef, useEffect } from 'react';
 import { ChevronLeft, ChevronRight, Apple, Wheat, Milk, Beef, GlassWater, Snowflake, 
   Candy, House, Package, Egg, Droplet, CookingPot, LeafyGreen, Globe, 
@@ -145,14 +146,14 @@ const CategoryBelt = () => {
                 >
                   <div className="w-[90px] h-[90px] mb-1 mx-auto relative flex items-center justify-center transition-transform hover:scale-105 duration-200">
                     {isCosmeticsCategory && showAnimation && (
-                      <div className="absolute left-1/2 -translate-x-1/2 top-full z-10 pointer-events-none -mt-4">
+                      <div className="absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 z-10 pointer-events-none">
                         <DotLottiePlayer
                           src="https://lottie.host/dc804401-5c3c-4d6c-98d6-674f041ae826/j1ft0Kz2V9.lottie"
                           background="transparent"
                           speed={1}
                           loop={true}
                           autoplay={true}
-                          className="w-[120px] h-[80px]"
+                          className="w-[120px] h-[120px]"
                         />
                       </div>
                     )}
