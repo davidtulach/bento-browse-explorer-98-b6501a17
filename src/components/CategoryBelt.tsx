@@ -146,6 +146,19 @@ const CategoryBelt = () => {
                   <div className="w-[90px] h-[90px] mb-1 mx-auto relative flex items-center justify-center transition-transform hover:scale-105 duration-200">
                     <IconComponent className="w-12 h-12 text-primary" strokeWidth={1.5} />
                     
+                    {isCosmeticsCategory && showAnimation && (
+                      <div className="absolute left-1/2 -translate-x-1/2 -top-8 z-20 pointer-events-none">
+                        <DotLottiePlayer
+                          src="https://lottie.host/dc804401-5c3c-4d6c-98d6-674f041ae826/j1ft0Kz2V9.lottie"
+                          background="transparent"
+                          speed={1}
+                          loop={true}
+                          autoplay={true}
+                          className="w-[120px] h-[80px]"
+                        />
+                      </div>
+                    )}
+                    
                     {category.hasNewItems && (
                       <Badge 
                         className="absolute -top-1 -right-1 bg-purple-500 text-white border-2 border-white p-1 rounded-full w-6 h-6 flex items-center justify-center"
@@ -165,19 +178,6 @@ const CategoryBelt = () => {
                     )}
                   </div>
                   <p className="text-sm font-normal mt-0 text-center">{category.name}</p>
-                  
-                  {isCosmeticsCategory && showAnimation && (
-                    <div className="absolute left-1/2 -translate-x-1/2 -top-8 z-20 pointer-events-none">
-                      <DotLottiePlayer
-                        src="https://lottie.host/dc804401-5c3c-4d6c-98d6-674f041ae826/j1ft0Kz2V9.lottie"
-                        background="transparent"
-                        speed={1}
-                        loop={true}
-                        autoplay={true}
-                        className="w-[120px] h-[80px]"
-                      />
-                    </div>
-                  )}
                 </div>
               );
             })}
