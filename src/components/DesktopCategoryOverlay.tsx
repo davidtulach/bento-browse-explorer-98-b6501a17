@@ -1,5 +1,5 @@
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { cn } from '@/lib/utils';
 import CategoryContent from './CategoryContent';
 
@@ -16,30 +16,30 @@ const DesktopCategoryOverlay: React.FC<DesktopCategoryOverlayProps> = ({
   category, 
   position 
 }) => {
-  const [overlayPosition, setOverlayPosition] = useState(position);
+  const overlayRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    setOverlayPosition(position);
-    
-    const handleScroll = () => {
-      if (position) {
-        // Update the top position based on the belt's current position
-        const beltElement = document.querySelector('[data-category-belt]');
-        if (beltElement) {
-          const beltRect = beltElement.getBoundingClientRect();
-          setOverlayPosition({
-            ...position,
-            top: beltRect.bottom + window.scrollY
-          });
-        }
-      }
-    };
+    if (!isOpen || !position) return;
 
-    window.addEventListener('scroll', handleScroll);
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-    };
-  }, [position, isOpen]);
+    // Get the belt element
+    const beltElement = document.querySelector('[data-category-belt]');
+    if (!beltElement || !overlayRef.current) return;
+
+    // Position the overlay directly below the belt
+    const beltRect = beltElement.getBoundingClientRect();
+    
+    overlayRef.current.style.position = 'absolute';
+    overlayRef.current.style.top = `${beltRect.bottom}px`;
+    overlayRef.current.style.left = '0px';
+    overlayRef.current.style.right = '0px';
+    overlayRef.current.style.width = `${position.width || 1200}px`;
+    overlayRef.current.style.maxWidth = '1200px';
+    overlayRef.current.style.marginLeft = 'auto';
+    overlayRef.current.style.marginRight = 'auto';
+    overlayRef.current.style.zIndex = '50';
+  }, [isOpen, position]);
+
+  if (!category) return null;
 
   return (
     <div 
@@ -52,21 +52,12 @@ const DesktopCategoryOverlay: React.FC<DesktopCategoryOverlayProps> = ({
       }}
     >
       <div 
+        ref={overlayRef}
         className={cn(
-          "absolute bg-white rounded-lg shadow-xl border border-gray-200 transition-all duration-200 overflow-hidden",
+          "bg-white rounded-lg shadow-xl border border-gray-200 transition-all duration-200 overflow-hidden",
           !isOpen && "opacity-0 translate-y-[-10px]",
           isOpen && "opacity-100 translate-y-0"
         )}
-        style={{
-          top: overlayPosition?.top || 0,
-          left: 0,
-          right: 0,
-          width: overlayPosition?.width || '1200px',
-          maxWidth: '1200px',
-          marginLeft: 'auto',
-          marginRight: 'auto',
-          zIndex: 50
-        }}
       >
         <CategoryContent category={category} onClose={onClose} isMobile={false} />
       </div>
