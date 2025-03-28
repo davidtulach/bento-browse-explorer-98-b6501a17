@@ -14,6 +14,7 @@ interface CategoryOverlayProps {
 const CategoryOverlay = ({ isOpen, onClose, category: initialCategory, position }: CategoryOverlayProps) => {
   const isMobile = useIsMobile();
   const [currentCategory, setCurrentCategory] = useState<string | null>(initialCategory);
+  const [slideDirection, setSlideDirection] = useState<'left' | 'right' | null>(null);
   
   // Update internal state when prop changes
   useEffect(() => {
@@ -23,7 +24,11 @@ const CategoryOverlay = ({ isOpen, onClose, category: initialCategory, position 
   // Listen for category change events from the MobileCategorySheet
   useEffect(() => {
     const handleCategoryChange = (e: CustomEvent) => {
-      setCurrentCategory(e.detail.category);
+      const newCategory = e.detail.category;
+      const direction = e.detail.direction || 'right';
+      
+      setSlideDirection(direction);
+      setCurrentCategory(newCategory);
     };
     
     // Use type assertion since CustomEvent is not recognized by default in TypeScript
@@ -40,7 +45,8 @@ const CategoryOverlay = ({ isOpen, onClose, category: initialCategory, position 
     <MobileCategorySheet 
       isOpen={isOpen} 
       onClose={onClose} 
-      category={currentCategory} 
+      category={currentCategory}
+      slideDirection={slideDirection}
     />
   ) : (
     <DesktopCategoryOverlay 

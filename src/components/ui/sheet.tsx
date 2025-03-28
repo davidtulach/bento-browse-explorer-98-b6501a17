@@ -1,3 +1,4 @@
+
 import * as SheetPrimitive from "@radix-ui/react-dialog"
 import { cva, type VariantProps } from "class-variance-authority"
 import { X } from "lucide-react"
@@ -124,8 +125,40 @@ const SheetDescription = React.forwardRef<
 ))
 SheetDescription.displayName = SheetPrimitive.Description.displayName
 
+// Add these custom animation utility classes
+const slideAnimationStyles = `
+  .animate-slide-left {
+    animation: slide-left 300ms ease-in-out;
+  }
+  .animate-slide-right {
+    animation: slide-right 300ms ease-in-out;
+  }
+  @keyframes slide-left {
+    0% {
+      transform: translateX(100%);
+    }
+    100% {
+      transform: translateX(0);
+    }
+  }
+  @keyframes slide-right {
+    0% {
+      transform: translateX(-100%);
+    }
+    100% {
+      transform: translateX(0);
+    }
+  }
+`;
+
+// Inject the animation styles into the document
+if (typeof document !== 'undefined') {
+  const styleEl = document.createElement('style');
+  styleEl.textContent = slideAnimationStyles;
+  document.head.appendChild(styleEl);
+}
+
 export {
   Sheet, SheetClose,
   SheetContent, SheetDescription, SheetFooter, SheetHeader, SheetOverlay, SheetPortal, SheetTitle, SheetTrigger
 }
-

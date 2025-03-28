@@ -1,21 +1,29 @@
 
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { X } from 'lucide-react';
 import { Sheet, SheetContent, SheetClose } from '@/components/ui/sheet';
 import CategoryContent from './CategoryContent';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { categorySubcategories } from '@/data/categoryData';
+import { cn } from '@/lib/utils';
 
 interface MobileCategorySheetProps {
   isOpen: boolean;
   onClose: () => void;
   category: string;
+  slideDirection?: 'left' | 'right' | null;
 }
 
-const MobileCategorySheet: React.FC<MobileCategorySheetProps> = ({ isOpen, onClose, category }) => {
+const MobileCategorySheet: React.FC<MobileCategorySheetProps> = ({ 
+  isOpen, 
+  onClose, 
+  category,
+  slideDirection 
+}) => {
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const touchStartX = useRef<number | null>(null);
   const touchEndX = useRef<number | null>(null);
+  const [animating, setAnimating] = useState(false);
   
   // Function to get the next or previous category
   const changeCategory = (direction: 'next' | 'prev') => {
@@ -50,13 +58,18 @@ const MobileCategorySheet: React.FC<MobileCategorySheetProps> = ({ isOpen, onClo
     const threshold = 75; // Minimum swipe distance to trigger category change
     
     if (Math.abs(diff) > threshold) {
+      // Don't process swipes if we're already animating
+      if (animating) return;
+      
+      setAnimating(true);
+      
       // Swipe right to left (next category)
       if (diff > 0) {
         const nextCategory = changeCategory('next');
         if (nextCategory !== category) {
           // Use CustomEvent to communicate with parent component
           const event = new CustomEvent('categoryChange', { 
-            detail: { category: nextCategory } 
+            detail: { category: nextCategory, direction: 'left' } 
           });
           window.dispatchEvent(event);
         }
@@ -66,11 +79,16 @@ const MobileCategorySheet: React.FC<MobileCategorySheetProps> = ({ isOpen, onClo
         const prevCategory = changeCategory('prev');
         if (prevCategory !== category) {
           const event = new CustomEvent('categoryChange', { 
-            detail: { category: prevCategory } 
+            detail: { category: prevCategory, direction: 'right' } 
           });
           window.dispatchEvent(event);
         }
       }
+      
+      // Reset animation state after transition finishes
+      setTimeout(() => {
+        setAnimating(false);
+      }, 300); // Match this with the animation duration
     }
     
     // Reset touch coordinates
@@ -79,31 +97,12 @@ const MobileCategorySheet: React.FC<MobileCategorySheetProps> = ({ isOpen, onClo
   };
   
   useEffect(() => {
-    // Only run the nudge animation for cosmetics category
-    if (isOpen && category === 'Cosmetics') {
-      const timer = setTimeout(() => {
-        if (scrollAreaRef.current) {
-          // Perform a small scroll nudge animation
-          scrollAreaRef.current.scrollTo({
-            top: 30,
-            behavior: 'smooth'
-          });
-          
-          // Return to original position to create a bouncing effect
-          setTimeout(() => {
-            if (scrollAreaRef.current) {
-              scrollAreaRef.current.scrollTo({
-                top: 10,
-                behavior: 'smooth'
-              });
-            }
-          }, 600);
-        }
-      }, 800); // Wait a bit before showing the nudge
-      
-      return () => clearTimeout(timer);
-    }
-  }, [isOpen, category]);
+    // Reset animation state when a new category is displayed
+    const timer = setTimeout(() => {
+      setAnimating(false);
+    }, 300);
+    return () => clearTimeout(timer);
+  }, [category]);
   
   return (
     <Sheet open={isOpen} onOpenChange={(open) => !open && onClose()}>
@@ -121,7 +120,15 @@ const MobileCategorySheet: React.FC<MobileCategorySheetProps> = ({ isOpen, onClo
           ref={scrollAreaRef} 
           className="flex-1 h-full overflow-y-auto" 
         >
-          <CategoryContent category={category} onClose={onClose} isMobile={true} />
+          <div 
+            className={cn(
+              "transition-transform duration-300 ease-in-out w-full",
+              slideDirection === 'left' && 'animate-slide-left',
+              slideDirection === 'right' && 'animate-slide-right',
+            )}
+          >
+            <CategoryContent category={category} onClose={onClose} isMobile={true} />
+          </div>
         </ScrollArea>
       </SheetContent>
     </Sheet>
