@@ -28,15 +28,18 @@ const DesktopCategoryOverlay: React.FC<DesktopCategoryOverlayProps> = ({
     >
       <div 
         className={cn(
-          "absolute bg-white rounded-lg shadow-xl border border-gray-200 transition-all duration-200 overflow-hidden",
+          "fixed bg-white rounded-lg shadow-xl border border-gray-200 transition-all duration-200 overflow-hidden",
           !isOpen && "opacity-0 translate-y-[-10px]",
           isOpen && "opacity-100 translate-y-0"
         )}
         style={{
           top: position?.top || 0,
-          left: position?.left || 0,
-          width: position?.width || '100%',
+          left: 0,
+          right: 0,
+          width: position?.width || '1200px',
           maxWidth: '1200px',
+          marginLeft: 'auto',
+          marginRight: 'auto',
           zIndex: 50
         }}
       >
