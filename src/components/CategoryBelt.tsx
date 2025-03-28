@@ -167,7 +167,7 @@ const CategoryBelt = () => {
                   <p className="text-sm font-normal mt-0 text-center">{category.name}</p>
                   
                   {isCosmeticsCategory && showAnimation && (
-                    <div className="absolute left-1/2 -translate-x-1/2 top-full z-20 pointer-events-none">
+                    <div className="absolute left-1/2 -translate-x-1/2 top-[90px] z-20 pointer-events-none">
                       <DotLottiePlayer
                         src="https://lottie.host/dc804401-5c3c-4d6c-98d6-674f041ae826/j1ft0Kz2V9.lottie"
                         background="transparent"
