@@ -1,4 +1,3 @@
-
 import { useState, useRef, useEffect } from 'react';
 import { ChevronLeft, ChevronRight, Apple, Wheat, Milk, Beef, GlassWater, Snowflake, 
   Candy, House, Package, Egg, Droplet, CookingPot, LeafyGreen, Globe, 
@@ -39,7 +38,6 @@ const CategoryBelt = () => {
   const [overlayPosition, setOverlayPosition] = useState<{ top: number; left: number; width: number } | undefined>();
   const isMobile = useIsMobile();
   const [showAnimation, setShowAnimation] = useState(false);
-  const cosmeticsIndex = categories.findIndex(cat => cat.name === "Cosmetics");
 
   const scroll = (direction: 'left' | 'right') => {
     if (scrollRef.current) {
@@ -94,21 +92,16 @@ const CategoryBelt = () => {
     };
   }, [isOverlayOpen, isMobile]);
   
-  // Effect to trigger animation every 15 seconds
   useEffect(() => {
-    // Show animation immediately on first load
     setShowAnimation(true);
     
-    // Hide animation after 5 seconds
     const hideTimeout = setTimeout(() => {
       setShowAnimation(false);
     }, 5000);
     
-    // Set up interval to show animation every 15 seconds
     const intervalId = setInterval(() => {
       setShowAnimation(true);
       
-      // Hide animation after 5 seconds of showing
       setTimeout(() => {
         setShowAnimation(false);
       }, 5000);
@@ -139,14 +132,14 @@ const CategoryBelt = () => {
             className="flex overflow-x-auto snap-x snap-mandatory gap-3 pb-4 px-6 scrollbar-hide"
             style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
           >
-            {categories.map((category, index) => {
+            {categories.map((category) => {
               const IconComponent = category.icon;
               const isCosmeticsCategory = category.name === "Cosmetics";
               
               return (
                 <div 
                   key={category.id}
-                  className="flex-shrink-0 snap-start text-center cursor-pointer"
+                  className="flex-shrink-0 snap-start text-center cursor-pointer relative"
                   onClick={(e) => handleCategoryClick(category.name, e)}
                   onMouseEnter={() => handleCategoryHover(category.name)}
                 >
@@ -173,9 +166,8 @@ const CategoryBelt = () => {
                   </div>
                   <p className="text-sm font-normal mt-0 text-center">{category.name}</p>
                   
-                  {/* Animation below Cosmetics category */}
                   {isCosmeticsCategory && showAnimation && (
-                    <div className="absolute left-1/2 -translate-x-1/2 -bottom-10 z-20 pointer-events-none">
+                    <div className="absolute left-1/2 -translate-x-1/2 top-full z-20 pointer-events-none">
                       <DotLottiePlayer
                         src="https://lottie.host/dc804401-5c3c-4d6c-98d6-674f041ae826/j1ft0Kz2V9.lottie"
                         background="transparent"
