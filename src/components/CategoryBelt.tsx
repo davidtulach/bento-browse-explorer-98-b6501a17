@@ -7,6 +7,7 @@ import { cn } from '@/lib/utils';
 import CategoryOverlay from './CategoryOverlay';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { Badge } from './ui/badge';
+import DotLottiePlayer from './DotLottiePlayer';
 
 const categories = [
   { id: 1, name: "Fruit & Veg", icon: Apple },
@@ -37,6 +38,8 @@ const CategoryBelt = () => {
   const [isOverlayOpen, setIsOverlayOpen] = useState(false);
   const [overlayPosition, setOverlayPosition] = useState<{ top: number; left: number; width: number } | undefined>();
   const isMobile = useIsMobile();
+  const [showAnimation, setShowAnimation] = useState(false);
+  const cosmeticsIndex = categories.findIndex(cat => cat.name === "Cosmetics");
 
   const scroll = (direction: 'left' | 'right') => {
     if (scrollRef.current) {
@@ -90,6 +93,32 @@ const CategoryBelt = () => {
       window.removeEventListener('resize', handleResize);
     };
   }, [isOverlayOpen, isMobile]);
+  
+  // Effect to trigger animation every 15 seconds
+  useEffect(() => {
+    // Show animation immediately on first load
+    setShowAnimation(true);
+    
+    // Hide animation after 5 seconds
+    const hideTimeout = setTimeout(() => {
+      setShowAnimation(false);
+    }, 5000);
+    
+    // Set up interval to show animation every 15 seconds
+    const intervalId = setInterval(() => {
+      setShowAnimation(true);
+      
+      // Hide animation after 5 seconds of showing
+      setTimeout(() => {
+        setShowAnimation(false);
+      }, 5000);
+    }, 15000);
+    
+    return () => {
+      clearInterval(intervalId);
+      clearTimeout(hideTimeout);
+    };
+  }, []);
 
   return (
     <div className="relative" ref={beltRef}>
@@ -110,8 +139,10 @@ const CategoryBelt = () => {
             className="flex overflow-x-auto snap-x snap-mandatory gap-3 pb-4 px-6 scrollbar-hide"
             style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
           >
-            {categories.map((category) => {
+            {categories.map((category, index) => {
               const IconComponent = category.icon;
+              const isCosmeticsCategory = category.name === "Cosmetics";
+              
               return (
                 <div 
                   key={category.id}
@@ -141,6 +172,20 @@ const CategoryBelt = () => {
                     )}
                   </div>
                   <p className="text-sm font-normal mt-0 text-center">{category.name}</p>
+                  
+                  {/* Animation below Cosmetics category */}
+                  {isCosmeticsCategory && showAnimation && (
+                    <div className="absolute left-1/2 -translate-x-1/2 -bottom-10 z-20 pointer-events-none">
+                      <DotLottiePlayer
+                        src="https://lottie.host/dc804401-5c3c-4d6c-98d6-674f041ae826/j1ft0Kz2V9.lottie"
+                        background="transparent"
+                        speed={1}
+                        loop={true}
+                        autoplay={true}
+                        className="w-[120px] h-[80px]"
+                      />
+                    </div>
+                  )}
                 </div>
               );
             })}
