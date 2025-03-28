@@ -35,10 +35,10 @@ export const categoryBrandMessages: Record<string, BrandMessage> = {
     fallbackSrc: 'https://images.unsplash.com/photo-1610832958506-aa56368176cf',
   },
   'Bakery': {
-    title: 'Artisan Baker Week!',
-    description: 'Meet our incredible local suppliers and discover unique handcrafted treats available for a limited time only.',
-    imageSrc: 'https://images.pexels.com/photos/1070946/pexels-photo-1070946.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
-    fallbackSrc: 'https://images.pexels.com/photos/31140365/pexels-photo-31140365/free-photo-of-traditional-bread-baking-in-wood-fired-oven.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+    title: 'Freshly Baked Daily',
+    description: 'Our bakery products are made fresh daily using traditional recipes and quality ingredients.',
+    imageSrc: 'https://images.pexels.com/photos/31140365/pexels-photo-31140365/free-photo-of-traditional-bread-baking-in-wood-fired-oven.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+    fallbackSrc: 'https://images.unsplash.com/photo-1509440159596-0249088772ff',
   },
   'Cosmetics': {
     title: 'Beauty Sale - Up to 30% OFF',
@@ -148,8 +148,4 @@ export const categoryBrandMessages: Record<string, BrandMessage> = {
     imageSrc: 'https://images.unsplash.com/photo-1604719312566-8912e9c8a213',
     fallbackSrc: 'https://images.unsplash.com/photo-1604719312566-8912e9c8a213',
   }
-};
-
-export const uniqueOfferSubcategories = {
-  'Bakery': ['Buns & Rolls', 'Cakes', 'Gluten-free']
 };

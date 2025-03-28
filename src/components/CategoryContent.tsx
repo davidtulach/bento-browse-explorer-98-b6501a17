@@ -1,27 +1,23 @@
 import React, { useState, useEffect } from 'react';
-import { X, ChevronRight, CheckCircle, BadgePercent, ArrowRight, Timer, Star, ChefHat, Award } from 'lucide-react';
+import { X, ChevronRight, CheckCircle, BadgePercent, ArrowRight, Timer } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import AnimatedImage from './AnimatedImage';
 import { SheetHeader, SheetTitle } from '@/components/ui/sheet';
-import { categorySubcategories, categoryBrandMessages, BrandMessage, uniqueOfferSubcategories } from '@/data/categoryData';
+import { categorySubcategories, categoryBrandMessages, BrandMessage } from '@/data/categoryData';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
-
 interface CategoryContentProps {
   category: string;
   onClose: () => void;
   isMobile: boolean;
 }
-
 const newArrivalSubcategories = {
   'Bakery': ['Bread', 'Pastries'],
   'Frozen': ['Frozen Fruits'],
   'Snacks': ['Chips', 'Protein Bars']
 };
-
 const discountedCategories = ['Cosmetics'];
-
 const CategoryContent: React.FC<CategoryContentProps> = ({
   category,
   onClose,
@@ -39,23 +35,15 @@ const CategoryContent: React.FC<CategoryContentProps> = ({
     seconds: 59
   });
   const [codeApplied, setCodeApplied] = useState(false);
-
   const hasNewArrival = (category: string, subcategory: string) => {
     return newArrivalSubcategories[category]?.includes(subcategory) || false;
   };
-
   const hasDiscount = (category: string) => {
     return discountedCategories.includes(category);
   };
-
   const isDiscountedSubcategory = (category: string, subcategory: string) => {
     return category === 'Cosmetics';
   };
-
-  const isUniqueOffer = (category: string, subcategory: string) => {
-    return uniqueOfferSubcategories[category]?.includes(subcategory) || false;
-  };
-
   useEffect(() => {
     if (!hasDiscount(category)) return;
     const timer = setInterval(() => {
@@ -105,7 +93,6 @@ const CategoryContent: React.FC<CategoryContentProps> = ({
     }, 1000);
     return () => clearInterval(timer);
   }, [category]);
-
   const handleApplyDiscount = () => {
     setCodeApplied(true);
     toast({
@@ -114,10 +101,11 @@ const CategoryContent: React.FC<CategoryContentProps> = ({
       duration: 3000
     });
   };
-
   const CosmeticsDiscountBanner = () => {
     return <div className="mb-6">
         <div className="flex flex-col">
+          
+          
           <div className="flex flex-col gap-3">
             <div className="inline-flex items-center px-4 py-3 bg-yellow-100 rounded-lg w-full">
               <span className="text-xl mr-2">🏷️</span>
@@ -155,54 +143,6 @@ const CategoryContent: React.FC<CategoryContentProps> = ({
         </div>
       </div>;
   };
-
-  const ArtisanBakerBanner = () => {
-    return (
-      <div className="mb-6">
-        <div className="flex flex-col">
-          <div className="flex flex-col gap-3">
-            <div className="inline-flex items-center px-4 py-3 bg-amber-100 rounded-lg w-full">
-              <ChefHat className="h-5 w-5 text-amber-700 mr-2" />
-              <span className="text-lg font-bold text-amber-700">Artisan Baker Week - Meet our local suppliers!</span>
-            </div>
-            
-            <div className="bg-white p-4 rounded-lg shadow-sm border border-amber-200">
-              <div className="flex items-center mb-3">
-                <Award className="h-5 w-5 text-amber-600 mr-2" />
-                <span className="font-medium">Limited edition artisan creations available now</span>
-              </div>
-              
-              <p className="text-sm text-gray-600 mb-3">
-                Our talented local bakers have crafted exclusive treats just for this week. 
-                Don't miss these unique items in our Buns & Rolls, Cakes, and Gluten-free sections!
-              </p>
-              
-              <div className="flex flex-wrap gap-2 mb-3">
-                <div className="px-2 py-1 bg-amber-100 text-amber-700 text-xs font-medium rounded-full flex items-center">
-                  <Star className="h-3 w-3 mr-1" />
-                  Handcrafted
-                </div>
-                <div className="px-2 py-1 bg-amber-100 text-amber-700 text-xs font-medium rounded-full flex items-center">
-                  <Star className="h-3 w-3 mr-1" />
-                  Limited Edition
-                </div>
-                <div className="px-2 py-1 bg-amber-100 text-amber-700 text-xs font-medium rounded-full flex items-center">
-                  <Star className="h-3 w-3 mr-1" />
-                  Local Artisans
-                </div>
-              </div>
-              
-              <button className="text-sm font-medium text-amber-700 hover:underline flex items-center">
-                <span>Meet our bakers</span>
-                <ChevronRight className="h-4 w-4 ml-1" />
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  };
-
   return <div className="relative">
       <div className={cn("py-6 px-6", isMobile && "relative")}>
         {isMobile ? <SheetHeader className="pb-2">
@@ -215,7 +155,6 @@ const CategoryContent: React.FC<CategoryContentProps> = ({
           </div>}
         
         {category === 'Cosmetics' && <CosmeticsDiscountBanner />}
-        {category === 'Bakery' && <ArtisanBakerBanner />}
         
         <div className="flex flex-col md:flex-row gap-8">
           <div className="md:w-3/5 grid grid-cols-2 gap-x-8 gap-y-2">
@@ -239,13 +178,6 @@ const CategoryContent: React.FC<CategoryContentProps> = ({
                         NEW
                       </div>
                     </div>}
-                    
-                  {isUniqueOffer(category, subcat) && <div className="ml-2">
-                      <div className="px-2 py-0.5 text-xs font-medium rounded-full bg-amber-500 text-white flex items-center">
-                        <Star className="h-3 w-3 mr-1" />
-                        Unique offer
-                      </div>
-                    </div>}
                 </div>
                 <ChevronRight className={cn("h-4 w-4 text-primary transition-all", isMobile ? "opacity-70" : "opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0")} />
               </a>)}
@@ -263,29 +195,7 @@ const CategoryContent: React.FC<CategoryContentProps> = ({
                       See all partner offers <ChevronRight className="h-4 w-4 ml-1" />
                     </a>
                   </div>
-                </div> : category === 'Bakery' ? (
-                <>
-                  <AnimatedImage src={brandMessage.imageSrc} fallbackSrc={brandMessage.fallbackSrc} alt={brandMessage.title} aspectRatio="aspect-[16/10]" objectFit="cover" className="w-full rounded-lg" />
-                  <div className="mt-4">
-                    <h3 className="font-semibold text-lg mb-1">{brandMessage.title}</h3>
-                    <p className="text-sm text-gray-600 mb-2">{brandMessage.description}</p>
-                    <div className="grid grid-cols-2 gap-2 mb-3">
-                      <div className="bg-amber-50 p-2 rounded border border-amber-200 text-xs">
-                        <span className="font-medium block">Daily Demonstrations</span>
-                        <span>Watch our artisans at work!</span>
-                      </div>
-                      <div className="bg-amber-50 p-2 rounded border border-amber-200 text-xs">
-                        <span className="font-medium block">Free Samples</span>
-                        <span>Try before you buy</span>
-                      </div>
-                    </div>
-                    <button className="text-sm font-medium text-amber-700 underline flex items-center group">
-                      <span>Event schedule</span>
-                      <ChevronRight className={cn("h-4 w-4 ml-1 transition-all", isMobile ? "opacity-70" : "opacity-70 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0")} />
-                    </button>
-                  </div>
-                </>
-              ) : <>
+                </div> : <>
                   <AnimatedImage src={brandMessage.imageSrc} fallbackSrc={brandMessage.fallbackSrc} alt={brandMessage.title} aspectRatio="aspect-[16/10]" objectFit="cover" className="w-full" />
                   <div className="mt-4">
                     <h3 className="font-semibold text-lg mb-1">{brandMessage.title}</h3>
@@ -302,5 +212,4 @@ const CategoryContent: React.FC<CategoryContentProps> = ({
       </div>
     </div>;
 };
-
 export default CategoryContent;

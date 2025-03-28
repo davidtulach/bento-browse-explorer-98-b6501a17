@@ -1,8 +1,7 @@
-
 import { useState, useRef, useEffect } from 'react';
 import { ChevronLeft, ChevronRight, Apple, Wheat, Milk, Beef, GlassWater, Snowflake, 
   Candy, House, Package, Egg, Droplet, CookingPot, LeafyGreen, Globe, 
-  IceCream, Dog, Baby, Scissors, Percent, ChefHat, Star } from 'lucide-react';
+  IceCream, Dog, Baby, Scissors, Percent } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import CategoryOverlay from './CategoryOverlay';
 import { useIsMobile } from '@/hooks/use-mobile';
@@ -10,7 +9,7 @@ import { Badge } from './ui/badge';
 
 const categories = [
   { id: 1, name: "Fruit & Veg", icon: Apple },
-  { id: 2, name: "Bakery", icon: ChefHat, hasSpecialEvent: true },
+  { id: 2, name: "Bakery", icon: Wheat, hasNewItems: true },
   { id: 3, name: "Cosmetics", icon: Scissors, hasDiscount: true },
   { id: 4, name: "Dairy", icon: Milk },
   { id: 5, name: "Meat", icon: Beef },
@@ -51,9 +50,10 @@ const CategoryBelt = () => {
     
     if (!isMobile && event && beltRef.current) {
       const beltRect = beltRef.current.getBoundingClientRect();
+      const scrollPosition = window.scrollY;
       
       setOverlayPosition({
-        top: beltRect.bottom,
+        top: beltRect.bottom + scrollPosition,
         left: 0,
         width: window.innerWidth
       });
@@ -71,9 +71,10 @@ const CategoryBelt = () => {
       if (isOverlayOpen && !isMobile) {
         if (beltRef.current) {
           const beltRect = beltRef.current.getBoundingClientRect();
+          const scrollPosition = window.scrollY;
           
           setOverlayPosition({
-            top: beltRect.bottom,
+            top: beltRect.bottom + scrollPosition,
             left: 0,
             width: window.innerWidth
           });
@@ -81,9 +82,24 @@ const CategoryBelt = () => {
       }
     };
 
+    const handleScroll = () => {
+      if (isOverlayOpen && !isMobile && beltRef.current) {
+        const beltRect = beltRef.current.getBoundingClientRect();
+        const scrollPosition = window.scrollY;
+        
+        setOverlayPosition({
+          top: beltRect.bottom + scrollPosition,
+          left: 0,
+          width: window.innerWidth
+        });
+      }
+    };
+
     window.addEventListener('resize', handleResize);
+    window.addEventListener('scroll', handleScroll);
     return () => {
       window.removeEventListener('resize', handleResize);
+      window.removeEventListener('scroll', handleScroll);
     };
   }, [isOverlayOpen, isMobile]);
 
@@ -111,21 +127,11 @@ const CategoryBelt = () => {
               return (
                 <div 
                   key={category.id}
-                  className={cn(
-                    "flex-shrink-0 snap-start text-center cursor-pointer",
-                    category.hasSpecialEvent && "animate-pulse"
-                  )}
+                  className="flex-shrink-0 snap-start text-center cursor-pointer"
                   onClick={(e) => handleCategoryClick(category.name, e)}
                 >
-                  <div className={cn(
-                    "w-[90px] h-[90px] mb-1 mx-auto relative flex items-center justify-center transition-transform hover:scale-105 duration-200",
-                    category.hasSpecialEvent && "bg-amber-50 rounded-full border-2 border-amber-300"
-                  )}>
-                    <IconComponent className={cn(
-                      "w-12 h-12", 
-                      category.hasSpecialEvent ? "text-amber-600" : "text-primary"
-                    )} 
-                    strokeWidth={1.5} />
+                  <div className="w-[90px] h-[90px] mb-1 mx-auto relative flex items-center justify-center transition-transform hover:scale-105 duration-200">
+                    <IconComponent className="w-12 h-12 text-primary" strokeWidth={1.5} />
                     
                     {category.hasNewItems && (
                       <Badge 
@@ -144,23 +150,8 @@ const CategoryBelt = () => {
                         <Percent className="w-3 h-3" />
                       </Badge>
                     )}
-                    
-                    {category.hasSpecialEvent && (
-                      <Badge 
-                        className="absolute -top-1 -right-1 bg-amber-500 text-white border-2 border-white p-1 rounded-full w-6 h-6 flex items-center justify-center"
-                        aria-label="Special event"
-                      >
-                        <Star className="w-3 h-3" />
-                      </Badge>
-                    )}
                   </div>
-                  <p className={cn(
-                    "text-sm font-normal mt-0 text-center",
-                    category.hasSpecialEvent && "font-medium text-amber-700"
-                  )}>{category.name}</p>
-                  {category.hasSpecialEvent && (
-                    <span className="text-xs text-amber-700 font-medium">Artisan Week!</span>
-                  )}
+                  <p className="text-sm font-normal mt-0 text-center">{category.name}</p>
                 </div>
               );
             })}
