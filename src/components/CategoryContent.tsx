@@ -149,7 +149,7 @@ const CategoryContent: React.FC<CategoryContentProps> = ({
         <div className="space-y-5">
           <div>
             
-            <p className="text-lg font-medium text-gray-700">Discover our new range of beauty products</p>
+            <p className="text-lg text-gray-700 font-extrabold">Discover our new range of beauty products</p>
           </div>
           
           <div className="bg-yellow-50 rounded-lg px-6 py-5">
