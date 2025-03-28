@@ -37,9 +37,6 @@ const DesktopCategoryOverlay: React.FC<DesktopCategoryOverlayProps> = ({
           left: position?.left || 0,
           width: position?.width || '100%',
           maxWidth: '1200px',
-          marginLeft: 'auto',
-          marginRight: 'auto',
-          right: 0,
           zIndex: 50
         }}
       >

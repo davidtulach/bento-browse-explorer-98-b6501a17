@@ -1,3 +1,4 @@
+
 export const categorySubcategories: Record<string, string[]> = {
   'Fruit & Veg': ['Apples', 'Bananas', 'Berries', 'Citrus', 'Tropical Fruits', 'Salad & Leafy Greens', 'Root Vegetables', 'Herbs'],
   'Bakery': ['Bread', 'Buns & Rolls', 'Cakes', 'Pastries', 'Cookies', 'Gluten-free'],
@@ -43,8 +44,8 @@ export const categoryBrandMessages: Record<string, BrandMessage> = {
   'Cosmetics': {
     title: 'Beauty Sale - Up to 30% OFF',
     description: 'Our luxury brand partners have enabled this exclusive offer for a limited time.',
-    imageSrc: '/lovable-uploads/d1bbcbd7-3b06-49f4-ad1c-6ed53dc23e01.png',
-    fallbackSrc: 'https://images.unsplash.com/photo-1596462502278-27bfdc403348',
+    imageSrc: '/lovable-uploads/57df0949-8906-423f-8116-7248ef4503f4.png',
+    fallbackSrc: '/lovable-uploads/57df0949-8906-423f-8116-7248ef4503f4.png',
   },
   'Dairy': {
     title: 'Farm to Table',

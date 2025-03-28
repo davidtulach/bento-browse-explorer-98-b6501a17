@@ -73,7 +73,7 @@ const AnimatedImage = ({
       if (currentSrc === fallbackSrc || !fallbackSrc) {
         setHasError(true);
       }
-    }} className="" />}
+    }} className="object-fill" />}
     </div>;
 };
 export default AnimatedImage;
