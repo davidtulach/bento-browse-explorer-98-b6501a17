@@ -1,3 +1,4 @@
+
 import { useState, useRef, useEffect } from 'react';
 import { ChevronLeft, ChevronRight, Apple, Wheat, Milk, Beef, GlassWater, Snowflake, 
   Candy, House, Package, Egg, Droplet, CookingPot, LeafyGreen, Globe, 
@@ -104,7 +105,7 @@ const CategoryBelt = () => {
   }, [isOverlayOpen, isMobile]);
 
   return (
-    <div className="relative" ref={beltRef}>
+    <div className="relative" ref={beltRef} data-category-belt>
       <div className="px-4 py-6">
         <h2 className="text-xl font-medium mb-4">Categories</h2>
         

@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { cn } from '@/lib/utils';
 import CategoryContent from './CategoryContent';
 
@@ -16,6 +16,31 @@ const DesktopCategoryOverlay: React.FC<DesktopCategoryOverlayProps> = ({
   category, 
   position 
 }) => {
+  const [overlayPosition, setOverlayPosition] = useState(position);
+
+  useEffect(() => {
+    setOverlayPosition(position);
+    
+    const handleScroll = () => {
+      if (position) {
+        // Update the top position based on the belt's current position
+        const beltElement = document.querySelector('[data-category-belt]');
+        if (beltElement) {
+          const beltRect = beltElement.getBoundingClientRect();
+          setOverlayPosition({
+            ...position,
+            top: beltRect.bottom + window.scrollY
+          });
+        }
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, [position, isOpen]);
+
   return (
     <div 
       className={cn(
@@ -28,15 +53,15 @@ const DesktopCategoryOverlay: React.FC<DesktopCategoryOverlayProps> = ({
     >
       <div 
         className={cn(
-          "fixed bg-white rounded-lg shadow-xl border border-gray-200 transition-all duration-200 overflow-hidden",
+          "absolute bg-white rounded-lg shadow-xl border border-gray-200 transition-all duration-200 overflow-hidden",
           !isOpen && "opacity-0 translate-y-[-10px]",
           isOpen && "opacity-100 translate-y-0"
         )}
         style={{
-          top: position?.top || 0,
+          top: overlayPosition?.top || 0,
           left: 0,
           right: 0,
-          width: position?.width || '1200px',
+          width: overlayPosition?.width || '1200px',
           maxWidth: '1200px',
           marginLeft: 'auto',
           marginRight: 'auto',
