@@ -14,11 +14,11 @@ interface MobileCategorySheetProps {
 const MobileCategorySheet: React.FC<MobileCategorySheetProps> = ({ isOpen, onClose, category }) => {
   return (
     <Sheet open={isOpen} onOpenChange={(open) => !open && onClose()}>
-      <SheetContent side="bottom" className="h-[80vh] rounded-t-xl p-0 flex flex-col">
+      <SheetContent side="bottom" className="h-auto max-h-[80vh] rounded-t-xl p-0 flex flex-col">
         <SheetClose className="absolute right-4 top-4 rounded-full bg-muted p-2 hover:bg-muted/80 z-10">
           <X className="h-5 w-5" />
         </SheetClose>
-        <ScrollArea className="flex-1 h-full w-full overflow-auto">
+        <ScrollArea className="flex-1 h-full w-full">
           <CategoryContent category={category} onClose={onClose} isMobile={true} />
         </ScrollArea>
       </SheetContent>

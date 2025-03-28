@@ -144,76 +144,71 @@ const CategoryContent: React.FC<CategoryContentProps> = ({
       </div>
     </div>;
   const renderCosmeticsCategory = () => <div className="flex flex-col">
-      <div className={cn("grid grid-cols-1 md:grid-cols-2 gap-6", isMobile && "grid-cols-1")}>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Left Column - Content */}
-        <div className="space-y-4">
+        <div className="space-y-5">
           <div>
-            <p className="text-base text-gray-700 font-extrabold">Discover our new range of beauty products</p>
+            
+            <p className="text-lg text-gray-700 font-extrabold">Discover our new range of beauty products</p>
           </div>
           
-          <div className="bg-yellow-50 rounded-lg px-4 py-3">
-            <div className="flex items-start mb-2">
-              <BadgePercent className="h-4 w-4 text-yellow-600 mt-1 mr-2 flex-shrink-0" />
+          <div className="bg-yellow-50 rounded-lg px-6 py-5">
+            <div className="flex items-start mb-3">
+              <BadgePercent className="h-5 w-5 text-yellow-600 mt-1 mr-2 flex-shrink-0" />
               <div>
-                <h3 className="text-lg font-bold text-yellow-600">10% off everything</h3>
-                <p className="text-sm font-semibold text-gray-700">Use code SALE10</p>
+                <h3 className="text-2xl font-bold text-yellow-600">10% off everything</h3>
+                <p className="font-semibold text-gray-700">Use code SALE10</p>
               </div>
             </div>
             
-            <div className="flex items-center mb-2 text-sm">
-              <Timer className="h-4 w-4 mr-2 text-gray-600" />
-              <div className="flex space-x-1 items-center">
-                <span className="text-xs font-medium text-gray-600">Ends in:</span>
+            <div className="flex items-center mb-3">
+              <Timer className="h-5 w-5 mr-2 text-gray-600" />
+              <div className="flex space-x-2 items-center">
+                <span className="text-sm font-medium text-gray-600">Ends in:</span>
                 <div className="flex space-x-1">
-                  <div className="bg-white px-1.5 py-0.5 rounded text-xs font-bold">
+                  <div className="bg-white px-2 py-1 rounded text-sm font-bold">
                     {timeRemaining.days}d
                   </div>
-                  <div className="bg-white px-1.5 py-0.5 rounded text-xs font-bold">
+                  <div className="bg-white px-2 py-1 rounded text-sm font-bold">
                     {timeRemaining.hours}h
+                  </div>
+                  <div className="bg-white px-2 py-1 rounded text-sm font-bold">
+                    {timeRemaining.minutes}m
                   </div>
                 </div>
               </div>
             </div>
             
-            <button onClick={handleApplyDiscount} className={cn("flex items-center font-medium text-xs transition-all", codeApplied ? "text-green-600" : "text-primary hover:text-primary/90")}>
+            <button onClick={handleApplyDiscount} className={cn("flex items-center font-medium text-sm transition-all", codeApplied ? "text-green-600" : "text-primary hover:text-primary/90")}>
               {codeApplied ? <>
-                  <CheckCircle className="mr-1 h-3 w-3" />
-                  Code applied
+                  <CheckCircle className="mr-1 h-4 w-4" />
+                  Code applied to your basket
                 </> : <>
-                  Apply discount <ArrowRight className="ml-1 h-3 w-3" />
+                  Apply discount to basket <ArrowRight className="ml-1 h-4 w-4" />
                 </>}
             </button>
           </div>
           
-          {isMobile ? <div className="bg-purple-50 rounded-lg px-4 py-3">
-              <h3 className="text-base font-bold text-purple-800 mb-2">60+ new products!</h3>
-              <p className="text-xs text-gray-700 mb-3">Amazing new Bio products and natural skincare from dozens of new suppliers.</p>
-              <div className="grid grid-cols-2 gap-2">
-                {subcategories.slice(0, 4).map((subcat, index) => <a key={index} href="#" className="hover:underline py-0.5 flex items-center justify-between group">
-                    <span className="text-xs text-gray-800 font-medium">{subcat}</span>
-                    <ChevronRight className="h-3 w-3 text-primary transition-all opacity-70" />
-                  </a>)}
-              </div>
-            </div> : <div className="bg-purple-50 rounded-lg px-6 py-5">
-              <h3 className="text-xl font-bold text-purple-800 mb-3">60+ new products just arrived!</h3>
-              <p className="text-gray-700 mb-4">We've partnered with dozens of amazing new suppliers bringing you the best in Bio products and natural skincare.</p>
-              <div className="grid grid-cols-2 gap-4">
-                {subcategories.map((subcat, index) => <a key={index} href="#" className="hover:underline py-1 flex items-center justify-between group">
-                    <span className="text-gray-800 font-medium">{subcat}</span>
-                    <ChevronRight className="h-4 w-4 text-primary transition-all opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0" />
-                  </a>)}
-              </div>
-            </div>}
+          <div className="bg-purple-50 rounded-lg px-6 py-5">
+            <h3 className="text-xl font-bold text-purple-800 mb-3">60+ new products just arrived!</h3>
+            <p className="text-gray-700 mb-4">We've partnered with dozens of amazing new suppliers bringing you the best in Bio products and natural skincare.</p>
+            <div className="grid grid-cols-2 gap-4">
+              {subcategories.map((subcat, index) => <a key={index} href="#" className="hover:underline py-1 flex items-center justify-between group">
+                  <span className="text-gray-800 font-medium">{subcat}</span>
+                  <ChevronRight className="h-4 w-4 text-primary transition-all opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0" />
+                </a>)}
+            </div>
+          </div>
         </div>
         
         {/* Right Column - Image */}
-        {!isMobile && <div className="aspect-[4/5] rounded-lg overflow-hidden">
-            <img src="/lovable-uploads/cff494d1-5fe6-4575-95a4-5240eaa31691.png" alt="Cosmetics collection" className="w-full h-full object-cover" />
-          </div>}
+        <div className="aspect-[4/5] rounded-lg overflow-hidden">
+          <img src="/lovable-uploads/cff494d1-5fe6-4575-95a4-5240eaa31691.png" alt="Cosmetics collection" className="w-full h-full object-cover" />
+        </div>
       </div>
     </div>;
   return <div className="relative">
-      <div className={cn("py-4 px-6", isMobile && "relative")}>
+      <div className={cn("py-6 px-6", isMobile && "relative")}>
         {isMobile ? <SheetHeader className="pb-2">
             <SheetTitle className="text-xl">{category}</SheetTitle>
           </SheetHeader> : <div className="flex items-center justify-between mb-4">
