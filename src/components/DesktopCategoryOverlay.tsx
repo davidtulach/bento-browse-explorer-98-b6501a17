@@ -1,5 +1,5 @@
 
-import React, { useEffect, useState, useRef } from 'react';
+import React from 'react';
 import { cn } from '@/lib/utils';
 import CategoryContent from './CategoryContent';
 
@@ -16,31 +16,6 @@ const DesktopCategoryOverlay: React.FC<DesktopCategoryOverlayProps> = ({
   category, 
   position 
 }) => {
-  const overlayRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (!isOpen || !position) return;
-
-    // Get the belt element
-    const beltElement = document.querySelector('[data-category-belt]');
-    if (!beltElement || !overlayRef.current) return;
-
-    // Position the overlay directly below the belt
-    const beltRect = beltElement.getBoundingClientRect();
-    
-    overlayRef.current.style.position = 'absolute';
-    overlayRef.current.style.top = `${beltRect.bottom}px`;
-    overlayRef.current.style.left = '0px';
-    overlayRef.current.style.right = '0px';
-    overlayRef.current.style.width = `${position.width || 1200}px`;
-    overlayRef.current.style.maxWidth = '1200px';
-    overlayRef.current.style.marginLeft = 'auto';
-    overlayRef.current.style.marginRight = 'auto';
-    overlayRef.current.style.zIndex = '50';
-  }, [isOpen, position]);
-
-  if (!category) return null;
-
   return (
     <div 
       className={cn(
@@ -52,12 +27,18 @@ const DesktopCategoryOverlay: React.FC<DesktopCategoryOverlayProps> = ({
       }}
     >
       <div 
-        ref={overlayRef}
         className={cn(
-          "bg-white rounded-lg shadow-xl border border-gray-200 transition-all duration-200 overflow-hidden",
+          "absolute bg-white rounded-lg shadow-xl border border-gray-200 transition-all duration-200 overflow-hidden",
           !isOpen && "opacity-0 translate-y-[-10px]",
           isOpen && "opacity-100 translate-y-0"
         )}
+        style={{
+          top: position?.top || 0,
+          left: position?.left || 0,
+          width: position?.width || '100%',
+          maxWidth: '1200px',
+          zIndex: 50
+        }}
       >
         <CategoryContent category={category} onClose={onClose} isMobile={false} />
       </div>
