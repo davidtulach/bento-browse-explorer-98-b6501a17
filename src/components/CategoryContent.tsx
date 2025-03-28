@@ -7,18 +7,22 @@ import { categorySubcategories, categoryBrandMessages, BrandMessage } from '@/da
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
+
 interface CategoryContentProps {
   category: string;
   onClose: () => void;
   isMobile: boolean;
 }
+
 const newArrivalSubcategories = {
   'Bakery': ['Bread', 'Pastries'],
   'Frozen': ['Frozen Fruits'],
   'Snacks': ['Chips', 'Protein Bars'],
   'Cosmetics': ['Organic Serums', 'Bio Products', 'Natural Oils']
 };
+
 const discountedCategories = ['Cosmetics'];
+
 const CategoryContent: React.FC<CategoryContentProps> = ({
   category,
   onClose,
@@ -36,15 +40,19 @@ const CategoryContent: React.FC<CategoryContentProps> = ({
     seconds: 59
   });
   const [codeApplied, setCodeApplied] = useState(false);
+
   const hasNewArrival = (category: string, subcategory: string) => {
     return newArrivalSubcategories[category]?.includes(subcategory) || false;
   };
+
   const hasDiscount = (category: string) => {
     return discountedCategories.includes(category);
   };
+
   const isDiscountedSubcategory = (category: string, subcategory: string) => {
     return category === 'Cosmetics';
   };
+
   useEffect(() => {
     if (!hasDiscount(category)) return;
     const timer = setInterval(() => {
@@ -94,6 +102,7 @@ const CategoryContent: React.FC<CategoryContentProps> = ({
     }, 1000);
     return () => clearInterval(timer);
   }, [category]);
+
   const handleApplyDiscount = () => {
     setCodeApplied(true);
     toast({
@@ -102,6 +111,7 @@ const CategoryContent: React.FC<CategoryContentProps> = ({
       duration: 3000
     });
   };
+
   const renderRegularCategory = () => <div className="flex flex-col md:flex-row gap-8">
       <div className="md:w-3/5 grid grid-cols-2 gap-x-8 gap-y-2">
         <a href="#" className="text-sm font-bold hover:underline col-span-2 mb-2 flex items-center group">
@@ -143,9 +153,9 @@ const CategoryContent: React.FC<CategoryContentProps> = ({
         </div>
       </div>
     </div>;
+
   const renderCosmeticsCategory = () => <div className="flex flex-col">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {/* Left Column - Content */}
         <div className="space-y-5">
           <div>
             
@@ -201,12 +211,16 @@ const CategoryContent: React.FC<CategoryContentProps> = ({
           </div>
         </div>
         
-        {/* Right Column - Image */}
         <div className="aspect-[4/5] rounded-lg overflow-hidden">
-          <img src="/lovable-uploads/cff494d1-5fe6-4575-95a4-5240eaa31691.png" alt="Cosmetics collection" className="w-full h-full object-cover" />
+          <img 
+            src="/lovable-uploads/cff494d1-5fe6-4575-95a4-5240eaa31691.png" 
+            alt="Cosmetics collection" 
+            className="w-full h-full object-contain" 
+          />
         </div>
       </div>
     </div>;
+
   return <div className="relative">
       <div className={cn("py-6 px-6", isMobile && "relative")}>
         {isMobile ? <SheetHeader className="pb-2">
@@ -222,4 +236,5 @@ const CategoryContent: React.FC<CategoryContentProps> = ({
       </div>
     </div>;
 };
+
 export default CategoryContent;
