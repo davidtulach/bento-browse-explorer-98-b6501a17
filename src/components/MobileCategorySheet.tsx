@@ -19,23 +19,23 @@ const MobileCategorySheet: React.FC<MobileCategorySheetProps> = ({ isOpen, onClo
     if (isOpen && category === 'Cosmetics') {
       const timer = setTimeout(() => {
         if (scrollAreaRef.current) {
-          // Perform a small scroll nudge animation
+          // First subtle nudge
           scrollAreaRef.current.scrollTo({
-            top: 30,
+            top: 15,
             behavior: 'smooth'
           });
           
-          // Return to original position to create a bouncing effect
+          // Return to original position and do a second, slightly different nudge
           setTimeout(() => {
             if (scrollAreaRef.current) {
               scrollAreaRef.current.scrollTo({
-                top: 10,
+                top: 5,
                 behavior: 'smooth'
               });
             }
-          }, 600);
+          }, 300);
         }
-      }, 800); // Wait a bit before showing the nudge
+      }, 200); // Start nudge 200ms after opening
       
       return () => clearTimeout(timer);
     }
@@ -59,3 +59,4 @@ const MobileCategorySheet: React.FC<MobileCategorySheetProps> = ({ isOpen, onClo
 };
 
 export default MobileCategorySheet;
+
