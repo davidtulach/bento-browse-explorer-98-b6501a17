@@ -39,7 +39,6 @@ const CategoryBelt = () => {
   const [overlayPosition, setOverlayPosition] = useState<{ top: number; left: number; width: number } | undefined>();
   const isMobile = useIsMobile();
   const [showAnimation, setShowAnimation] = useState(false);
-  const categoryBeltRef = useRef<HTMLDivElement>(null);
 
   const scroll = (direction: 'left' | 'right') => {
     if (scrollRef.current) {
@@ -66,40 +65,14 @@ const CategoryBelt = () => {
   };
 
   const handleCategoryHover = (categoryName: string) => {
-    if (!isMobile) {
+    if (isOverlayOpen && !isMobile) {
       setSelectedCategory(categoryName);
-      if (!isOverlayOpen) {
-        setIsOverlayOpen(true);
-      }
     }
   };
 
   const handleCloseOverlay = () => {
     setIsOverlayOpen(false);
   };
-  
-  const handleMouseLeave = () => {
-    if (!isMobile) {
-      setIsOverlayOpen(false);
-    }
-  };
-
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        categoryBeltRef.current && 
-        !categoryBeltRef.current.contains(event.target as Node) &&
-        isOverlayOpen
-      ) {
-        setIsOverlayOpen(false);
-      }
-    };
-    
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [isOverlayOpen]);
 
   useEffect(() => {
     const handleResize = () => {
@@ -142,11 +115,7 @@ const CategoryBelt = () => {
   }, []);
 
   return (
-    <div 
-      className="relative" 
-      ref={categoryBeltRef} 
-      onMouseLeave={handleMouseLeave}
-    >
+    <div className="relative" ref={beltRef}>
       <div className="px-4 py-6">
         <h2 className="text-xl font-medium mb-4">Categories</h2>
         
