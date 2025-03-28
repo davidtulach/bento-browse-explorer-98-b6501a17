@@ -14,7 +14,7 @@ interface MobileCategorySheetProps {
 const MobileCategorySheet: React.FC<MobileCategorySheetProps> = ({ isOpen, onClose, category }) => {
   return (
     <Sheet open={isOpen} onOpenChange={(open) => !open && onClose()}>
-      <SheetContent side="bottom" className="h-[80vh] p-0">
+      <SheetContent side="bottom" className="p-0 max-h-[80vh] h-auto">
         <div className="flex flex-col h-full">
           <SheetClose className="absolute right-4 top-4 rounded-full bg-muted p-2 hover:bg-muted/80 z-10">
             <X className="h-5 w-5" />
