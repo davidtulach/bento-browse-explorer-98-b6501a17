@@ -24,6 +24,16 @@ const MobileCategorySheet: React.FC<MobileCategorySheetProps> = ({
   const touchStartX = useRef<number | null>(null);
   const touchEndX = useRef<number | null>(null);
   const [animating, setAnimating] = useState(false);
+  const [prevCategory, setPrevCategory] = useState<string | null>(null);
+  
+  // Update previous category when current category changes
+  useEffect(() => {
+    if (category !== prevCategory && prevCategory !== null) {
+      // Category has changed
+      setAnimating(true);
+    }
+    setPrevCategory(category);
+  }, [category]);
   
   // Function to get the next or previous category
   const changeCategory = (direction: 'next' | 'prev') => {
@@ -102,6 +112,13 @@ const MobileCategorySheet: React.FC<MobileCategorySheetProps> = ({
       setAnimating(false);
     }, 300);
     return () => clearTimeout(timer);
+  }, [category]);
+  
+  // Reset scroll position when category changes
+  useEffect(() => {
+    if (scrollAreaRef.current) {
+      scrollAreaRef.current.scrollTop = 0;
+    }
   }, [category]);
   
   return (

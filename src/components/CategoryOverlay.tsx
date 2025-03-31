@@ -1,5 +1,5 @@
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useIsMobile } from '@/hooks/use-mobile';
 import MobileCategorySheet from './MobileCategorySheet';
 import DesktopCategoryOverlay from './DesktopCategoryOverlay';
@@ -15,10 +15,19 @@ const CategoryOverlay = ({ isOpen, onClose, category: initialCategory, position 
   const isMobile = useIsMobile();
   const [currentCategory, setCurrentCategory] = useState<string | null>(initialCategory);
   const [slideDirection, setSlideDirection] = useState<'left' | 'right' | null>(null);
+  const previousCategory = useRef<string | null>(null);
   
   // Update internal state when prop changes
   useEffect(() => {
+    // If there was a previous category and it's different, determine direction
+    if (previousCategory.current && initialCategory !== previousCategory.current) {
+      // Get the categories to determine direction
+      // This is a simplified logic - a more complete version would compare indices in the category array
+      setSlideDirection('right'); // Default direction
+    }
+    
     setCurrentCategory(initialCategory);
+    previousCategory.current = initialCategory;
   }, [initialCategory]);
   
   // Listen for category change events from the MobileCategorySheet

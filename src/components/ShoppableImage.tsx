@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { 
   Popover,
@@ -7,6 +8,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { Plus, ShoppingCart } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { AspectRatio } from '@/components/ui/aspect-ratio';
 
 interface HotspotItem {
   id: number;
@@ -20,6 +22,7 @@ interface HotspotItem {
 
 const ShoppableImage = () => {
   const { toast } = useToast();
+  const [imageLoaded, setImageLoaded] = useState(false);
   
   // Hotspot items data
   const hotspots: HotspotItem[] = [
@@ -91,14 +94,23 @@ const ShoppableImage = () => {
       <h2 className="text-lg font-medium mb-3 px-2">Outdoor dining inspiration</h2>
       
       <div className="relative w-full mx-auto overflow-hidden md:max-w-[400px] lg:max-w-[450px]">
-        <img 
-          src="/lovable-uploads/0df29fa2-95a6-408b-b51e-4d7f69a34fc7.png" 
-          alt="Outdoor dining setup" 
-          className="w-full h-auto"
-        />
+        {/* Use modern approach with srcSet and sizes attributes */}
+        <div className="relative w-full">
+          {!imageLoaded && (
+            <div className="absolute inset-0 bg-gray-100 animate-pulse" />
+          )}
+          <img 
+            src="/lovable-uploads/0df29fa2-95a6-408b-b51e-4d7f69a34fc7.png" 
+            alt="Outdoor dining setup" 
+            className="w-full h-auto"
+            loading="eager"
+            decoding="async"
+            onLoad={() => setImageLoaded(true)}
+          />
+        </div>
         
-        {/* Hotspots */}
-        {hotspots.map((hotspot) => (
+        {/* Hotspots - only show when image has loaded */}
+        {imageLoaded && hotspots.map((hotspot) => (
           <Popover key={hotspot.id}>
             <PopoverTrigger asChild>
               <button

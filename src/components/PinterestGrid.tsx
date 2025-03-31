@@ -1,7 +1,9 @@
+
 import { cn } from '@/lib/utils';
 import AnimatedImage from './AnimatedImage';
 import { useIsMobile } from '@/hooks/use-mobile';
 import ContentPreview from './ContentPreview';
+import { useRef, useEffect, useState } from 'react';
 
 const items = [
   {
@@ -67,13 +69,44 @@ const tagColors: Record<string, { bg: string, text: string }> = {
 
 const PinterestGrid = () => {
   const isMobile = useIsMobile();
+  const [visibleItems, setVisibleItems] = useState<number[]>([0, 1]); // Start with first two items
+  const gridRef = useRef<HTMLDivElement>(null);
   
   // Split items into two columns for mobile
   const leftColumnItems = items.filter((_, idx) => idx % 2 === 0);
   const rightColumnItems = items.filter((_, idx) => idx % 2 === 1);
   
+  // Set up intersection observer to load images as they come into view
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const itemIndex = Number(entry.target.getAttribute('data-index'));
+            if (!isNaN(itemIndex) && !visibleItems.includes(itemIndex)) {
+              setVisibleItems(prev => [...prev, itemIndex]);
+            }
+          }
+        });
+      },
+      { rootMargin: '200px', threshold: 0.1 }
+    );
+    
+    // Observe all grid item containers
+    const itemElements = document.querySelectorAll('.pin-card');
+    itemElements.forEach((el, index) => {
+      el.setAttribute('data-index', index.toString());
+      observer.observe(el);
+    });
+    
+    return () => observer.disconnect();
+  }, []);
+  
   // For larger screens, show in a regular grid
-  const renderMasonryItem = (item: typeof items[0]) => {
+  const renderMasonryItem = (item: typeof items[0], index: number) => {
+    const isVisible = visibleItems.includes(index);
+    const isPriority = index < 4; // First 4 items are priority
+    
     const itemContent = (
       <div className="relative overflow-hidden rounded-xl">
         <div className="relative">
@@ -83,6 +116,8 @@ const PinterestGrid = () => {
             className="w-full rounded-xl"
             aspectRatio=""
             objectFit="cover"
+            priority={isPriority}
+            sizes={isMobile ? "50vw" : "(max-width: 768px) 33vw, (max-width: 1024px) 25vw, 16vw"}
           />
           
           <div className="absolute top-2 left-2">
@@ -104,6 +139,7 @@ const PinterestGrid = () => {
           src={item.image} 
           alt={item.title} 
           className="w-full rounded-none" 
+          loading={isPriority ? "eager" : "lazy"}
         />
         <div className="absolute inset-0 bg-gradient-to-b from-black/20 to-black/60 flex flex-col justify-end p-4">
           <h3 className="text-white font-medium">{item.title}</h3>
@@ -150,7 +186,7 @@ const PinterestGrid = () => {
   };
 
   return (
-    <div className="px-2 py-2 md:px-2">
+    <div className="px-2 py-2 md:px-2" ref={gridRef}>
       <h2 className="text-lg font-medium mb-3 px-2">Our best offers</h2>
       
       {isMobile ? (
@@ -158,18 +194,18 @@ const PinterestGrid = () => {
         <div className="flex gap-2 max-w-6xl mx-auto">
           {/* Left column */}
           <div className="w-1/2 flex flex-col gap-2">
-            {leftColumnItems.map(renderMasonryItem)}
+            {leftColumnItems.map((item, i) => renderMasonryItem(item, i * 2))}
           </div>
           
           {/* Right column with offset */}
           <div className="w-1/2 flex flex-col gap-2 mt-10">
-            {rightColumnItems.map(renderMasonryItem)}
+            {rightColumnItems.map((item, i) => renderMasonryItem(item, i * 2 + 1))}
           </div>
         </div>
       ) : (
         // Desktop view with compact grid (more columns, smaller gap)
         <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-2 max-w-6xl mx-auto">
-          {items.map(renderMasonryItem)}
+          {items.map((item, i) => renderMasonryItem(item, i))}
         </div>
       )}
     </div>
