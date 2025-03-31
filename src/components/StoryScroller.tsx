@@ -41,7 +41,6 @@ const StoryScroller = () => {
         <button 
           onClick={() => scroll('left')}
           className="absolute left-0 top-1/2 -translate-y-1/2 z-10 w-8 h-8 bg-white/90 backdrop-blur-sm rounded-full shadow-md flex items-center justify-center"
-          aria-label="Scroll left"
         >
           <ChevronLeft className="w-5 h-5" />
         </button>
@@ -51,7 +50,7 @@ const StoryScroller = () => {
           className="flex overflow-x-auto scrollbar-hide snap-x snap-mandatory gap-4 pb-2 -mx-4 px-4"
           style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
         >
-          {stories.map((story, index) => (
+          {stories.map((story) => (
             <div key={story.id} className="flex flex-col items-center flex-shrink-0 w-16 snap-start">
               <div className="story-circle mb-1.5">
                 <div className="story-circle-inner">
@@ -59,8 +58,6 @@ const StoryScroller = () => {
                     src={story.image}
                     alt={story.title}
                     className="w-full h-full object-cover"
-                    priority={index < 3} // Only prioritize first 3 images
-                    sizes="64px"
                   />
                 </div>
               </div>
@@ -72,7 +69,6 @@ const StoryScroller = () => {
         <button 
           onClick={() => scroll('right')}
           className="absolute right-0 top-1/2 -translate-y-1/2 z-10 w-8 h-8 bg-white/90 backdrop-blur-sm rounded-full shadow-md flex items-center justify-center"
-          aria-label="Scroll right"
         >
           <ChevronRight className="w-5 h-5" />
         </button>
