@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -61,38 +62,7 @@ export default {
 					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
-				},
-				material: {
-					primary: '#6750A4',
-					onPrimary: '#FFFFFF',
-					primaryContainer: '#EADDFF',
-					onPrimaryContainer: '#21005E',
-					secondary: '#625B71',
-					onSecondary: '#FFFFFF',
-					secondaryContainer: '#E8DEF8',
-					onSecondaryContainer: '#1E192B',
-					tertiary: '#7E5260',
-					onTertiary: '#FFFFFF',
-					tertiaryContainer: '#FFD9E3',
-					onTertiaryContainer: '#370B1E',
-					error: '#BA1A1A',
-					onError: '#FFFFFF',
-					errorContainer: '#FFDAD6',
-					onErrorContainer: '#410002',
-					background: '#FFFBFE',
-					onBackground: '#1C1B1F',
-					surface: '#FFFBFE',
-					onSurface: '#1C1B1F',
-					surfaceVariant: '#E7E0EC',
-					onSurfaceVariant: '#49454E',
-					outline: '#79747E',
-					outlineVariant: '#CAC4CF',
-					shadow: '#000000',
-					scrim: '#000000',
-					inverseSurface: '#313033',
-					inverseOnSurface: '#F4EFF4',
-					inversePrimary: '#D0BCFF',
-				},
+				}
 			},
 			borderRadius: {
 				lg: 'var(--radius)',
@@ -175,16 +145,6 @@ export default {
 				'image-shimmer': 'image-shimmer 1.5s infinite linear',
 				'enter': 'fade-in 0.3s ease-out, scale-in 0.2s ease-out',
 				'exit': 'fade-out 0.3s ease-out, scale-out 0.2s ease-out',
-			},
-			fontFamily: {
-				'material': ['Roboto', 'system-ui', 'sans-serif'],
-			},
-			boxShadow: {
-				'material-1': '0px 1px 3px 0px rgba(0, 0, 0, 0.12), 0px 1px 2px 0px rgba(0, 0, 0, 0.14)',
-				'material-2': '0px 2px 6px 2px rgba(0, 0, 0, 0.15), 0px 1px 2px 0px rgba(0, 0, 0, 0.30)',
-				'material-3': '0px 1px 3px 0px rgba(0, 0, 0, 0.30), 0px 4px 8px 3px rgba(0, 0, 0, 0.15)',
-				'material-4': '0px 2px 3px 0px rgba(0, 0, 0, 0.30), 0px 6px 10px 4px rgba(0, 0, 0, 0.15)',
-				'material-5': '0px 4px 4px 0px rgba(0, 0, 0, 0.30), 0px 8px 12px 6px rgba(0, 0, 0, 0.15)',
 			}
 		}
 	},
