@@ -89,7 +89,7 @@ const IkeaBelt = () => {
           </div>}
         <div className={cn("absolute inset-0 bg-gradient-to-b from-black/10 to-black/70 transition-opacity duration-200", focusedWeeklyIndex === index ? "opacity-90" : "opacity-100")}></div>
         <div className="absolute inset-0 flex items-center justify-center">
-          <h3 className="text-center text-white px-4 max-w-full text-xl font-extrabold">
+          <h3 className="text-center text-white px-4 max-w-full text-xl font-thin">
             {item.title}
           </h3>
         </div>
