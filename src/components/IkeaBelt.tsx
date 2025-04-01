@@ -1,3 +1,4 @@
+
 import { useRef, useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import AnimatedImage from './AnimatedImage';
@@ -93,7 +94,7 @@ const IkeaBelt = () => {
           </div>}
         <div className={cn("absolute inset-0 bg-gradient-to-b from-black/10 to-black/70 transition-opacity duration-200", focusedWeeklyIndex === index ? "opacity-90" : "opacity-100")}></div>
         <div className="absolute inset-0 flex items-center justify-center">
-          <h3 className="text-center text-white px-4 max-w-full text-2xl font-black tracking-tight uppercase text-shadow-sm">
+          <h3 className="text-center text-white px-4 max-w-full text-2xl font-bold tracking-tight text-shadow-sm">
             {item.title}
           </h3>
         </div>
@@ -102,7 +103,7 @@ const IkeaBelt = () => {
     const previewContent = <div className="relative rounded overflow-hidden">
         <img src={item.image} alt={item.title} className="w-full aspect-video object-cover" />
         <div className="absolute inset-0 flex items-center justify-center">
-          <h3 className="text-white font-extrabold text-xl text-center px-4">{item.title}</h3>
+          <h3 className="text-white font-bold text-xl text-center px-4">{item.title}</h3>
           <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2">
             <div className="bg-white/20 backdrop-blur-sm px-3 py-2 rounded-md inline-block">
               <p className="text-white text-xs">Click to view shopping list</p>
