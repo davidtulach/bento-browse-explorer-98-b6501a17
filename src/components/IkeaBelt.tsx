@@ -6,7 +6,6 @@ import { useHapticFeedback } from '@/hooks/use-haptic';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { Badge } from '@/components/ui/badge';
 import ContentPreview from './ContentPreview';
-
 const weeklyOffers = {
   id: 1,
   title: "Weekly Topics",
@@ -36,7 +35,6 @@ const weeklyOffers = {
     fallbackSrc: "/lovable-uploads/c2a98500-94d6-4675-9461-4de64da74d39.png"
   }]
 };
-
 const IkeaBelt = () => {
   const weeklyScrollRef = useRef<HTMLDivElement>(null);
   const {
@@ -46,7 +44,6 @@ const IkeaBelt = () => {
   const [focusedWeeklyIndex, setFocusedWeeklyIndex] = useState<number | null>(0);
   const weeklyItemRefs = useRef<(HTMLDivElement | null)[]>([]);
   const lastHapticTime = useRef<number>(0);
-
   useEffect(() => {
     if (!isMobile || !weeklyScrollRef.current) return;
     const options = {
@@ -81,7 +78,6 @@ const IkeaBelt = () => {
       observer.disconnect();
     };
   }, [isMobile, focusedWeeklyIndex, triggerHaptic]);
-
   const renderWeeklyItem = (item: typeof weeklyOffers.items[0], index: number) => {
     const itemContent = <div className="relative">
         <AnimatedImage src={item.image} fallbackSrc={item.fallbackSrc} alt={item.title} className="w-full" aspectRatio="aspect-[3/4]" objectFit="cover" />
@@ -93,12 +89,11 @@ const IkeaBelt = () => {
           </div>}
         <div className={cn("absolute inset-0 bg-gradient-to-b from-black/10 to-black/70 transition-opacity duration-200", focusedWeeklyIndex === index ? "opacity-90" : "opacity-100")}></div>
         <div className="absolute inset-0 flex items-center justify-center">
-          <h3 className="text-center text-white px-4 max-w-full text-xl font-extrabold tracking-tight">
+          <h3 className="text-center text-white px-4 max-w-full text-xl font-extrabold">
             {item.title}
           </h3>
         </div>
       </div>;
-
     const previewContent = <div className="relative rounded overflow-hidden">
         <img src={item.image} alt={item.title} className="w-full aspect-video object-cover" />
         <div className="absolute inset-0 flex items-center justify-center">
@@ -110,14 +105,12 @@ const IkeaBelt = () => {
           </div>
         </div>
       </div>;
-
     return <div key={item.id} ref={el => weeklyItemRefs.current[index] = el} data-index={index} className={cn("flex-shrink-0 snap-start overflow-hidden shadow-sm w-[300px] md:w-[calc(33.333%-16px)] lg:w-[calc(25%-16px)] transition-all duration-200", focusedWeeklyIndex === index && "scale-105 shadow-md")}>
         {isMobile ? itemContent : <ContentPreview previewContent={previewContent} previewTitle={`${item.title} Preview`} openDelay={1000}>
             {itemContent}
           </ContentPreview>}
       </div>;
   };
-
   return <div className="py-4">
       <div className="mb-10">
         <div className="px-4 mb-3">
@@ -135,5 +128,4 @@ const IkeaBelt = () => {
       </div>
     </div>;
 };
-
 export default IkeaBelt;
