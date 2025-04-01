@@ -31,7 +31,8 @@ const DesktopCategoryOverlay: React.FC<DesktopCategoryOverlayProps> = ({
     >
       <div 
         className={cn(
-          "absolute left-0 bg-white rounded-lg shadow-xl border border-gray-200 transition-all duration-200 overflow-hidden w-full",
+          "absolute left-0 bg-white dark:bg-gray-900 rounded-lg shadow-xl",
+          "border border-gray-200 dark:border-gray-700 transition-all duration-200 overflow-hidden w-full",
           !isOpen && "opacity-0 translate-y-[-10px]",
           isOpen && "opacity-100 translate-y-0"
         )}

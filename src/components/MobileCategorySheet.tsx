@@ -108,12 +108,12 @@ const MobileCategorySheet: React.FC<MobileCategorySheetProps> = ({
     <Sheet open={isOpen} onOpenChange={(open) => !open && onClose()}>
       <SheetContent 
         side="bottom" 
-        className="h-auto max-h-[80vh] rounded-t-xl p-0 flex flex-col"
+        className="h-auto max-h-[80vh] rounded-t-xl p-0 flex flex-col dark:bg-gray-900 dark:border-gray-800"
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
       >
-        <SheetClose className="absolute right-4 top-4 rounded-full bg-muted p-2 hover:bg-muted/80 z-10">
+        <SheetClose className="absolute right-4 top-4 rounded-full bg-muted dark:bg-gray-800 p-2 hover:bg-muted/80 dark:hover:bg-gray-700 z-10">
           <X className="h-5 w-5" />
         </SheetClose>
         <ScrollArea 

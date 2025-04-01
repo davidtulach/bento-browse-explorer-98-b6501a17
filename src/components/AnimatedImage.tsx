@@ -76,11 +76,11 @@ const AnimatedImage = ({
       className
     )}>
       {isLoading && (
-        <div className="absolute inset-0 animate-image-shimmer bg-gradient-to-r from-transparent via-white/20 to-transparent" />
+        <div className="absolute inset-0 animate-image-shimmer bg-gradient-to-r from-transparent via-white/20 dark:via-gray-700/20 to-transparent" />
       )}
       
       {hasError ? (
-        <div className="w-full h-full flex items-center justify-center bg-gray-100 text-gray-400 text-xs">
+        <div className="w-full h-full flex items-center justify-center bg-gray-100 dark:bg-gray-800 text-gray-400 dark:text-gray-500 text-xs">
           Image not found
         </div>
       ) : (
