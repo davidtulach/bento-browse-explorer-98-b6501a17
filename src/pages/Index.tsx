@@ -17,10 +17,30 @@ import { useHapticFeedback } from '@/hooks/use-haptic';
 import { useIsMobile } from '@/hooks/use-mobile';
 
 const pillButtons = [
-  { id: 'favorites', label: 'Favorites', lightColor: 'bg-green-100 text-green-700', darkColor: 'bg-green-900 text-green-200' },
-  { id: 'price-hits', label: 'Price Hits', lightColor: 'bg-yellow-100 text-yellow-700', darkColor: 'bg-yellow-900 text-yellow-200' },
-  { id: 'new-arrivals', label: 'New Arrivals', lightColor: 'bg-purple-100 text-purple-700', darkColor: 'bg-purple-900 text-purple-200' },
-  { id: 'rescue', label: 'Rescue and Save', lightColor: 'bg-pink-100 text-red-600', darkColor: 'bg-pink-900 text-red-300' },
+  { 
+    id: 'favorites', 
+    label: 'Favorites', 
+    lightColor: 'bg-green-100 text-green-700', 
+    darkColor: 'dark:bg-green-900/40 dark:text-green-300 dark:border dark:border-green-800' 
+  },
+  { 
+    id: 'price-hits', 
+    label: 'Price Hits', 
+    lightColor: 'bg-yellow-100 text-yellow-700', 
+    darkColor: 'dark:bg-yellow-900/40 dark:text-yellow-300 dark:border dark:border-yellow-800' 
+  },
+  { 
+    id: 'new-arrivals', 
+    label: 'New Arrivals', 
+    lightColor: 'bg-purple-100 text-purple-700', 
+    darkColor: 'dark:bg-purple-900/40 dark:text-purple-300 dark:border dark:border-purple-800' 
+  },
+  { 
+    id: 'rescue', 
+    label: 'Rescue and Save', 
+    lightColor: 'bg-pink-100 text-red-600', 
+    darkColor: 'dark:bg-pink-900/40 dark:text-red-300 dark:border dark:border-pink-800' 
+  },
 ];
 
 const Index = () => {
