@@ -1,4 +1,5 @@
-import { useState, useEffect, useRef } from 'react';
+
+import React, { useState, useEffect, useRef } from 'react';
 import { cn } from '@/lib/utils';
 import Header from '@/components/Header';
 import StoryScroller from '@/components/StoryScroller';
@@ -16,10 +17,10 @@ import { useHapticFeedback } from '@/hooks/use-haptic';
 import { useIsMobile } from '@/hooks/use-mobile';
 
 const pillButtons = [
-  { id: 'favorites', label: 'Favorites', color: 'bg-green-100 text-green-700' },
-  { id: 'price-hits', label: 'Price Hits', color: 'bg-yellow-100 text-yellow-700' },
-  { id: 'new-arrivals', label: 'New Arrivals', color: 'bg-purple-100 text-purple-700' },
-  { id: 'rescue', label: 'Rescue and Save', color: 'bg-pink-100 text-red-600' },
+  { id: 'favorites', label: 'Favorites', lightColor: 'bg-green-100 text-green-700', darkColor: 'bg-green-900 text-green-200' },
+  { id: 'price-hits', label: 'Price Hits', lightColor: 'bg-yellow-100 text-yellow-700', darkColor: 'bg-yellow-900 text-yellow-200' },
+  { id: 'new-arrivals', label: 'New Arrivals', lightColor: 'bg-purple-100 text-purple-700', darkColor: 'bg-purple-900 text-purple-200' },
+  { id: 'rescue', label: 'Rescue and Save', lightColor: 'bg-pink-100 text-red-600', darkColor: 'bg-pink-900 text-red-300' },
 ];
 
 const Index = () => {
@@ -102,7 +103,7 @@ const Index = () => {
 
   return (
     <div 
-      className="min-h-screen bg-gray-50 flex flex-col overflow-auto"
+      className="min-h-screen bg-gray-50 dark:bg-gray-900 flex flex-col overflow-auto"
       onScroll={handleScroll}
       ref={containerRef}
     >
@@ -122,7 +123,8 @@ const Index = () => {
               key={button.id}
               className={cn(
                 "flex-shrink-0 px-4 py-1.5 rounded-full text-sm font-medium",
-                button.color
+                button.lightColor,
+                "dark:"+button.darkColor
               )}
             >
               {button.label}
@@ -183,3 +185,4 @@ const Index = () => {
 };
 
 export default Index;
+
