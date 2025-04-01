@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import { cn } from '@/lib/utils';
 import Header from '@/components/Header';
@@ -21,25 +20,25 @@ const pillButtons = [
     id: 'favorites', 
     label: 'Favorites', 
     lightColor: 'bg-green-100 text-green-700', 
-    darkColor: 'dark:bg-green-800 dark:text-green-100 dark:border dark:border-green-700' 
+    darkColor: 'dark:bg-green-950 dark:text-green-200 dark:border dark:border-green-800' 
   },
   { 
     id: 'price-hits', 
     label: 'Price Hits', 
     lightColor: 'bg-yellow-100 text-yellow-700', 
-    darkColor: 'dark:bg-yellow-800 dark:text-yellow-100 dark:border dark:border-yellow-700' 
+    darkColor: 'dark:bg-amber-950 dark:text-amber-200 dark:border dark:border-amber-800' 
   },
   { 
     id: 'new-arrivals', 
     label: 'New Arrivals', 
     lightColor: 'bg-purple-100 text-purple-700', 
-    darkColor: 'dark:bg-purple-800 dark:text-purple-100 dark:border dark:border-purple-700' 
+    darkColor: 'dark:bg-purple-950 dark:text-purple-200 dark:border dark:border-purple-800' 
   },
   { 
     id: 'rescue', 
     label: 'Rescue and Save', 
     lightColor: 'bg-pink-100 text-red-600', 
-    darkColor: 'dark:bg-red-800 dark:text-red-100 dark:border dark:border-red-700' 
+    darkColor: 'dark:bg-red-950 dark:text-red-200 dark:border dark:border-red-800' 
   },
 ];
 
@@ -144,7 +143,8 @@ const Index = () => {
               className={cn(
                 "flex-shrink-0 px-4 py-1.5 rounded-full text-sm font-medium",
                 button.lightColor,
-                "dark:"+button.darkColor
+                button.darkColor,
+                "transition-colors duration-200"
               )}
             >
               {button.label}
@@ -153,37 +153,37 @@ const Index = () => {
         </div>
         
         <div className="py-2">
-          <div className="h-[1px] bg-gradient-to-r from-transparent via-gray-200 to-transparent" />
+          <div className="h-[1px] bg-gradient-to-r from-transparent via-gray-200 dark:via-gray-700 to-transparent" />
         </div>
         
         <IkeaBelt />
         
         <div className="py-2">
-          <div className="h-[1px] bg-gradient-to-r from-transparent via-gray-200 to-transparent" />
+          <div className="h-[1px] bg-gradient-to-r from-transparent via-gray-200 dark:via-gray-700 to-transparent" />
         </div>
         
         <BrandsBelt />
         
         <div className="py-2">
-          <div className="h-[1px] bg-gradient-to-r from-transparent via-gray-200 to-transparent" />
+          <div className="h-[1px] bg-gradient-to-r from-transparent via-gray-200 dark:via-gray-700 to-transparent" />
         </div>
         
         <PinterestGrid />
         
         <div className="py-2">
-          <div className="h-[1px] bg-gradient-to-r from-transparent via-gray-200 to-transparent" />
+          <div className="h-[1px] bg-gradient-to-r from-transparent via-gray-200 dark:via-gray-700 to-transparent" />
         </div>
         
         <PriceHitsBelt />
         
         <div className="py-2">
-          <div className="h-[1px] bg-gradient-to-r from-transparent via-gray-200 to-transparent" />
+          <div className="h-[1px] bg-gradient-to-r from-transparent via-gray-200 dark:via-gray-700 to-transparent" />
         </div>
         
         <ShoppableImage />
         
         <div className="py-2">
-          <div className="h-[1px] bg-gradient-to-r from-transparent via-gray-200 to-transparent" />
+          <div className="h-[1px] bg-gradient-to-r from-transparent via-gray-200 dark:via-gray-700 to-transparent" />
         </div>
         
         <DiscountCode 
@@ -205,4 +205,3 @@ const Index = () => {
 };
 
 export default Index;
-
