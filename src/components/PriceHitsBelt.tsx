@@ -1,4 +1,3 @@
-
 import { useRef, useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import AnimatedImage from './AnimatedImage';
@@ -250,8 +249,8 @@ const PriceHitsBelt = () => {
       {/* Discounted Products Section */}
       <div className="mb-6">
         <div className="px-4 mb-4 flex items-center gap-2">
-          <Percent className="w-5 h-5 text-red-500" />
-          <h2 className="text-lg font-medium text-gray-900">{discountedProducts.title}</h2>
+          <Percent className="w-5 h-5 text-red-500 dark:text-red-400" />
+          <h2 className="text-lg font-medium text-gray-900 dark:text-gray-100">{discountedProducts.title}</h2>
         </div>
         
         <div
@@ -284,36 +283,36 @@ const PriceHitsBelt = () => {
                 />
                 
                 {/* Discount badge */}
-                <div className="absolute top-1 right-1 bg-red-500 text-white text-xs font-bold px-1.5 py-0.5 rounded-md">
+                <div className="absolute top-1 right-1 bg-red-500 dark:bg-red-600 text-white text-xs font-bold px-1.5 py-0.5 rounded-md">
                   {product.discount}
                 </div>
                 
                 {/* New badge */}
                 {product.isNew && (
-                  <div className="absolute top-1 left-1 bg-blue-500 text-white text-xs font-bold px-1.5 py-0.5 rounded-md">
+                  <div className="absolute top-1 left-1 bg-blue-500 dark:bg-blue-600 text-white text-xs font-bold px-1.5 py-0.5 rounded-md">
                     New
                   </div>
                 )}
               </div>
               
-              <div className="py-2 relative">
-                <div className="text-xs text-gray-500 mb-0.5">{product.category}</div>
-                <h3 className="font-medium text-sm text-gray-900 mb-0.5 truncate">{product.title}</h3>
+              <div className="py-2 relative dark:bg-gray-800 rounded-b-lg px-2">
+                <div className="text-xs text-gray-500 dark:text-gray-400 mb-0.5">{product.category}</div>
+                <h3 className="font-medium text-sm text-gray-900 dark:text-gray-100 mb-0.5 truncate">{product.title}</h3>
                 
                 <div className="flex items-center gap-1 mb-0.5">
-                  <Weight className="w-3 h-3 text-gray-400" />
-                  <span className="text-xs text-gray-500">{product.weight}</span>
+                  <Weight className="w-3 h-3 text-gray-400 dark:text-gray-500" />
+                  <span className="text-xs text-gray-500 dark:text-gray-400">{product.weight}</span>
                 </div>
                 
                 <div className="flex items-baseline gap-1.5">
-                  <span className="text-sm font-bold text-gray-900">{product.discountedPrice} CZK</span>
-                  <span className="text-xs line-through text-gray-400">{product.originalPrice}</span>
+                  <span className="text-sm font-bold text-gray-900 dark:text-gray-100">{product.discountedPrice} CZK</span>
+                  <span className="text-xs line-through text-gray-400 dark:text-gray-500">{product.originalPrice}</span>
                 </div>
                 
-                <div className="text-xs text-gray-500">{product.pricePerUnit}</div>
+                <div className="text-xs text-gray-500 dark:text-gray-400">{product.pricePerUnit}</div>
 
                 {/* Add to cart button - with animations */}
-                <div className="absolute bottom-2 right-0">
+                <div className="absolute bottom-2 right-2">
                   {/* Lottie animation overlay for button only */}
                   {buttonAnimations[product.id] && (
                     <div className="absolute inset-0 z-10 pointer-events-none" style={{ width: cart[product.id] ? '80px' : '32px', height: '32px' }}>
