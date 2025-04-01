@@ -126,7 +126,7 @@ const Index = () => {
 
   return (
     <div 
-      className="min-h-screen bg-gray-50 dark:bg-background flex flex-col overflow-auto"
+      className="min-h-screen material-surface flex flex-col overflow-auto"
       onScroll={handleScroll}
       ref={containerRef}
     >
@@ -143,37 +143,37 @@ const Index = () => {
         <PillButtonsRow buttons={pillButtons} />
         
         <div className="py-2">
-          <div className="h-[1px] bg-gradient-to-r from-transparent via-gray-200 dark:via-gray-700 to-transparent" />
+          <div className="h-[1px] material-divider mx-4" />
         </div>
         
         <IkeaBelt />
         
         <div className="py-2">
-          <div className="h-[1px] bg-gradient-to-r from-transparent via-gray-200 dark:via-gray-700 to-transparent" />
+          <div className="h-[1px] material-divider mx-4" />
         </div>
         
         <BrandsBelt />
         
         <div className="py-2">
-          <div className="h-[1px] bg-gradient-to-r from-transparent via-gray-200 dark:via-gray-700 to-transparent" />
+          <div className="h-[1px] material-divider mx-4" />
         </div>
         
         <PinterestGrid />
         
         <div className="py-2">
-          <div className="h-[1px] bg-gradient-to-r from-transparent via-gray-200 dark:via-gray-700 to-transparent" />
+          <div className="h-[1px] material-divider mx-4" />
         </div>
         
         <PriceHitsBelt />
         
         <div className="py-2">
-          <div className="h-[1px] bg-gradient-to-r from-transparent via-gray-200 dark:via-gray-700 to-transparent" />
+          <div className="h-[1px] material-divider mx-4" />
         </div>
         
         <ShoppableImage />
         
         <div className="py-2">
-          <div className="h-[1px] bg-gradient-to-r from-transparent via-gray-200 dark:via-gray-700 to-transparent" />
+          <div className="h-[1px] material-divider mx-4" />
         </div>
         
         <DiscountCode 
