@@ -1,3 +1,4 @@
+
 import { useRef, useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import AnimatedImage from './AnimatedImage';
@@ -14,7 +15,6 @@ const weeklyOffers = {
     {
       id: 101,
       title: "The Perfect Sunday Breakfast",
-      description: "Check out our shopping list for a yummy Sunday",
       image: "/lovable-uploads/cbfe3137-a8fe-47b7-b7bb-4e2fdcd931fc.png",
       fallbackSrc: "/lovable-uploads/cbfe3137-a8fe-47b7-b7bb-4e2fdcd931fc.png",
       badge: {
@@ -25,21 +25,18 @@ const weeklyOffers = {
     {
       id: 102,
       title: "Butcher's Special",
-      description: "Premium cuts at special weekend prices",
       image: "/lovable-uploads/93315171-35f2-45a1-9399-e3f088c074fc.png",
       fallbackSrc: "/lovable-uploads/93315171-35f2-45a1-9399-e3f088c074fc.png",
     },
     {
       id: 103,
       title: "Bakery Fresh",
-      description: "Buy 2 get 1 free on all artisan breads",
       image: "/lovable-uploads/449d2a80-7b69-4959-8a66-f74b63814e56.png",
       fallbackSrc: "/lovable-uploads/449d2a80-7b69-4959-8a66-f74b63814e56.png",
     },
     {
       id: 104,
       title: "Wine & Cheese Festival",
-      description: "Special pairings and tastings this weekend",
       image: "/lovable-uploads/c2a98500-94d6-4675-9461-4de64da74d39.png",
       fallbackSrc: "/lovable-uploads/c2a98500-94d6-4675-9461-4de64da74d39.png",
     }
@@ -123,11 +120,10 @@ const IkeaBelt = () => {
           "absolute inset-0 bg-gradient-to-b from-black/10 to-black/70 transition-opacity duration-200",
           focusedWeeklyIndex === index ? "opacity-90" : "opacity-100"
         )}></div>
-        <div className="absolute bottom-0 left-0 right-0 p-4 text-white">
-          <h3 className="font-medium text-lg">{item.title}</h3>
-          {item.description && (
-            <p className="text-sm text-white/90 mt-1">{item.description}</p>
-          )}
+        <div className="absolute inset-0 flex items-center justify-center">
+          <h3 className="font-extrabold text-xl text-center text-white px-4 max-w-full">
+            {item.title}
+          </h3>
         </div>
       </div>
     );
@@ -139,13 +135,12 @@ const IkeaBelt = () => {
           alt={item.title} 
           className="w-full aspect-video object-cover" 
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/10 to-black/70 flex flex-col justify-end p-4">
-          <h3 className="text-white font-medium text-lg">{item.title}</h3>
-          {item.description && (
-            <p className="text-white/90 text-sm mt-1">{item.description}</p>
-          )}
-          <div className="mt-3 bg-white/20 backdrop-blur-sm px-3 py-2 rounded-md inline-block">
-            <p className="text-white text-xs">Click to view shopping list</p>
+        <div className="absolute inset-0 flex items-center justify-center">
+          <h3 className="text-white font-extrabold text-xl text-center px-4">{item.title}</h3>
+          <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2">
+            <div className="bg-white/20 backdrop-blur-sm px-3 py-2 rounded-md inline-block">
+              <p className="text-white text-xs">Click to view shopping list</p>
+            </div>
           </div>
         </div>
       </div>
