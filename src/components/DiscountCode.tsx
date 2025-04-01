@@ -20,11 +20,11 @@ const DiscountCode = ({ code, description }: DiscountCodeProps) => {
 
   return (
     <div className="py-6 px-4">
-      <div className="max-w-md mx-auto bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-4 shadow-sm">
+      <div className="max-w-md mx-auto bg-white dark:bg-card border border-gray-200 dark:border-border rounded-lg p-4 shadow-sm backdrop-blur-sm">
         <div className="flex flex-col space-y-2">
           <p className="text-sm text-gray-500 dark:text-gray-300">{description}</p>
           <div className="flex items-center justify-between">
-            <div className="font-mono text-base font-medium tracking-wider bg-gray-50 dark:bg-gray-900 py-2 px-4 rounded border border-gray-100 dark:border-gray-700 text-gray-800 dark:text-gray-200">
+            <div className="font-mono text-base font-medium tracking-wider bg-gray-50 dark:bg-muted py-2 px-4 rounded border border-gray-100 dark:border-muted text-gray-800 dark:text-gray-200">
               {code}
             </div>
             <Button 
@@ -34,8 +34,8 @@ const DiscountCode = ({ code, description }: DiscountCodeProps) => {
               className={cn(
                 "transition-all duration-200",
                 copied 
-                  ? "bg-green-50 text-green-600 border-green-200 dark:bg-green-900 dark:text-green-200 dark:border-green-700"
-                  : "dark:bg-gray-800 dark:text-gray-200 dark:border-gray-600"
+                  ? "bg-green-50 text-green-600 border-green-200 dark:bg-green-900/30 dark:text-green-300 dark:border-green-800/40"
+                  : "dark:bg-muted dark:text-gray-200 dark:border-muted"
               )}
             >
               {copied ? (
