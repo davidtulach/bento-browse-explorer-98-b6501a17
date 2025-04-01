@@ -103,33 +103,32 @@ const ShoppableImage = () => {
           <Popover key={hotspot.id}>
             <PopoverTrigger asChild>
               <button
-                className="absolute w-10 h-10 rounded-full bg-white/80 text-gray-800 backdrop-blur-sm border border-gray-200 flex items-center justify-center transform -translate-x-1/2 -translate-y-1/2 transition-transform hover:scale-110 focus:outline-none focus:ring-2 focus:ring-primary"
+                className="absolute w-10 h-10 rounded-full bg-white/80 dark:bg-gray-700/80 backdrop-blur-sm border border-gray-200 dark:border-gray-600 flex items-center justify-center transform -translate-x-1/2 -translate-y-1/2 transition-transform hover:scale-110 focus:outline-none focus:ring-2 focus:ring-primary"
                 style={{ 
                   left: `${hotspot.x}%`, 
                   top: `${hotspot.y}%`,
                 }}
                 aria-label={`View ${hotspot.name} details`}
               >
-                <Plus className="h-5 w-5 text-gray-800" />
+                <Plus className="h-5 w-5 text-gray-800 dark:text-gray-200" />
               </button>
             </PopoverTrigger>
             <PopoverContent 
-              className="w-64 p-3 shadow-md bg-white/95 backdrop-blur-sm border border-gray-100" 
+              className="w-64 p-3 shadow-md bg-white/95 dark:bg-gray-800/95 backdrop-blur-sm border border-gray-100 dark:border-gray-700" 
               sideOffset={5}
             >
               <div className="space-y-2">
-                <h3 className="font-medium text-base">{hotspot.name}</h3>
-                <p className="text-xs text-gray-500 line-clamp-2">{hotspot.description}</p>
+                <h3 className="font-medium text-base dark:text-gray-100">{hotspot.name}</h3>
+                <p className="text-xs text-gray-500 dark:text-gray-300 line-clamp-2">{hotspot.description}</p>
                 
                 <div className="flex items-center justify-between pt-1">
                   <div>
-                    <p className="text-sm font-bold">${hotspot.price}</p>
-                    <p className="text-xs text-gray-500">Price per {hotspot.unit}</p>
+                    <p className="text-sm font-bold dark:text-white">${hotspot.price}</p>
+                    <p className="text-xs text-gray-500 dark:text-gray-400">Price per {hotspot.unit}</p>
                   </div>
                   <Button 
                     onClick={() => handleAddToCart(hotspot)}
                     size="sm"
-                    variant="outline"
                     className="h-8 px-3 text-xs"
                   >
                     <ShoppingCart className="h-3 w-3 mr-1" />
