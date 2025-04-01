@@ -124,9 +124,9 @@ const IkeaBelt = () => {
           focusedWeeklyIndex === index ? "opacity-90" : "opacity-100"
         )}></div>
         <div className="absolute bottom-0 left-0 right-0 p-4 text-white">
-          <h3 className="font-bold text-lg">{item.title}</h3>
+          <h3 className="font-medium text-lg">{item.title}</h3>
           {item.description && (
-            <p className="text-sm text-white/90 mt-1 font-medium">{item.description}</p>
+            <p className="text-sm text-white/90 mt-1">{item.description}</p>
           )}
         </div>
       </div>
@@ -140,12 +140,12 @@ const IkeaBelt = () => {
           className="w-full aspect-video object-cover" 
         />
         <div className="absolute inset-0 bg-gradient-to-b from-black/10 to-black/70 flex flex-col justify-end p-4">
-          <h3 className="text-white font-bold text-lg">{item.title}</h3>
+          <h3 className="text-white font-medium text-lg">{item.title}</h3>
           {item.description && (
-            <p className="text-white/90 text-sm mt-1 font-medium">{item.description}</p>
+            <p className="text-white/90 text-sm mt-1">{item.description}</p>
           )}
           <div className="mt-3 bg-white/20 backdrop-blur-sm px-3 py-2 rounded-md inline-block">
-            <p className="text-white text-xs font-medium">Click to view shopping list</p>
+            <p className="text-white text-xs">Click to view shopping list</p>
           </div>
         </div>
       </div>
@@ -180,7 +180,7 @@ const IkeaBelt = () => {
     <div className="py-4">
       <div className="mb-10">
         <div className="px-4 mb-3">
-          <h2 className="text-xl font-bold">{weeklyOffers.title}</h2>
+          <h2 className="text-lg font-medium">{weeklyOffers.title}</h2>
         </div>
         
         <div className="relative px-4">
