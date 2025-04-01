@@ -103,14 +103,14 @@ const ShoppableImage = () => {
           <Popover key={hotspot.id}>
             <PopoverTrigger asChild>
               <button
-                className="absolute w-10 h-10 rounded-full bg-white/80 dark:bg-gray-700/80 backdrop-blur-sm border border-gray-200 dark:border-gray-600 flex items-center justify-center transform -translate-x-1/2 -translate-y-1/2 transition-transform hover:scale-110 focus:outline-none focus:ring-2 focus:ring-primary"
+                className="absolute w-10 h-10 rounded-full bg-gray-700/90 text-white backdrop-blur-sm border-0 flex items-center justify-center transform -translate-x-1/2 -translate-y-1/2 transition-transform hover:scale-110 focus:outline-none focus:ring-2 focus:ring-primary"
                 style={{ 
                   left: `${hotspot.x}%`, 
                   top: `${hotspot.y}%`,
                 }}
                 aria-label={`View ${hotspot.name} details`}
               >
-                <Plus className="h-5 w-5 text-gray-800 dark:text-gray-200" />
+                <Plus className="h-5 w-5 text-white" />
               </button>
             </PopoverTrigger>
             <PopoverContent 
