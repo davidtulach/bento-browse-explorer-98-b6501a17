@@ -240,9 +240,9 @@ const BrandsBelt = () => {
                   {brandProducts[brand.id as keyof typeof brandProducts].map((product) => (
                     <div 
                       key={product.id} 
-                      className="flex-shrink-0 w-[140px] bg-white rounded-md shadow-sm overflow-hidden border border-gray-100"
+                      className="flex-shrink-0 w-[140px] bg-white dark:bg-gray-800 rounded-md shadow-sm overflow-hidden"
                     >
-                      <div className="w-full h-28 bg-gray-100">
+                      <div className="w-full h-28 bg-gray-100 dark:bg-gray-700">
                         <img 
                           src={product.image} 
                           alt={product.name} 
@@ -251,7 +251,7 @@ const BrandsBelt = () => {
                       </div>
                       <div className="p-3">
                         <h3 className="text-sm font-medium line-clamp-1">{product.name}</h3>
-                        <p className="text-sm text-gray-500 mt-1">{product.price}</p>
+                        <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">{product.price}</p>
                       </div>
                     </div>
                   ))}
