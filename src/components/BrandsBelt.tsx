@@ -1,4 +1,3 @@
-
 import React, { useRef, useState, useEffect } from 'react';
 import { 
   Circle, Square, Triangle, Diamond, Hexagon, 
@@ -10,6 +9,7 @@ import { useHapticFeedback } from '@/hooks/use-haptic';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { useTheme } from '@/context/ThemeContext';
 
 const brandProducts = {
   1: [
@@ -118,6 +118,8 @@ const brandIcons = [
 const BrandsBelt = () => {
   const { triggerHaptic } = useHapticFeedback();
   const isMobile = useIsMobile();
+  const { theme } = useTheme();
+  const isDarkMode = theme === 'dark';
   const scrollRef = useRef<HTMLDivElement>(null);
   const [activeTab, setActiveTab] = useState("1");
   const [focusedItemIndex, setFocusedItemIndex] = useState<number | null>(0);
@@ -214,10 +216,15 @@ const BrandsBelt = () => {
             >
               <div 
                 className={cn(
-                  "w-14 h-14 rounded-full flex items-center justify-center mb-2 transition-transform border cursor-pointer",
+                  "w-14 h-14 rounded-full flex items-center justify-center mb-2 transition-all",
+                  "cursor-pointer",
                   activeTab === brand.id.toString() 
-                    ? "bg-primary/10 shadow-md border-primary/30" 
-                    : "bg-white shadow-sm border-gray-100"
+                    ? isDarkMode 
+                      ? "bg-gray-800 shadow-md" 
+                      : "bg-primary/10 shadow-md" 
+                    : isDarkMode 
+                      ? "bg-gray-900 shadow-sm" 
+                      : "bg-white shadow-sm"
                 )}
               >
                 {React.createElement(brand.icon, { 
