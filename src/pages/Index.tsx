@@ -14,31 +14,32 @@ import { Toaster } from '@/components/ui/toaster';
 import { useHapticFeedback } from '@/hooks/use-haptic';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { useTheme } from '@/context/ThemeContext';
+import PillButtonsRow from '@/components/PillButtonsRow';
 
 const pillButtons = [
   { 
     id: 'favorites', 
     label: 'Favorites', 
     lightColor: 'bg-green-100 text-green-700', 
-    darkColor: 'dark:bg-green-950/50 dark:text-[hsl(var(--pastel-green))]' 
+    darkColor: 'bg-[#D2E3A0] text-[#2A3518]' 
   },
   { 
     id: 'price-hits', 
     label: 'Price Hits', 
     lightColor: 'bg-yellow-100 text-yellow-700', 
-    darkColor: 'dark:bg-amber-950/50 dark:text-[hsl(var(--pastel-yellow))]' 
+    darkColor: 'bg-[#F1D789] text-[#3B2E0A]' 
   },
   { 
     id: 'new-arrivals', 
     label: 'New Arrivals', 
     lightColor: 'bg-purple-100 text-purple-700', 
-    darkColor: 'dark:bg-purple-950/50 dark:text-[hsl(var(--pastel-purple))]' 
+    darkColor: 'bg-[#D0BCFF] text-[#381E72]' 
   },
   { 
     id: 'rescue', 
     label: 'Rescue and Save', 
     lightColor: 'bg-pink-100 text-red-600', 
-    darkColor: 'dark:bg-red-950/50 dark:text-[hsl(var(--pastel-pink))]' 
+    darkColor: 'bg-[#FFB4AB] text-[#690005]' 
   },
 ];
 
@@ -138,22 +139,7 @@ const Index = () => {
         
         <CategoryBelt />
         
-        <div className="px-4 py-3 flex overflow-x-auto gap-2 md:gap-4 scrollbar-hide justify-center">
-          {pillButtons.map((button) => (
-            <button 
-              key={button.id}
-              className={cn(
-                "flex-shrink-0 px-4 py-1.5 rounded-full text-sm font-medium",
-                button.lightColor,
-                button.darkColor,
-                "transition-colors duration-200 shadow-sm",
-                isDarkMode && "border border-opacity-20 border-current"
-              )}
-            >
-              {button.label}
-            </button>
-          ))}
-        </div>
+        <PillButtonsRow buttons={pillButtons} />
         
         <div className="py-2">
           <div className="h-[1px] bg-gradient-to-r from-transparent via-gray-200 dark:via-gray-700 to-transparent" />
