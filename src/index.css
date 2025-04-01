@@ -113,6 +113,10 @@
   h1, h2, h3, h4, h5, h6 {
     @apply font-medium tracking-tight;
   }
+  
+  .font-black, h3.text-2xl {
+    font-weight: 900 !important;
+  }
 }
 
 @layer components {
