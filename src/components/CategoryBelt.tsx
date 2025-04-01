@@ -8,6 +8,7 @@ import CategoryOverlay from './CategoryOverlay';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { Badge } from './ui/badge';
 import DotLottiePlayer from './DotLottiePlayer';
+import { useTheme } from '@/context/ThemeContext';
 
 const categories = [
   { id: 1, name: "Fruit & Veg", icon: Apple },
@@ -31,6 +32,29 @@ const categories = [
   { id: 19, name: "Baby Products", icon: Baby },
 ];
 
+// Map of category colors for dark mode
+const categoryPastelColors: Record<string, string> = {
+  "Fruit & Veg": "text-[#F2FCE2]",
+  "Bakery": "text-[#FEF7CD]",
+  "Cosmetics": "text-[#FFDEE2]",
+  "Dairy": "text-[#D3E4FD]",
+  "Meat": "text-[#FEC6A1]",
+  "Drinks": "text-[#D3E4FD]",
+  "Frozen": "text-[#E5DEFF]",
+  "Snacks": "text-[#FDE1D3]",
+  "Household": "text-[#F1F0FB]",
+  "Pasta & Rice": "text-[#FEF7CD]",
+  "Canned Goods": "text-[#FDE1D3]",
+  "Breakfast": "text-[#FEF7CD]",
+  "Condiments": "text-[#D3E4FD]",
+  "Baking": "text-[#FEF7CD]",
+  "Health Foods": "text-[#F2FCE2]",
+  "International": "text-[#E5DEFF]",
+  "Sweets": "text-[#FFDEE2]",
+  "Pet Supplies": "text-[#F1F0FB]",
+  "Baby Products": "text-[#FFDEE2]",
+};
+
 const CategoryBelt = () => {
   const scrollRef = useRef<HTMLDivElement>(null);
   const beltRef = useRef<HTMLDivElement>(null);
@@ -39,6 +63,8 @@ const CategoryBelt = () => {
   const [overlayPosition, setOverlayPosition] = useState<{ top: number; left: number; width: number } | undefined>();
   const isMobile = useIsMobile();
   const [showAnimation, setShowAnimation] = useState(false);
+  const { theme } = useTheme();
+  const isDarkMode = theme === 'dark';
 
   const scroll = (direction: 'left' | 'right') => {
     if (scrollRef.current) {
@@ -122,7 +148,7 @@ const CategoryBelt = () => {
         <div className="relative">
           <button 
             onClick={() => scroll('left')}
-            className="absolute left-0 top-1/2 -translate-y-1/2 z-10 w-9 h-9 rounded-full flex items-center justify-center bg-black text-white hover:bg-black/90 transition-colors"
+            className="absolute left-0 top-1/2 -translate-y-1/2 z-10 w-9 h-9 rounded-full flex items-center justify-center bg-black text-white dark:bg-gray-800 hover:bg-black/90 dark:hover:bg-gray-700 transition-colors"
             aria-label="Scroll left"
           >
             <ChevronLeft className="w-5 h-5" />
@@ -136,6 +162,7 @@ const CategoryBelt = () => {
             {categories.map((category) => {
               const IconComponent = category.icon;
               const isCosmeticsCategory = category.name === "Cosmetics";
+              const iconColorClass = isDarkMode ? categoryPastelColors[category.name] || "text-primary" : "text-primary";
               
               return (
                 <div 
@@ -158,11 +185,11 @@ const CategoryBelt = () => {
                       </div>
                     )}
                     
-                    <IconComponent className="w-12 h-12 text-primary z-20 relative" strokeWidth={1.5} />
+                    <IconComponent className={cn("w-12 h-12 z-20 relative", iconColorClass)} strokeWidth={1.5} />
                     
                     {category.hasNewItems && (
                       <Badge 
-                        className="absolute -top-1 -right-1 bg-purple-500 text-white border-2 border-white p-1 rounded-full w-6 h-6 flex items-center justify-center"
+                        className="absolute -top-1 -right-1 bg-purple-500 text-white border-2 border-white dark:border-gray-800 p-1 rounded-full w-6 h-6 flex items-center justify-center"
                         aria-label="New items available"
                       >
                         ★
@@ -171,7 +198,7 @@ const CategoryBelt = () => {
                     
                     {category.hasDiscount && (
                       <Badge 
-                        className="absolute -top-1 -right-1 bg-[#fde7f4] text-[#de3031] border-2 border-[#de3031] p-1 rounded-full w-6 h-6 flex items-center justify-center"
+                        className="absolute -top-1 -right-1 bg-[#fde7f4] text-[#de3031] border-2 border-[#de3031] dark:border-gray-800 p-1 rounded-full w-6 h-6 flex items-center justify-center"
                         aria-label="Discount available"
                       >
                         <Percent className="w-3 h-3" />
@@ -186,7 +213,7 @@ const CategoryBelt = () => {
           
           <button 
             onClick={() => scroll('right')}
-            className="absolute right-0 top-1/2 -translate-y-1/2 z-10 w-9 h-9 rounded-full flex items-center justify-center bg-black text-white hover:bg-black/90 transition-colors"
+            className="absolute right-0 top-1/2 -translate-y-1/2 z-10 w-9 h-9 rounded-full flex items-center justify-center bg-black text-white dark:bg-gray-800 hover:bg-black/90 dark:hover:bg-gray-700 transition-colors"
             aria-label="Scroll right"
           >
             <ChevronRight className="w-5 h-5" />

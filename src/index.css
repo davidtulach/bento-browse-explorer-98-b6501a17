@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -42,6 +43,16 @@
     --sidebar-accent-foreground: 240 5.9% 10%;
     --sidebar-border: 220 13% 91%;
     --sidebar-ring: 217.2 91.2% 59.8%;
+    
+    /* Pastel colors for dark mode */
+    --pastel-green: 84 89% 94%;
+    --pastel-yellow: 48 96% 89%;
+    --pastel-orange: 27 99% 81%;
+    --pastel-purple: 249 100% 94%;
+    --pastel-pink: 351 100% 94%;
+    --pastel-peach: 29 93% 91%;
+    --pastel-blue: 214 93% 91%;
+    --pastel-gray: 240 78% 94%;
   }
 
   .dark {
