@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useRef } from 'react';
 import { cn } from '@/lib/utils';
 import Header from '@/components/Header';
@@ -20,25 +21,25 @@ const pillButtons = [
   { 
     id: 'favorites', 
     label: 'Favorites', 
-    lightColor: 'bg-green-100 text-green-700', 
+    lightColor: 'bg-[#D2E3A0] text-[#2A3518]', 
     darkColor: 'bg-[#D2E3A0] text-[#2A3518]' 
   },
   { 
     id: 'price-hits', 
     label: 'Price Hits', 
-    lightColor: 'bg-yellow-100 text-yellow-700', 
+    lightColor: 'bg-[#F1D789] text-[#3B2E0A]', 
     darkColor: 'bg-[#F1D789] text-[#3B2E0A]' 
   },
   { 
     id: 'new-arrivals', 
     label: 'New Arrivals', 
-    lightColor: 'bg-purple-100 text-purple-700', 
+    lightColor: 'bg-[#D0BCFF] text-[#381E72]', 
     darkColor: 'bg-[#D0BCFF] text-[#381E72]' 
   },
   { 
     id: 'rescue', 
     label: 'Rescue and Save', 
-    lightColor: 'bg-pink-100 text-red-600', 
+    lightColor: 'bg-[#FFB4AB] text-[#690005]', 
     darkColor: 'bg-[#FFB4AB] text-[#690005]' 
   },
 ];
