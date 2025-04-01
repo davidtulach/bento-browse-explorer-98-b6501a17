@@ -89,7 +89,7 @@ const ShoppableImage = () => {
 
   return (
     <div className="py-4 px-2">
-      <h2 className="text-lg font-medium mb-3 px-2">Outdoor dining inspiration</h2>
+      <h2 className="text-xl font-bold mb-3 px-2">Outdoor dining inspiration</h2>
       
       <div className="relative w-full mx-auto overflow-hidden md:max-w-[400px] lg:max-w-[450px]">
         <img 
@@ -103,14 +103,14 @@ const ShoppableImage = () => {
           <Popover key={hotspot.id}>
             <PopoverTrigger asChild>
               <button
-                className="absolute w-10 h-10 rounded-full bg-white/80 dark:bg-gray-700/80 backdrop-blur-sm border border-gray-200 dark:border-gray-600 flex items-center justify-center transform -translate-x-1/2 -translate-y-1/2 transition-transform hover:scale-110 focus:outline-none focus:ring-2 focus:ring-primary"
+                className="absolute w-10 h-10 rounded-full bg-white dark:bg-white backdrop-blur-sm border border-gray-200 dark:border-gray-200 flex items-center justify-center transform -translate-x-1/2 -translate-y-1/2 transition-transform hover:scale-110 focus:outline-none focus:ring-2 focus:ring-primary"
                 style={{ 
                   left: `${hotspot.x}%`, 
                   top: `${hotspot.y}%`,
                 }}
                 aria-label={`View ${hotspot.name} details`}
               >
-                <Plus className="h-5 w-5 text-gray-800 dark:text-gray-200" />
+                <Plus className="h-5 w-5 text-gray-800 dark:text-gray-800" />
               </button>
             </PopoverTrigger>
             <PopoverContent 
@@ -118,8 +118,8 @@ const ShoppableImage = () => {
               sideOffset={5}
             >
               <div className="space-y-2">
-                <h3 className="font-medium text-base dark:text-gray-100">{hotspot.name}</h3>
-                <p className="text-xs text-gray-500 dark:text-gray-300 line-clamp-2">{hotspot.description}</p>
+                <h3 className="font-bold text-base dark:text-gray-100">{hotspot.name}</h3>
+                <p className="text-xs text-gray-500 dark:text-gray-300 line-clamp-2 font-medium">{hotspot.description}</p>
                 
                 <div className="flex items-center justify-between pt-1">
                   <div>
@@ -129,6 +129,7 @@ const ShoppableImage = () => {
                   <Button 
                     onClick={() => handleAddToCart(hotspot)}
                     size="sm"
+                    variant="default"
                     className="h-8 px-3 text-xs"
                   >
                     <ShoppingCart className="h-3 w-3 mr-1" />
