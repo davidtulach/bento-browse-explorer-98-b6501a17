@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import { cn } from '@/lib/utils';
 import Header from '@/components/Header';
@@ -126,14 +125,14 @@ const Index = () => {
 
   return (
     <div 
-      className="min-h-screen bg-gray-50 dark:bg-background flex flex-col overflow-auto max-w-[100vw] overflow-x-hidden"
+      className="min-h-screen w-full bg-gray-50 dark:bg-background flex flex-col overflow-hidden"
       onScroll={handleScroll}
       ref={containerRef}
     >
       <Header />
       
       <main className={cn(
-        "flex-1 pb-20 w-full overflow-x-hidden",
+        "flex-1 pb-20 w-full",
         isMobile && "pt-0"
       )}>
         <StoryScroller />

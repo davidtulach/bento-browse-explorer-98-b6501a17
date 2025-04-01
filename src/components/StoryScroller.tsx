@@ -34,20 +34,20 @@ const StoryScroller = () => {
   };
 
   return (
-    <div className="relative px-4 py-4">
-      <h2 className="text-lg font-medium mb-3">Food Inspiration</h2>
+    <div className="w-full py-4">
+      <h2 className="text-lg font-medium mb-3 px-4">Food Inspiration</h2>
       
       <div className="relative">
         <button 
           onClick={() => scroll('left')}
-          className="absolute left-0 top-1/2 -translate-y-1/2 z-10 w-8 h-8 bg-white/90 backdrop-blur-sm rounded-full shadow-md flex items-center justify-center"
+          className="absolute left-1 top-1/2 -translate-y-1/2 z-10 w-8 h-8 bg-white/90 backdrop-blur-sm rounded-full shadow-md flex items-center justify-center"
         >
           <ChevronLeft className="w-5 h-5" />
         </button>
         
         <div 
           ref={scrollRef}
-          className="flex overflow-x-auto scrollbar-hide snap-x snap-mandatory gap-4 pb-2 -mx-4 px-4"
+          className="flex overflow-x-auto scrollbar-hide snap-x snap-mandatory gap-4 pb-2 px-4"
           style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
         >
           {stories.map((story) => (
@@ -68,7 +68,7 @@ const StoryScroller = () => {
         
         <button 
           onClick={() => scroll('right')}
-          className="absolute right-0 top-1/2 -translate-y-1/2 z-10 w-8 h-8 bg-white/90 backdrop-blur-sm rounded-full shadow-md flex items-center justify-center"
+          className="absolute right-1 top-1/2 -translate-y-1/2 z-10 w-8 h-8 bg-white/90 backdrop-blur-sm rounded-full shadow-md flex items-center justify-center"
         >
           <ChevronRight className="w-5 h-5" />
         </button>
