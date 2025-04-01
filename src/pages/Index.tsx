@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import { cn } from '@/lib/utils';
 import Header from '@/components/Header';
@@ -11,35 +10,35 @@ import PriceHitsBelt from '@/components/PriceHitsBelt';
 import DiscountCode from '@/components/DiscountCode';
 import ScrollDownIndicator from '@/components/ScrollDownIndicator';
 import ShoppableImage from '@/components/ShoppableImage';
-import { Haptics } from '@capacitor/haptics';
 import { Toaster } from '@/components/ui/toaster';
 import { useHapticFeedback } from '@/hooks/use-haptic';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { useTheme } from '@/context/ThemeContext';
 
 const pillButtons = [
   { 
     id: 'favorites', 
     label: 'Favorites', 
     lightColor: 'bg-green-100 text-green-700', 
-    darkColor: 'dark:bg-green-950/90 dark:text-green-300 dark:border dark:border-green-800/60' 
+    darkColor: 'dark:bg-green-950/50 dark:text-[hsl(var(--pastel-green))]' 
   },
   { 
     id: 'price-hits', 
     label: 'Price Hits', 
     lightColor: 'bg-yellow-100 text-yellow-700', 
-    darkColor: 'dark:bg-amber-950/90 dark:text-amber-300 dark:border dark:border-amber-800/60' 
+    darkColor: 'dark:bg-amber-950/50 dark:text-[hsl(var(--pastel-yellow))]' 
   },
   { 
     id: 'new-arrivals', 
     label: 'New Arrivals', 
     lightColor: 'bg-purple-100 text-purple-700', 
-    darkColor: 'dark:bg-purple-950/90 dark:text-purple-300 dark:border dark:border-purple-800/60' 
+    darkColor: 'dark:bg-purple-950/50 dark:text-[hsl(var(--pastel-purple))]' 
   },
   { 
     id: 'rescue', 
     label: 'Rescue and Save', 
     lightColor: 'bg-pink-100 text-red-600', 
-    darkColor: 'dark:bg-red-950/90 dark:text-red-300 dark:border dark:border-red-800/60' 
+    darkColor: 'dark:bg-red-950/50 dark:text-[hsl(var(--pastel-pink))]' 
   },
 ];
 
@@ -51,6 +50,8 @@ const Index = () => {
   const [isAtBottom, setIsAtBottom] = useState(false);
   const { triggerHaptic } = useHapticFeedback();
   const isMobile = useIsMobile();
+  const { theme } = useTheme();
+  const isDarkMode = theme === 'dark';
 
   useEffect(() => {
     const initCapacitorFeatures = async () => {
@@ -145,7 +146,8 @@ const Index = () => {
                 "flex-shrink-0 px-4 py-1.5 rounded-full text-sm font-medium",
                 button.lightColor,
                 button.darkColor,
-                "transition-colors duration-200 shadow-sm"
+                "transition-colors duration-200 shadow-sm",
+                isDarkMode && "border border-opacity-20 border-current"
               )}
             >
               {button.label}
