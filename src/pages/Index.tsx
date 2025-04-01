@@ -126,14 +126,14 @@ const Index = () => {
 
   return (
     <div 
-      className="min-h-screen bg-gray-50 dark:bg-background flex flex-col overflow-auto"
+      className="min-h-screen bg-gray-50 dark:bg-background flex flex-col overflow-auto max-w-[100vw] overflow-x-hidden"
       onScroll={handleScroll}
       ref={containerRef}
     >
       <Header />
       
       <main className={cn(
-        "flex-1 pb-20",
+        "flex-1 pb-20 w-full overflow-x-hidden",
         isMobile && "pt-0"
       )}>
         <StoryScroller />
