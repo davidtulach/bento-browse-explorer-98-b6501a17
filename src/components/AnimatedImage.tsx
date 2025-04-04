@@ -1,6 +1,7 @@
 
 import { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
+import { Skeleton } from '@/components/ui/skeleton';
 
 interface AnimatedImageProps {
   src: string;
@@ -27,17 +28,32 @@ const AnimatedImage = ({
   const [currentSrc, setCurrentSrc] = useState(src);
 
   useEffect(() => {
+    // Reset states when the src changes
     setIsLoading(true);
     setHasError(false);
     setIsVisible(false);
     setCurrentSrc(src);
     
+    // Preload the image
     const img = new Image();
     img.src = src;
+    
+    // Add loading=eager for critical images
+    img.loading = 'eager';
+    
+    // Use high fetchPriority for important images
+    if ('fetchPriority' in img) {
+      (img as any).fetchPriority = 'high';
+    }
+    
+    // Handle successful load
     img.onload = () => {
       setIsLoading(false);
-      setTimeout(() => setIsVisible(true), 100);
+      // Reduced animation delay for faster perceived performance
+      setTimeout(() => setIsVisible(true), 50);
     };
+    
+    // Handle error
     img.onerror = () => {
       // If there's a fallback image available, try that instead
       if (fallbackSrc) {
@@ -46,10 +62,13 @@ const AnimatedImage = ({
         
         const fallbackImg = new Image();
         fallbackImg.src = fallbackSrc;
+        fallbackImg.loading = 'eager';
+        
         fallbackImg.onload = () => {
           setIsLoading(false);
-          setTimeout(() => setIsVisible(true), 100);
+          setTimeout(() => setIsVisible(true), 50);
         };
+        
         fallbackImg.onerror = () => {
           setIsLoading(false);
           setHasError(true);
@@ -76,7 +95,7 @@ const AnimatedImage = ({
       className
     )}>
       {isLoading && (
-        <div className="absolute inset-0 animate-image-shimmer bg-gradient-to-r from-transparent via-white/20 dark:via-gray-700/20 to-transparent" />
+        <Skeleton className="absolute inset-0 w-full h-full" />
       )}
       
       {hasError ? (
@@ -88,13 +107,16 @@ const AnimatedImage = ({
           src={currentSrc}
           alt={alt}
           className={cn(
-            "w-full h-full transition-all duration-700",
+            "w-full h-full transition-all duration-300",
             `object-${objectFit}`,
             isVisible ? "opacity-100 scale-100" : "opacity-0 scale-105"
           )}
+          loading="eager"
+          decoding="async"
+          fetchpriority="high"
           onLoad={() => {
             setIsLoading(false);
-            setTimeout(() => setIsVisible(true), 100);
+            setTimeout(() => setIsVisible(true), 50);
           }}
           onError={() => {
             // This handles any potential errors with the currently displayed image

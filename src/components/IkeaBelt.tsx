@@ -38,6 +38,18 @@ const weeklyOffers = {
   }]
 };
 
+// Preload images on component initialization
+const preloadImages = () => {
+  weeklyOffers.items.forEach(item => {
+    const img = new Image();
+    img.src = item.image;
+    if (item.fallbackSrc) {
+      const fallbackImg = new Image();
+      fallbackImg.src = item.fallbackSrc;
+    }
+  });
+};
+
 const IkeaBelt = () => {
   const weeklyScrollRef = useRef<HTMLDivElement>(null);
   const {
@@ -47,6 +59,11 @@ const IkeaBelt = () => {
   const [focusedWeeklyIndex, setFocusedWeeklyIndex] = useState<number | null>(0);
   const weeklyItemRefs = useRef<(HTMLDivElement | null)[]>([]);
   const lastHapticTime = useRef<number>(0);
+
+  // Preload images immediately
+  useEffect(() => {
+    preloadImages();
+  }, []);
 
   useEffect(() => {
     if (!isMobile || !weeklyScrollRef.current) return;
@@ -85,7 +102,14 @@ const IkeaBelt = () => {
 
   const renderWeeklyItem = (item: typeof weeklyOffers.items[0], index: number) => {
     const itemContent = <div className="relative">
-        <AnimatedImage src={item.image} fallbackSrc={item.fallbackSrc} alt={item.title} className="w-full" aspectRatio="aspect-[3/4]" objectFit="cover" />
+        <AnimatedImage 
+          src={item.image} 
+          fallbackSrc={item.fallbackSrc} 
+          alt={item.title} 
+          className="w-full" 
+          aspectRatio="aspect-[3/4]" 
+          objectFit="cover" 
+        />
         {item.badge && <div className="absolute top-4 left-4 z-10">
             <Badge variant="secondary" className="px-2 py-1 bg-white/90 text-primary shadow-sm backdrop-blur-sm flex items-center gap-1.5">
               <ListTodo className="w-3.5 h-3.5" />
@@ -101,7 +125,14 @@ const IkeaBelt = () => {
       </div>;
 
     const previewContent = <div className="relative rounded overflow-hidden">
-        <img src={item.image} alt={item.title} className="w-full aspect-video object-cover" />
+        <img 
+          src={item.image} 
+          alt={item.title} 
+          className="w-full aspect-video object-cover" 
+          loading="eager"
+          decoding="async"
+          fetchpriority="high"
+        />
         <div className="absolute inset-0 flex items-center justify-center">
           <h3 className="text-white text-xl text-center px-4" style={{ fontWeight: 900 }}>
             {item.title}
@@ -114,7 +145,15 @@ const IkeaBelt = () => {
         </div>
       </div>;
 
-    return <div key={item.id} ref={el => weeklyItemRefs.current[index] = el} data-index={index} className={cn("flex-shrink-0 snap-start overflow-hidden shadow-sm w-[300px] md:w-[calc(33.333%-16px)] lg:w-[calc(25%-16px)] transition-all duration-200", focusedWeeklyIndex === index && "scale-105 shadow-md")}>
+    return <div 
+      key={item.id} 
+      ref={el => weeklyItemRefs.current[index] = el} 
+      data-index={index} 
+      className={cn(
+        "flex-shrink-0 snap-start overflow-hidden shadow-sm w-[300px] md:w-[calc(33.333%-16px)] lg:w-[calc(25%-16px)] transition-all duration-200", 
+        focusedWeeklyIndex === index && "scale-105 shadow-md"
+      )}
+    >
         {isMobile ? itemContent : <ContentPreview previewContent={previewContent} previewTitle={`${item.title} Preview`} openDelay={1000}>
             {itemContent}
           </ContentPreview>}
@@ -128,10 +167,14 @@ const IkeaBelt = () => {
         </div>
         
         <div className="relative px-4">
-          <div ref={weeklyScrollRef} className="flex flex-nowrap overflow-x-auto snap-x snap-mandatory gap-4 pb-4 scrollbar-hide" style={{
-          scrollbarWidth: 'none',
-          msOverflowStyle: 'none'
-        }}>
+          <div 
+            ref={weeklyScrollRef} 
+            className="flex flex-nowrap overflow-x-auto snap-x snap-mandatory gap-4 pb-4 scrollbar-hide" 
+            style={{
+              scrollbarWidth: 'none',
+              msOverflowStyle: 'none'
+            }}
+          >
             {weeklyOffers.items.map((item, index) => renderWeeklyItem(item, index))}
           </div>
         </div>

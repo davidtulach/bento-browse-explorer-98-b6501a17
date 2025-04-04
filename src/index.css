@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -116,6 +117,13 @@
   
   .font-black, h3.text-2xl {
     font-weight: 900 !important;
+  }
+  
+  /* Image performance optimizations */
+  img {
+    will-change: transform, opacity;
+    backface-visibility: hidden;
+    transform: translateZ(0);
   }
 }
 
