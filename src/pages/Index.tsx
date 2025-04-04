@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useRef } from 'react';
 import { cn } from '@/lib/utils';
 import Header from '@/components/Header';
@@ -10,6 +11,7 @@ import PriceHitsBelt from '@/components/PriceHitsBelt';
 import DiscountCode from '@/components/DiscountCode';
 import ScrollDownIndicator from '@/components/ScrollDownIndicator';
 import ShoppableImage from '@/components/ShoppableImage';
+import Footer from '@/components/Footer';
 import { Toaster } from '@/components/ui/toaster';
 import { useHapticFeedback } from '@/hooks/use-haptic';
 import { useIsMobile } from '@/hooks/use-mobile';
@@ -132,7 +134,7 @@ const Index = () => {
       <Header />
       
       <main className={cn(
-        "flex-1 pb-20 w-full",
+        "flex-1 pb-0 w-full", // Changed pb-20 to pb-0 to remove padding before footer
         isMobile && "pt-0"
       )}>
         <StoryScroller />
@@ -180,6 +182,8 @@ const Index = () => {
           description="Your unique discount code for free delivery:" 
         />
       </main>
+      
+      <Footer />
       
       {!isAtBottom && (
         <ScrollDownIndicator 
