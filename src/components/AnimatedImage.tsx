@@ -113,7 +113,7 @@ const AnimatedImage = ({
           )}
           loading="eager"
           decoding="async"
-          fetchpriority="high"
+          fetchPriority="high"
           onLoad={() => {
             setIsLoading(false);
             setTimeout(() => setIsVisible(true), 50);

@@ -1,4 +1,3 @@
-
 import { useRef, useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import AnimatedImage from './AnimatedImage';
@@ -38,7 +37,6 @@ const weeklyOffers = {
   }]
 };
 
-// Preload images on component initialization
 const preloadImages = () => {
   weeklyOffers.items.forEach(item => {
     const img = new Image();
@@ -60,7 +58,6 @@ const IkeaBelt = () => {
   const weeklyItemRefs = useRef<(HTMLDivElement | null)[]>([]);
   const lastHapticTime = useRef<number>(0);
 
-  // Preload images immediately
   useEffect(() => {
     preloadImages();
   }, []);
@@ -131,7 +128,7 @@ const IkeaBelt = () => {
           className="w-full aspect-video object-cover" 
           loading="eager"
           decoding="async"
-          fetchpriority="high"
+          fetchPriority="high"
         />
         <div className="absolute inset-0 flex items-center justify-center">
           <h3 className="text-white text-xl text-center px-4" style={{ fontWeight: 900 }}>
