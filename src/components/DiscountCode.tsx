@@ -51,7 +51,9 @@ const DiscountCode = ({ code, description }: DiscountCodeProps) => {
           </div>
         </div>
       </div>
-      {/* Removed the text and bottom margin */}
+      <p className="text-center text-sm text-gray-500 dark:text-gray-400 mt-3 italic">
+        Hey, who knows what surprises might be here the next time you scroll all the way down 😉
+      </p>
     </div>
   );
 };
