@@ -21,9 +21,22 @@ const weeklyOffers = {
     }
   }, {
     id: 102,
-    title: "Butcher's Special",
-    image: "/lovable-uploads/93315171-35f2-45a1-9399-e3f088c074fc.png",
-    fallbackSrc: "/lovable-uploads/93315171-35f2-45a1-9399-e3f088c074fc.png"
+    title: "Stacked Ads",
+    isAdStack: true,
+    ads: [
+      {
+        id: 1021,
+        title: "Fitness Sale",
+        image: "https://images.unsplash.com/photo-1466721591366-2d5fba72006d?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&h=400&q=80",
+        sponsor: "SportLife"
+      },
+      {
+        id: 1022,
+        title: "Travel Deals",
+        image: "https://images.unsplash.com/photo-1493962853295-0fd70327578a?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&h=400&q=80",
+        sponsor: "TravelCo"
+      }
+    ]
   }, {
     id: 103,
     title: "Bakery Fresh",
@@ -31,19 +44,39 @@ const weeklyOffers = {
     fallbackSrc: "/lovable-uploads/449d2a80-7b69-4959-8a66-f74b63814e56.png"
   }, {
     id: 104,
-    title: "Wine & Cheese Festival",
-    image: "/lovable-uploads/c2a98500-94d6-4675-9461-4de64da74d39.png",
-    fallbackSrc: "/lovable-uploads/c2a98500-94d6-4675-9461-4de64da74d39.png"
+    title: "Stacked Ads",
+    isAdStack: true,
+    ads: [
+      {
+        id: 1041,
+        title: "Summer Collection",
+        image: "https://images.unsplash.com/photo-1466721591366-2d5fba72006d?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&h=400&q=80", 
+        sponsor: "FashionBrand"
+      },
+      {
+        id: 1042,
+        title: "Home Essentials",
+        image: "https://images.unsplash.com/photo-1493962853295-0fd70327578a?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&h=400&q=80",
+        sponsor: "HomeDeco"
+      }
+    ]
   }]
 };
 
 const preloadImages = () => {
   weeklyOffers.items.forEach(item => {
-    const img = new Image();
-    img.src = item.image;
-    if (item.fallbackSrc) {
-      const fallbackImg = new Image();
-      fallbackImg.src = item.fallbackSrc;
+    if (item.isAdStack) {
+      item.ads.forEach(ad => {
+        const img = new Image();
+        img.src = ad.image;
+      });
+    } else {
+      const img = new Image();
+      img.src = item.image;
+      if (item.fallbackSrc) {
+        const fallbackImg = new Image();
+        fallbackImg.src = item.fallbackSrc;
+      }
     }
   });
 };
@@ -97,7 +130,86 @@ const IkeaBelt = () => {
     };
   }, [isMobile, focusedWeeklyIndex, triggerHaptic]);
 
+  const renderStackedAds = (item: typeof weeklyOffers.items[0], index: number) => {
+    if (!item.isAdStack || !item.ads) return null;
+
+    const stackedAdsContent = (
+      <div className="relative h-full flex flex-col">
+        {item.ads.map((ad, adIndex) => (
+          <div key={ad.id} className="relative flex-1">
+            <img 
+              src={ad.image} 
+              alt={ad.title} 
+              className="w-full h-full object-cover" 
+              loading="eager"
+              decoding="async"
+              fetchPriority="high"
+            />
+            <div className="absolute inset-0 bg-gradient-to-b from-black/10 to-black/70">
+              <div className="absolute bottom-2 left-2 right-2">
+                <h4 className="text-white text-sm font-medium">{ad.title}</h4>
+                {ad.sponsor && (
+                  <span className="text-white/80 text-xs">Sponsored by {ad.sponsor}</span>
+                )}
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    );
+
+    const previewContent = (
+      <div className="relative rounded overflow-hidden">
+        <div className="flex flex-col h-full">
+          {item.ads.map((ad) => (
+            <div key={ad.id} className="relative flex-1">
+              <img 
+                src={ad.image} 
+                alt={ad.title} 
+                className="w-full object-cover" 
+                loading="eager"
+                decoding="async"
+                fetchPriority="high"
+              />
+              <div className="absolute inset-0 flex items-center justify-center">
+                <div className="bg-white/20 backdrop-blur-sm px-3 py-2 rounded-md inline-block">
+                  <p className="text-white text-xs">Sponsored by {ad.sponsor}</p>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+
+    return (
+      <div 
+        key={item.id} 
+        ref={el => weeklyItemRefs.current[index] = el} 
+        data-index={index} 
+        className={cn(
+          "flex-shrink-0 snap-start overflow-hidden shadow-sm w-[300px] md:w-[calc(33.333%-16px)] lg:w-[calc(25%-16px)] transition-all duration-200 h-full", 
+          focusedWeeklyIndex === index && "scale-105 shadow-md"
+        )}
+      >
+        {isMobile ? stackedAdsContent : (
+          <ContentPreview 
+            previewContent={previewContent} 
+            previewTitle="Sponsored Content" 
+            openDelay={1000}
+          >
+            {stackedAdsContent}
+          </ContentPreview>
+        )}
+      </div>
+    );
+  };
+
   const renderWeeklyItem = (item: typeof weeklyOffers.items[0], index: number) => {
+    if (item.isAdStack) {
+      return renderStackedAds(item, index);
+    }
+
     const itemContent = <div className="relative">
         <AnimatedImage 
           src={item.image} 
