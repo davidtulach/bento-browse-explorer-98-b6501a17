@@ -195,9 +195,9 @@ const IkeaBelt = () => {
         ref={el => weeklyItemRefs.current[index] = el} 
         data-index={index} 
         className={cn(
-          "flex-shrink-0 snap-start overflow-hidden shadow-sm transition-all duration-200 h-[400px]", 
+          "flex-shrink-0 snap-start overflow-hidden shadow-sm transition-all duration-200", 
           focusedWeeklyIndex === index && "scale-105 shadow-md",
-          "w-[280px]" // Unified card width
+          "w-[320px] h-[450px]" // Increased card size
         )}
       >
         {isMobile ? stackedAdsContent : (
@@ -267,9 +267,9 @@ const IkeaBelt = () => {
       ref={el => weeklyItemRefs.current[index] = el} 
       data-index={index} 
       className={cn(
-        "flex-shrink-0 snap-start overflow-hidden shadow-sm transition-all duration-200 h-[400px]", 
+        "flex-shrink-0 snap-start overflow-hidden shadow-sm transition-all duration-200", 
         focusedWeeklyIndex === index && "scale-105 shadow-md",
-        "w-[280px]" // Unified card width
+        "w-[320px] h-[450px]" // Increased card size
       )}
     >
         {isMobile ? itemContent : <ContentPreview previewContent={previewContent} previewTitle={`${item.title} Preview`} openDelay={1000}>
@@ -287,7 +287,7 @@ const IkeaBelt = () => {
         <div className="relative px-4">
           <div 
             ref={weeklyScrollRef} 
-            className="flex flex-nowrap overflow-x-auto snap-x snap-mandatory gap-5 pb-4 scrollbar-hide" 
+            className="flex flex-nowrap overflow-x-auto snap-x snap-mandatory gap-6 pb-4 scrollbar-hide" 
             style={{
               scrollbarWidth: 'none',
               msOverflowStyle: 'none'
