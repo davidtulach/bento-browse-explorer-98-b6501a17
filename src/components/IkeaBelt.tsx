@@ -1,3 +1,4 @@
+
 import { useRef, useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import AnimatedImage from './AnimatedImage';
@@ -136,11 +137,14 @@ const IkeaBelt = () => {
     const stackedAdsContent = (
       <div className="relative h-full flex flex-col">
         {item.ads.map((ad, adIndex) => (
-          <div key={ad.id} className="relative flex-1">
+          <div key={ad.id} className={cn(
+            "relative flex-1",
+            adIndex === 0 ? "pb-1" : "pt-1" // Add padding between stacked ads
+          )}>
             <img 
               src={ad.image} 
               alt={ad.title} 
-              className="w-full h-full object-cover" 
+              className="w-full h-full object-cover rounded" 
               loading="eager"
               decoding="async"
               fetchPriority="high"
@@ -161,12 +165,15 @@ const IkeaBelt = () => {
     const previewContent = (
       <div className="relative rounded overflow-hidden">
         <div className="flex flex-col h-full">
-          {item.ads.map((ad) => (
-            <div key={ad.id} className="relative flex-1">
+          {item.ads.map((ad, adIndex) => (
+            <div key={ad.id} className={cn(
+              "relative flex-1",
+              adIndex === 0 ? "mb-1" : "mt-1" // Add margin between ads in preview
+            )}>
               <img 
                 src={ad.image} 
                 alt={ad.title} 
-                className="w-full object-cover" 
+                className="w-full object-cover rounded" 
                 loading="eager"
                 decoding="async"
                 fetchPriority="high"
@@ -188,8 +195,9 @@ const IkeaBelt = () => {
         ref={el => weeklyItemRefs.current[index] = el} 
         data-index={index} 
         className={cn(
-          "flex-shrink-0 snap-start overflow-hidden shadow-sm w-[300px] md:w-[calc(33.333%-16px)] lg:w-[calc(25%-16px)] transition-all duration-200 h-full", 
-          focusedWeeklyIndex === index && "scale-105 shadow-md"
+          "flex-shrink-0 snap-start overflow-hidden shadow-sm rounded-lg transition-all duration-200 h-[400px]", 
+          focusedWeeklyIndex === index && "scale-105 shadow-md",
+          "w-[280px]" // Unified card width
         )}
       >
         {isMobile ? stackedAdsContent : (
@@ -210,12 +218,12 @@ const IkeaBelt = () => {
       return renderStackedAds(item, index);
     }
 
-    const itemContent = <div className="relative">
+    const itemContent = <div className="relative h-full">
         <AnimatedImage 
           src={item.image} 
           fallbackSrc={item.fallbackSrc} 
           alt={item.title} 
-          className="w-full" 
+          className="w-full h-full" 
           aspectRatio="aspect-[3/4]" 
           objectFit="cover" 
         />
@@ -259,8 +267,9 @@ const IkeaBelt = () => {
       ref={el => weeklyItemRefs.current[index] = el} 
       data-index={index} 
       className={cn(
-        "flex-shrink-0 snap-start overflow-hidden shadow-sm w-[300px] md:w-[calc(33.333%-16px)] lg:w-[calc(25%-16px)] transition-all duration-200", 
-        focusedWeeklyIndex === index && "scale-105 shadow-md"
+        "flex-shrink-0 snap-start overflow-hidden shadow-sm rounded-lg transition-all duration-200 h-[400px]", 
+        focusedWeeklyIndex === index && "scale-105 shadow-md",
+        "w-[280px]" // Unified card width
       )}
     >
         {isMobile ? itemContent : <ContentPreview previewContent={previewContent} previewTitle={`${item.title} Preview`} openDelay={1000}>
@@ -278,7 +287,7 @@ const IkeaBelt = () => {
         <div className="relative px-4">
           <div 
             ref={weeklyScrollRef} 
-            className="flex flex-nowrap overflow-x-auto snap-x snap-mandatory gap-4 pb-4 scrollbar-hide" 
+            className="flex flex-nowrap overflow-x-auto snap-x snap-mandatory gap-5 pb-4 scrollbar-hide" 
             style={{
               scrollbarWidth: 'none',
               msOverflowStyle: 'none'
