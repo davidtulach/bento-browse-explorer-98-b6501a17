@@ -270,10 +270,11 @@ const IkeaBelt = () => {
         <div className="relative px-4">
           <div 
             ref={beltRef} 
-            className="flex overflow-x-auto snap-x snap-mandatory gap-6 pb-6 scrollbar-hide" 
+            className="flex overflow-x-auto snap-x snap-mandatory gap-4 pb-6 scrollbar-hide" 
             style={{
               scrollbarWidth: 'none',
-              msOverflowStyle: 'none'
+              msOverflowStyle: 'none',
+              paddingRight: isMobile ? '80px' : '16px' // Add extra padding on mobile to show next item
             }}
           >
             {weeklyOffers.items.map((item, index) => (
@@ -285,8 +286,12 @@ const IkeaBelt = () => {
                   "flex-shrink-0 snap-start overflow-hidden border-0 shadow-md",
                   "transition-all duration-200",
                   "w-[350px] h-[500px]",
-                  focusedIndex === index && "scale-[1.02] shadow-lg"
+                  focusedIndex === index && "scale-[1.02] shadow-lg",
+                  "!rounded-none" // Remove rounded corners
                 )}
+                style={{
+                  borderRadius: 0 // Ensure no rounded corners
+                }}
               >
                 {item.isAdStack ? (
                   <StackedAdCard item={item} isFocused={focusedIndex === index} />
