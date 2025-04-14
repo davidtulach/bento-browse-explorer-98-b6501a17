@@ -1,3 +1,4 @@
+
 import { useRef, useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import { useHapticFeedback } from '@/hooks/use-haptic';
@@ -54,13 +55,13 @@ const weeklyOffers: BeltSection = {
         {
           id: 1021,
           title: "Viladomy Pitkovic",
-          image: "/lovable-uploads/4b03e2eb-33c9-4b33-85d4-d06f5e2e2fb6.png",
+          image: "/lovable-uploads/90f118dd-41bc-482c-98b0-3763799f43e1.png",
           sponsor: "Central Group"
         },
         {
           id: 1022,
           title: "Partners Banka",
-          image: "/lovable-uploads/cd8e8965-2690-4b84-a350-aa72294551ec.png",
+          image: "/lovable-uploads/ae63401e-b7d6-4f1f-817d-2c379b21bd15.png",
           sponsor: "Partners Banka"
         }
       ]
@@ -79,13 +80,13 @@ const weeklyOffers: BeltSection = {
         {
           id: 1041,
           title: "Misa Ice Cream",
-          image: "/lovable-uploads/adaca933-f51b-417a-b11c-8c50c57634a1.png",
+          image: "/lovable-uploads/d136c32a-fa95-4a02-ac7a-ca96bdad4f58.png",
           sponsor: "Misa"
         },
         {
           id: 1042,
           title: "U-mai Caviar",
-          image: "/lovable-uploads/4bf05a4a-d317-4f24-b734-3c218b704618.png",
+          image: "/lovable-uploads/80409ac3-087c-453d-a031-d3dc5358c401.png",
           sponsor: "U-mai"
         }
       ]
