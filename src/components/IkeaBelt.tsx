@@ -1,4 +1,3 @@
-
 import { useRef, useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import { useHapticFeedback } from '@/hooks/use-haptic';
@@ -7,7 +6,6 @@ import { ListTodo } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Card } from '@/components/ui/card';
 
-// Types for our data model
 interface AdItem {
   id: number;
   title: string;
@@ -34,7 +32,6 @@ interface BeltSection {
   items: BeltItem[];
 }
 
-// Mock data
 const weeklyOffers: BeltSection = {
   id: 1,
   title: "Weekly Topics",
@@ -56,15 +53,15 @@ const weeklyOffers: BeltSection = {
       ads: [
         {
           id: 1021,
-          title: "Fitness Sale",
-          image: "https://images.unsplash.com/photo-1466721591366-2d5fba72006d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=400&q=80",
-          sponsor: "SportLife"
+          title: "Viladomy Pitkovic",
+          image: "/lovable-uploads/4b03e2eb-33c9-4b33-85d4-d06f5e2e2fb6.png",
+          sponsor: "Central Group"
         },
         {
           id: 1022,
-          title: "Travel Deals",
-          image: "https://images.unsplash.com/photo-1493962853295-0fd70327578a?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=400&q=80",
-          sponsor: "TravelCo"
+          title: "Partners Banka",
+          image: "/lovable-uploads/cd8e8965-2690-4b84-a350-aa72294551ec.png",
+          sponsor: "Partners Banka"
         }
       ]
     }, 
@@ -81,22 +78,21 @@ const weeklyOffers: BeltSection = {
       ads: [
         {
           id: 1041,
-          title: "Summer Collection",
-          image: "https://images.unsplash.com/photo-1466721591366-2d5fba72006d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=400&q=80", 
-          sponsor: "FashionBrand"
+          title: "Misa Ice Cream",
+          image: "/lovable-uploads/adaca933-f51b-417a-b11c-8c50c57634a1.png",
+          sponsor: "Misa"
         },
         {
           id: 1042,
-          title: "Home Essentials",
-          image: "https://images.unsplash.com/photo-1493962853295-0fd70327578a?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=400&q=80",
-          sponsor: "HomeDeco"
+          title: "U-mai Caviar",
+          image: "/lovable-uploads/4bf05a4a-d317-4f24-b734-3c218b704618.png",
+          sponsor: "U-mai"
         }
       ]
     }
   ]
 };
 
-// Helper component for rendering a standard card
 const ContentCard = ({ 
   item, 
   isFocused 
@@ -140,7 +136,6 @@ const ContentCard = ({
   );
 };
 
-// Helper component for rendering a stacked ad card
 const StackedAdCard = ({ 
   item, 
   isFocused 
@@ -188,7 +183,6 @@ const StackedAdCard = ({
   );
 };
 
-// Main component
 const IkeaBelt = () => {
   const beltRef = useRef<HTMLDivElement>(null);
   const { triggerHaptic } = useHapticFeedback();
@@ -197,12 +191,10 @@ const IkeaBelt = () => {
   const itemRefs = useRef<(HTMLDivElement | null)[]>([]);
   const lastHapticTime = useRef<number>(0);
 
-  // Calculate card width for mobile view
-  const cardWidth = 350; // Base card width
-  const visibleCardPercentage = isMobile ? 0.85 : 1; // Show 85% of the card on mobile
+  const cardWidth = 350;
+  const visibleCardPercentage = isMobile ? 0.85 : 1;
   const mobileCardWidth = cardWidth * visibleCardPercentage;
 
-  // Preload images for better performance
   useEffect(() => {
     weeklyOffers.items.forEach(item => {
       if (item.isAdStack) {
@@ -221,7 +213,6 @@ const IkeaBelt = () => {
     });
   }, []);
 
-  // Set up intersection observer for mobile scroll detection
   useEffect(() => {
     if (!isMobile || !beltRef.current) return;
     
@@ -279,7 +270,7 @@ const IkeaBelt = () => {
             style={{
               scrollbarWidth: 'none',
               msOverflowStyle: 'none',
-              paddingRight: isMobile ? '40px' : '16px' // Reduced right padding to show more of next card
+              paddingRight: isMobile ? '40px' : '16px'
             }}
           >
             {weeklyOffers.items.map((item, index) => (
@@ -291,11 +282,11 @@ const IkeaBelt = () => {
                   "flex-shrink-0 snap-start overflow-hidden border-0 shadow-md",
                   "transition-all duration-200",
                   focusedIndex === index && "scale-[1.02] shadow-lg",
-                  "!rounded-none" // Remove rounded corners
+                  "!rounded-none"
                 )}
                 style={{
-                  borderRadius: 0, // Ensure no rounded corners
-                  width: isMobile ? `${mobileCardWidth}px` : '350px', // Adjusted width for mobile
+                  borderRadius: 0,
+                  width: isMobile ? `${mobileCardWidth}px` : '350px',
                   height: '500px'
                 }}
               >
