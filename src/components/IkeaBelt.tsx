@@ -165,17 +165,6 @@ const StackedAdCard = ({
             />
             
             <div className="absolute inset-0 bg-gradient-to-b from-black/10 to-black/70" />
-            
-            <div className="absolute inset-x-0 bottom-0 p-4">
-              <h4 className="text-white text-xl font-bold leading-tight mb-1">
-                {ad.title}
-              </h4>
-              {ad.sponsor && (
-                <span className="text-white/80 text-sm">
-                  Sponsored by {ad.sponsor}
-                </span>
-              )}
-            </div>
           </div>
         </div>
       ))}
