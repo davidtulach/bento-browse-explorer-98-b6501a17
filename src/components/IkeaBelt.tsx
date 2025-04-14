@@ -144,7 +144,7 @@ const IkeaBelt = () => {
             <img 
               src={ad.image} 
               alt={ad.title} 
-              className="w-full h-full object-cover rounded" 
+              className="w-full h-full object-cover" 
               loading="eager"
               decoding="async"
               fetchPriority="high"
@@ -163,7 +163,7 @@ const IkeaBelt = () => {
     );
 
     const previewContent = (
-      <div className="relative rounded overflow-hidden">
+      <div className="relative overflow-hidden">
         <div className="flex flex-col h-full">
           {item.ads.map((ad, adIndex) => (
             <div key={ad.id} className={cn(
@@ -173,13 +173,13 @@ const IkeaBelt = () => {
               <img 
                 src={ad.image} 
                 alt={ad.title} 
-                className="w-full object-cover rounded" 
+                className="w-full object-cover" 
                 loading="eager"
                 decoding="async"
                 fetchPriority="high"
               />
               <div className="absolute inset-0 flex items-center justify-center">
-                <div className="bg-white/20 backdrop-blur-sm px-3 py-2 rounded-md inline-block">
+                <div className="bg-white/20 backdrop-blur-sm px-3 py-2 inline-block">
                   <p className="text-white text-xs">Sponsored by {ad.sponsor}</p>
                 </div>
               </div>
@@ -195,7 +195,7 @@ const IkeaBelt = () => {
         ref={el => weeklyItemRefs.current[index] = el} 
         data-index={index} 
         className={cn(
-          "flex-shrink-0 snap-start overflow-hidden shadow-sm rounded-lg transition-all duration-200 h-[400px]", 
+          "flex-shrink-0 snap-start overflow-hidden shadow-sm transition-all duration-200 h-[400px]", 
           focusedWeeklyIndex === index && "scale-105 shadow-md",
           "w-[280px]" // Unified card width
         )}
@@ -241,7 +241,7 @@ const IkeaBelt = () => {
         </div>
       </div>;
 
-    const previewContent = <div className="relative rounded overflow-hidden">
+    const previewContent = <div className="relative overflow-hidden">
         <img 
           src={item.image} 
           alt={item.title} 
@@ -255,7 +255,7 @@ const IkeaBelt = () => {
             {item.title}
           </h3>
           <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2">
-            <div className="bg-white/20 backdrop-blur-sm px-3 py-2 rounded-md inline-block">
+            <div className="bg-white/20 backdrop-blur-sm px-3 py-2 inline-block">
               <p className="text-white text-xs">Click to view shopping list</p>
             </div>
           </div>
@@ -267,7 +267,7 @@ const IkeaBelt = () => {
       ref={el => weeklyItemRefs.current[index] = el} 
       data-index={index} 
       className={cn(
-        "flex-shrink-0 snap-start overflow-hidden shadow-sm rounded-lg transition-all duration-200 h-[400px]", 
+        "flex-shrink-0 snap-start overflow-hidden shadow-sm transition-all duration-200 h-[400px]", 
         focusedWeeklyIndex === index && "scale-105 shadow-md",
         "w-[280px]" // Unified card width
       )}
