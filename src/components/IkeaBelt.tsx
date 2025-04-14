@@ -197,6 +197,11 @@ const IkeaBelt = () => {
   const itemRefs = useRef<(HTMLDivElement | null)[]>([]);
   const lastHapticTime = useRef<number>(0);
 
+  // Calculate card width for mobile view
+  const cardWidth = 350; // Base card width
+  const visibleCardPercentage = isMobile ? 0.85 : 1; // Show 85% of the card on mobile
+  const mobileCardWidth = cardWidth * visibleCardPercentage;
+
   // Preload images for better performance
   useEffect(() => {
     weeklyOffers.items.forEach(item => {
@@ -274,7 +279,7 @@ const IkeaBelt = () => {
             style={{
               scrollbarWidth: 'none',
               msOverflowStyle: 'none',
-              paddingRight: isMobile ? '80px' : '16px' // Add extra padding on mobile to show next item
+              paddingRight: isMobile ? '40px' : '16px' // Reduced right padding to show more of next card
             }}
           >
             {weeklyOffers.items.map((item, index) => (
@@ -285,12 +290,13 @@ const IkeaBelt = () => {
                 className={cn(
                   "flex-shrink-0 snap-start overflow-hidden border-0 shadow-md",
                   "transition-all duration-200",
-                  "w-[350px] h-[500px]",
                   focusedIndex === index && "scale-[1.02] shadow-lg",
                   "!rounded-none" // Remove rounded corners
                 )}
                 style={{
-                  borderRadius: 0 // Ensure no rounded corners
+                  borderRadius: 0, // Ensure no rounded corners
+                  width: isMobile ? `${mobileCardWidth}px` : '350px', // Adjusted width for mobile
+                  height: '500px'
                 }}
               >
                 {item.isAdStack ? (
