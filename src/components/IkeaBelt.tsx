@@ -384,8 +384,8 @@ const IkeaBelt = () => {
                       visibleMobileIndex === index 
                         ? "opacity-100 z-10 translate-y-0" 
                         : index < visibleMobileIndex
-                          ? "opacity-0 z-0 -translate-y-8" 
-                          : "opacity-0 z-0 translate-y-8"
+                          ? "opacity-0 z-0 -translate-y-full" 
+                          : "opacity-0 z-0 translate-y-full"
                     )}
                   >
                     <ContentCard item={item} isFocused={false} />
@@ -416,7 +416,7 @@ const IkeaBelt = () => {
                   "absolute inset-0 grid grid-cols-4 gap-4 transition-all duration-500",
                   desktopSetIndex === 0 
                     ? "opacity-100 z-10 translate-y-0" 
-                    : "opacity-0 z-0 -translate-y-8"
+                    : "opacity-0 z-0 -translate-y-full"
                 )}
               >
                 {firstSet.map((item, gridIndex) => (
@@ -441,7 +441,7 @@ const IkeaBelt = () => {
                   "absolute inset-0 grid grid-cols-4 gap-4 transition-all duration-500",
                   desktopSetIndex === 1
                     ? "opacity-100 z-10 translate-y-0" 
-                    : "opacity-0 z-0 translate-y-8"
+                    : "opacity-0 z-0 translate-y-full"
                 )}
               >
                 {secondSet.map((item, gridIndex) => (
