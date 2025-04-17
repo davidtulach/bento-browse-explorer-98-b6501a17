@@ -182,7 +182,9 @@ const IkeaBelt = () => {
   const [isScrolling, setIsScrolling] = useState(false);
   const observerRef = useRef<IntersectionObserver | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
-  const scrollOffset = useRef(0);
+  const scrollStartRef = useRef(0);
+  const lastScrollPositionRef = useRef(0);
+  const scrollDirectionRef = useRef<'up' | 'down'>('down');
 
   const cardWidth = 350;
   const visibleCardPercentage = isMobile ? 0.85 : 1;
@@ -191,6 +193,9 @@ const IkeaBelt = () => {
   // The aspect ratio for regular and ad cards
   const standardCardHeight = 500;  
   const adStackCardHeight = 600; // 3:2.5 aspect ratio maintained
+  
+  // Scroll increment needed to change the card (in pixels)
+  const scrollThreshold = 40;
 
   useEffect(() => {
     weeklyOffers.items.forEach(item => {
@@ -214,6 +219,17 @@ const IkeaBelt = () => {
   useEffect(() => {
     if (!isMobile || !containerRef.current) return;
 
+    // Initialize scroll position tracking
+    const initializeScrollTracking = () => {
+      if (containerRef.current) {
+        const rect = containerRef.current.getBoundingClientRect();
+        scrollStartRef.current = window.scrollY;
+        lastScrollPositionRef.current = window.scrollY;
+      }
+    };
+
+    initializeScrollTracking();
+
     const handleScroll = () => {
       if (!containerRef.current) return;
       
@@ -222,42 +238,58 @@ const IkeaBelt = () => {
       
       // Check if the container is in viewport
       if (rect.top < viewportHeight && rect.bottom > 0) {
-        // Calculate scroll progress within the container
-        const containerVisible = Math.min(viewportHeight, rect.bottom) - Math.max(0, rect.top);
-        const containerVisiblePercentage = containerVisible / standardCardHeight;
+        // Determine scroll direction
+        const currentScrollY = window.scrollY;
+        scrollDirectionRef.current = currentScrollY > lastScrollPositionRef.current ? 'down' : 'up';
         
-        // Determine which item should be visible based on scroll position
-        const scrollY = window.scrollY;
-        const relativeScroll = scrollY - (scrollOffset.current || 0);
-        const itemIndex = Math.min(
-          Math.floor(relativeScroll / 60), // Every 60px of scroll, show next item
-          weeklyOffers.items.length - 1
-        );
+        // Calculate relative scroll since last position check
+        const scrollDelta = Math.abs(currentScrollY - lastScrollPositionRef.current);
         
-        if (itemIndex !== visibleMobileIndex && itemIndex >= 0) {
-          setVisibleMobileIndex(itemIndex);
-          triggerHaptic();
-          setIsScrolling(true);
-          setTimeout(() => setIsScrolling(false), 300);
+        // Only process if we've scrolled enough to trigger a change
+        if (scrollDelta >= scrollThreshold) {
+          // Calculate which content item should be visible
+          const relativeScrollDistance = currentScrollY - scrollStartRef.current;
+          const itemIndexCalculated = Math.floor(relativeScrollDistance / scrollThreshold);
+          
+          // Clamp the index to valid range and handle direction
+          let newIndex;
+          
+          if (scrollDirectionRef.current === 'down') {
+            newIndex = Math.min(
+              Math.max(0, itemIndexCalculated), 
+              weeklyOffers.items.length - 1
+            );
+          } else {
+            // For upward scrolling, we want to go to the previous item
+            newIndex = Math.max(
+              0, 
+              visibleMobileIndex - 1
+            );
+          }
+          
+          // Only update if the index would change
+          if (newIndex !== visibleMobileIndex) {
+            setVisibleMobileIndex(newIndex);
+            triggerHaptic();
+            setIsScrolling(true);
+            setTimeout(() => setIsScrolling(false), 300);
+            
+            // Update last position for next scroll check
+            lastScrollPositionRef.current = currentScrollY;
+          }
+        } else if (scrollDelta > 0) {
+          // Still update the last position even if we didn't change items
+          lastScrollPositionRef.current = currentScrollY;
         }
       }
     };
-
-    // Store initial offset
-    const updateOffset = () => {
-      if (containerRef.current) {
-        const rect = containerRef.current.getBoundingClientRect();
-        scrollOffset.current = window.scrollY - rect.top;
-      }
-    };
     
-    updateOffset();
     window.addEventListener('scroll', handleScroll, { passive: true });
-    window.addEventListener('resize', updateOffset);
+    window.addEventListener('resize', initializeScrollTracking);
     
     return () => {
       window.removeEventListener('scroll', handleScroll);
-      window.removeEventListener('resize', updateOffset);
+      window.removeEventListener('resize', initializeScrollTracking);
     };
   }, [isMobile, visibleMobileIndex, triggerHaptic]);
 
@@ -324,7 +356,7 @@ const IkeaBelt = () => {
               <div 
                 key={item.id}
                 className={cn(
-                  "absolute inset-0 w-full transition-opacity duration-300",
+                  "absolute inset-0 w-full transition-all duration-300",
                   visibleMobileIndex === index ? "opacity-100 z-10" : "opacity-0 z-0"
                 )}
               >
@@ -336,7 +368,7 @@ const IkeaBelt = () => {
               </div>
             ))}
             
-            {/* Optional scroll indicator */}
+            {/* Scroll indicator */}
             <div className="absolute bottom-4 right-4 flex gap-1">
               {weeklyOffers.items.map((_, index) => (
                 <div 
