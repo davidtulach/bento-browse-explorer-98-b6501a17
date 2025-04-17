@@ -1,3 +1,4 @@
+
 import { useRef, useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import { useHapticFeedback } from '@/hooks/use-haptic';
@@ -25,6 +26,8 @@ interface BeltItem {
   };
   isAdStack?: boolean;
   ads?: AdItem[];
+  isAd?: boolean;
+  sponsor?: string;
 }
 
 interface BeltSection {
@@ -181,6 +184,9 @@ const IkeaBelt = () => {
   const lastHapticTime = useRef<number>(0);
   const [visibleMobileIndex, setVisibleMobileIndex] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
+  
+  // Process the belt items
+  const processedItems = processBeltItems(weeklyOffers);
   
   const scrollThreshold = 150;
   const lastScrollY = useRef<number>(0);
