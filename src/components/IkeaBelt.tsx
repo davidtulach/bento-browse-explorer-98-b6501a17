@@ -253,42 +253,62 @@ const IkeaBelt = () => {
           <h2 className="text-xl font-semibold">{weeklyOffers.title}</h2>
         </div>
         
-        <div className="relative px-4">
-          <div 
-            ref={beltRef} 
-            className="flex overflow-x-auto snap-x snap-mandatory gap-4 pb-6 scrollbar-hide" 
-            style={{
-              scrollbarWidth: 'none',
-              msOverflowStyle: 'none',
-              paddingRight: isMobile ? '40px' : '16px'
-            }}
-          >
+        {isMobile ? (
+          // Mobile view: vertical column layout
+          <div className="flex flex-col w-full">
             {weeklyOffers.items.map((item, index) => (
-              <Card
+              <div 
                 key={item.id}
-                ref={el => itemRefs.current[index] = el}
-                data-index={index}
-                className={cn(
-                  "flex-shrink-0 snap-start overflow-hidden border-0 shadow-md",
-                  "transition-all duration-200",
-                  focusedIndex === index && "scale-[1.02] shadow-lg",
-                  "!rounded-none"
-                )}
-                style={{
-                  borderRadius: 0,
-                  width: isMobile ? `${mobileCardWidth}px` : '350px',
-                  height: '500px'
-                }}
+                className="w-full"
+                style={{ height: item.isAdStack ? '400px' : '500px' }}
               >
                 {item.isAdStack ? (
-                  <StackedAdCard item={item} isFocused={focusedIndex === index} />
+                  <StackedAdCard item={item} isFocused={false} />
                 ) : (
-                  <ContentCard item={item} isFocused={focusedIndex === index} />
+                  <ContentCard item={item} isFocused={false} />
                 )}
-              </Card>
+              </div>
             ))}
           </div>
-        </div>
+        ) : (
+          // Desktop view: horizontal scroll belt
+          <div className="relative px-4">
+            <div 
+              ref={beltRef} 
+              className="flex overflow-x-auto snap-x snap-mandatory gap-4 pb-6 scrollbar-hide" 
+              style={{
+                scrollbarWidth: 'none',
+                msOverflowStyle: 'none',
+                paddingRight: '16px'
+              }}
+            >
+              {weeklyOffers.items.map((item, index) => (
+                <Card
+                  key={item.id}
+                  ref={el => itemRefs.current[index] = el}
+                  data-index={index}
+                  className={cn(
+                    "flex-shrink-0 snap-start overflow-hidden border-0 shadow-md",
+                    "transition-all duration-200",
+                    focusedIndex === index && "scale-[1.02] shadow-lg",
+                    "!rounded-none"
+                  )}
+                  style={{
+                    borderRadius: 0,
+                    width: '350px',
+                    height: '500px'
+                  }}
+                >
+                  {item.isAdStack ? (
+                    <StackedAdCard item={item} isFocused={focusedIndex === index} />
+                  ) : (
+                    <ContentCard item={item} isFocused={focusedIndex === index} />
+                  )}
+                </Card>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
