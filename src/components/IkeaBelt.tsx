@@ -138,7 +138,7 @@ const ContentCard = ({
         />
       </div>
       
-      {item.badge && !item.isAd && (
+      {item.badge && (
         <div className="absolute top-4 left-4 z-10">
           <Badge variant="secondary" className="px-2 py-1 bg-white/90 text-primary shadow-sm backdrop-blur-sm flex items-center gap-1.5">
             <ListTodo className="w-3.5 h-3.5" />
@@ -219,10 +219,11 @@ const IkeaBelt = () => {
         setVisibleMobileIndex(prev => Math.max(prev - 1, 0));
       }
     } else {
+      // For desktop, correctly handle both directions
       if (direction === 'down') {
-        setDesktopSetIndex(1);
+        setDesktopSetIndex(1); // Move to second set when scrolling down
       } else {
-        setDesktopSetIndex(0);
+        setDesktopSetIndex(0); // Move to first set when scrolling up
       }
     }
     
@@ -266,8 +267,10 @@ const IkeaBelt = () => {
       const scrollDelta = Math.abs(currentScrollY - lastScrollY.current);
       
       if (scrollDelta > 5) {
+        // Determine scroll direction
         const direction = currentScrollY > lastScrollY.current ? 'down' : 'up';
         
+        // Reset accumulator when direction changes
         if (direction !== scrollDirection.current) {
           scrollDirection.current = direction;
           scrollAccumulator.current = 0;
@@ -275,6 +278,7 @@ const IkeaBelt = () => {
         
         scrollAccumulator.current += scrollDelta;
         
+        // Trigger transition when threshold is reached
         if (scrollAccumulator.current >= scrollThreshold) {
           scrollAccumulator.current = 0;
           triggerTransition(direction);
@@ -349,7 +353,7 @@ const IkeaBelt = () => {
             "relative overflow-hidden",
             "w-full"
           )}>
-            <AspectRatio ratio={3 / 2.5} className="w-full" maxWidth={800}>
+            <AspectRatio ratio={3 / 2.5} className="w-full">
               <div 
                 ref={containerRef}
                 className="w-full h-full relative overflow-hidden perspective-1000"
@@ -396,7 +400,7 @@ const IkeaBelt = () => {
           </div>
         ) : (
           <div className="relative px-4">
-            <div className="relative overflow-hidden perspective-1000 mx-auto" style={{ height: '320px', maxWidth: '1200px' }}>
+            <div className="relative overflow-hidden perspective-1000" style={{ height: '320px' }}>
               <div className="h-full w-full relative">
                 <div 
                   className={cn(
@@ -414,9 +418,9 @@ const IkeaBelt = () => {
                   {firstSet.map((item, gridIndex) => (
                     <div 
                       key={`first-${item.id}-${gridIndex}`}
-                      className="transition-all duration-500 transform-gpu min-w-[300px] min-h-[250px]"
+                      className="transition-all duration-500 transform-gpu"
                     >
-                      <AspectRatio ratio={3 / 2.5} className="overflow-hidden" maxWidth={300}>
+                      <AspectRatio ratio={3 / 2.5} className="overflow-hidden">
                         <Card
                           className="h-full w-full overflow-hidden border-0 shadow-md transition-all duration-200 !rounded-none"
                           style={{ borderRadius: 0 }}
@@ -444,9 +448,9 @@ const IkeaBelt = () => {
                   {secondSet.map((item, gridIndex) => (
                     <div 
                       key={`second-${item.id}-${gridIndex}`}
-                      className="transition-all duration-500 transform-gpu min-w-[300px] min-h-[250px]"
+                      className="transition-all duration-500 transform-gpu"
                     >
-                      <AspectRatio ratio={3 / 2.5} className="overflow-hidden" maxWidth={300}>
+                      <AspectRatio ratio={3 / 2.5} className="overflow-hidden">
                         <Card
                           className="h-full w-full overflow-hidden border-0 shadow-md transition-all duration-200 !rounded-none"
                           style={{ borderRadius: 0 }}
