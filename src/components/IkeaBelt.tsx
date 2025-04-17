@@ -1,4 +1,3 @@
-
 import { useRef, useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import { useHapticFeedback } from '@/hooks/use-haptic';
@@ -183,25 +182,29 @@ const IkeaBelt = () => {
   const itemRefs = useRef<(HTMLDivElement | null)[]>([]);
   const lastHapticTime = useRef<number>(0);
   const [visibleMobileIndex, setVisibleMobileIndex] = useState(0);
-  const [visibleDesktopItems, setVisibleDesktopItems] = useState<number[]>([0, 1, 2, 3]);
+  const [desktopSetIndex, setDesktopSetIndex] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
   
-  // Process the belt items
   const processedItems = processBeltItems(weeklyOffers);
   
-  const scrollThreshold = 150; // Pixels to scroll before triggering a transition
+  const scrollThreshold = 150;
   const lastScrollY = useRef<number>(0);
   const scrollDirection = useRef<'up' | 'down'>('down');
   const scrollAccumulator = useRef<number>(0);
   
-  // Timing and transition queue management
   const lastTransitionTime = useRef<number>(Date.now());
-  const minimumDisplayTime = 1000; // 1 second minimum display time
+  const minimumDisplayTime = 1000;
   const transitionQueue = useRef<number[]>([]);
   const isTransitioning = useRef<boolean>(false);
   const isProcessingQueue = useRef<boolean>(false);
 
-  // Process the transition queue with guaranteed minimum display time
+  const firstSet = [0, 1, 2, 3];
+  const secondSet = [4, 5, 6, 7].filter(i => i < processedItems.length);
+
+  while (secondSet.length < 4 && processedItems.length > 0) {
+    secondSet.push(secondSet.length % processedItems.length);
+  }
+
   const processTransitionQueue = () => {
     if (isProcessingQueue.current) return;
     
@@ -211,33 +214,21 @@ const IkeaBelt = () => {
       
       const nextIndex = transitionQueue.current.shift() as number;
       
-      // Update the visible index
       if (isMobile) {
         setVisibleMobileIndex(nextIndex);
       } else {
-        // For desktop, update the 4 visible items
-        const newVisibleItems = [
-          nextIndex,
-          (nextIndex + 1) % processedItems.length,
-          (nextIndex + 2) % processedItems.length,
-          (nextIndex + 3) % processedItems.length
-        ];
-        setVisibleDesktopItems(newVisibleItems);
+        setDesktopSetIndex(desktopSetIndex === 0 ? 1 : 0);
         setFocusedIndex(nextIndex);
       }
       
-      // Provide haptic feedback
       triggerHaptic();
       
-      // Update the last transition time
       lastTransitionTime.current = Date.now();
       
-      // Wait for minimum display time before processing the next item
       setTimeout(() => {
         isTransitioning.current = false;
         isProcessingQueue.current = false;
         
-        // Process the next item in the queue if available
         if (transitionQueue.current.length > 0) {
           processTransitionQueue();
         }
@@ -245,20 +236,22 @@ const IkeaBelt = () => {
     }
   };
 
-  // Queue a transition to a specific index
   const queueTransition = (index: number) => {
-    // Prevent adding duplicate consecutive transitions
-    if (transitionQueue.current.length > 0) {
-      const lastQueuedIndex = transitionQueue.current[transitionQueue.current.length - 1];
-      if (lastQueuedIndex === index) return;
-    } else if ((isMobile ? visibleMobileIndex : focusedIndex) === index) {
-      return;
+    if (!isMobile) {
+      if (transitionQueue.current.length > 0) return;
+      
+      transitionQueue.current.push(index);
+    } else {
+      if (transitionQueue.current.length > 0) {
+        const lastQueuedIndex = transitionQueue.current[transitionQueue.current.length - 1];
+        if (lastQueuedIndex === index) return;
+      } else if (visibleMobileIndex === index) {
+        return;
+      }
+      
+      transitionQueue.current.push(index);
     }
     
-    // Add the transition to the queue
-    transitionQueue.current.push(index);
-    
-    // Start processing the queue if not already processing
     processTransitionQueue();
   };
 
@@ -276,15 +269,12 @@ const IkeaBelt = () => {
   }, []);
 
   useEffect(() => {
-    // Apply scroll-based transitions to both mobile and desktop
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
       const direction = currentScrollY > lastScrollY.current ? 'down' : 'up';
       const scrollDelta = Math.abs(currentScrollY - lastScrollY.current);
       
-      // Only process if there's a meaningful scroll
       if (scrollDelta > 5) {
-        // Update or reset scroll accumulator based on direction change
         if (direction === scrollDirection.current) {
           scrollAccumulator.current += scrollDelta;
         } else {
@@ -292,24 +282,23 @@ const IkeaBelt = () => {
           scrollAccumulator.current = scrollDelta;
         }
         
-        // Check if we've scrolled enough to trigger item changes
         if (scrollAccumulator.current >= scrollThreshold) {
-          // Calculate how many items to move
           const itemsToMove = Math.floor(scrollAccumulator.current / scrollThreshold);
           scrollAccumulator.current = scrollAccumulator.current % scrollThreshold;
           
-          // Determine the new index based on direction
-          let currentIndex = isMobile ? visibleMobileIndex : (focusedIndex || 0);
+          let currentIndex = isMobile ? visibleMobileIndex : 0;
           
-          // Process multiple transitions if needed
           for (let i = 0; i < itemsToMove; i++) {
-            if (direction === 'down') {
-              currentIndex = Math.min(currentIndex + 1, processedItems.length - 1);
+            if (isMobile) {
+              if (direction === 'down') {
+                currentIndex = Math.min(currentIndex + 1, processedItems.length - 1);
+              } else {
+                currentIndex = Math.max(currentIndex - 1, 0);
+              }
             } else {
-              currentIndex = Math.max(currentIndex - 1, 0);
+              currentIndex = desktopSetIndex === 0 ? 1 : 0;
             }
             
-            // Queue this transition
             queueTransition(currentIndex);
           }
         }
@@ -326,7 +315,7 @@ const IkeaBelt = () => {
     return () => {
       window.removeEventListener('scroll', handleScroll);
     };
-  }, [isMobile, visibleMobileIndex, focusedIndex, triggerHaptic]);
+  }, [isMobile, visibleMobileIndex, desktopSetIndex, triggerHaptic]);
 
   useEffect(() => {
     if (!isMobile || !beltRef.current) return;
@@ -350,7 +339,7 @@ const IkeaBelt = () => {
         const leftmostItem = visibleEntries[0];
         const index = Number(leftmostItem.target.getAttribute('data-index'));
         
-        if ((isMobile ? visibleMobileIndex : (focusedIndex || 0)) !== index) {
+        if (visibleMobileIndex !== index) {
           queueTransition(index);
         }
       }
@@ -363,7 +352,9 @@ const IkeaBelt = () => {
     });
     
     return () => observer.disconnect();
-  }, [isMobile, visibleMobileIndex, focusedIndex, triggerHaptic]);
+  }, [isMobile, visibleMobileIndex, triggerHaptic]);
+
+  const currentDesktopSet = desktopSetIndex === 0 ? firstSet : secondSet;
 
   return (
     <div className="py-8">
@@ -416,47 +407,99 @@ const IkeaBelt = () => {
           </div>
         ) : (
           <div className="relative px-4">
-            <div className="grid grid-cols-4 gap-4">
-              {visibleDesktopItems.map((itemIndex, gridIndex) => {
-                const item = processedItems[itemIndex];
-                return (
-                  <div 
-                    key={`${item.id}-${gridIndex}`}
-                    className={cn(
-                      "transition-all duration-500",
-                      "transform-gpu"
-                    )}
-                  >
-                    <AspectRatio ratio={3 / 2.5} className="overflow-hidden">
-                      <Card
+            <div className="relative overflow-hidden">
+              <div 
+                className={cn(
+                  "grid grid-cols-4 gap-4 transition-all duration-500",
+                )}
+              >
+                <div className={cn(
+                  "grid grid-cols-4 gap-4 absolute inset-0 w-full transition-all duration-500",
+                  desktopSetIndex === 0 
+                    ? "opacity-100 z-10 translate-y-0" 
+                    : "opacity-0 z-0 -translate-y-8"
+                )}>
+                  {firstSet.map((itemIndex, gridIndex) => {
+                    if (itemIndex >= processedItems.length) return null;
+                    const item = processedItems[itemIndex];
+                    return (
+                      <div 
+                        key={`${item.id}-${gridIndex}`}
                         className={cn(
-                          "h-full w-full overflow-hidden border-0 shadow-md",
                           "transition-all duration-200",
-                          focusedIndex === itemIndex && "scale-[1.02] shadow-lg",
-                          "!rounded-none"
+                          "transform-gpu"
                         )}
-                        style={{ borderRadius: 0 }}
                       >
-                        <ContentCard item={item} isFocused={focusedIndex === itemIndex} />
-                      </Card>
-                    </AspectRatio>
-                  </div>
-                );
-              })}
+                        <AspectRatio ratio={3 / 2.5} className="overflow-hidden">
+                          <Card
+                            className={cn(
+                              "h-full w-full overflow-hidden border-0 shadow-md",
+                              "transition-all duration-200",
+                              "!rounded-none"
+                            )}
+                            style={{ borderRadius: 0 }}
+                          >
+                            <ContentCard item={item} isFocused={false} />
+                          </Card>
+                        </AspectRatio>
+                      </div>
+                    );
+                  })}
+                </div>
+
+                <div className={cn(
+                  "grid grid-cols-4 gap-4 absolute inset-0 w-full transition-all duration-500",
+                  desktopSetIndex === 1
+                    ? "opacity-100 z-10 translate-y-0" 
+                    : "opacity-0 z-0 translate-y-8"
+                )}>
+                  {secondSet.map((itemIndex, gridIndex) => {
+                    if (itemIndex >= processedItems.length) return null;
+                    const item = processedItems[itemIndex];
+                    return (
+                      <div 
+                        key={`${item.id}-${gridIndex}`}
+                        className={cn(
+                          "transition-all duration-200",
+                          "transform-gpu"
+                        )}
+                      >
+                        <AspectRatio ratio={3 / 2.5} className="overflow-hidden">
+                          <Card
+                            className={cn(
+                              "h-full w-full overflow-hidden border-0 shadow-md",
+                              "transition-all duration-200",
+                              "!rounded-none"
+                            )}
+                            style={{ borderRadius: 0 }}
+                          >
+                            <ContentCard item={item} isFocused={false} />
+                          </Card>
+                        </AspectRatio>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
             </div>
             
             <div className="flex justify-center mt-4 gap-1">
-              {processedItems.map((_, index) => (
-                <div 
-                  key={index}
-                  className={cn(
-                    "w-2 h-2 rounded-full transition-all duration-300",
-                    visibleDesktopItems.includes(index)
-                      ? "bg-primary scale-125" 
-                      : "bg-primary/40"
-                  )}
-                />
-              ))}
+              <div 
+                className={cn(
+                  "w-2 h-2 rounded-full transition-all duration-300",
+                  desktopSetIndex === 0 
+                    ? "bg-primary scale-125" 
+                    : "bg-primary/40"
+                )}
+              />
+              <div 
+                className={cn(
+                  "w-2 h-2 rounded-full transition-all duration-300",
+                  desktopSetIndex === 1 
+                    ? "bg-primary scale-125" 
+                    : "bg-primary/40"
+                )}
+              />
             </div>
           </div>
         )}
