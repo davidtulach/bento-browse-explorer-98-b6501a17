@@ -185,6 +185,10 @@ const IkeaBelt = () => {
   const visibleCardPercentage = isMobile ? 0.85 : 1;
   const mobileCardWidth = cardWidth * visibleCardPercentage;
 
+  // The aspect ratio for regular and ad cards
+  const standardCardHeight = 500;  
+  const adStackCardHeight = 600; // 3:2.5 aspect ratio maintained
+
   useEffect(() => {
     weeklyOffers.items.forEach(item => {
       if (item.isAdStack) {
@@ -254,13 +258,15 @@ const IkeaBelt = () => {
         </div>
         
         {isMobile ? (
-          // Mobile view: vertical column layout
+          // Mobile view: vertical column layout with edge-to-edge design
           <div className="flex flex-col w-full">
             {weeklyOffers.items.map((item, index) => (
               <div 
                 key={item.id}
                 className="w-full"
-                style={{ height: item.isAdStack ? '400px' : '500px' }}
+                style={{ 
+                  height: item.isAdStack ? adStackCardHeight : standardCardHeight
+                }}
               >
                 {item.isAdStack ? (
                   <StackedAdCard item={item} isFocused={false} />
@@ -296,7 +302,7 @@ const IkeaBelt = () => {
                   style={{
                     borderRadius: 0,
                     width: '350px',
-                    height: '500px'
+                    height: item.isAdStack ? '600px' : '500px'
                   }}
                 >
                   {item.isAdStack ? (
