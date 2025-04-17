@@ -1,4 +1,3 @@
-
 import { useRef, useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import { useHapticFeedback } from '@/hooks/use-haptic';
@@ -219,11 +218,10 @@ const IkeaBelt = () => {
         setVisibleMobileIndex(prev => Math.max(prev - 1, 0));
       }
     } else {
-      // For desktop, correctly handle both directions
       if (direction === 'down') {
-        setDesktopSetIndex(1); // Move to second set when scrolling down
+        setDesktopSetIndex(1);
       } else {
-        setDesktopSetIndex(0); // Move to first set when scrolling up
+        setDesktopSetIndex(0);
       }
     }
     
@@ -267,10 +265,8 @@ const IkeaBelt = () => {
       const scrollDelta = Math.abs(currentScrollY - lastScrollY.current);
       
       if (scrollDelta > 5) {
-        // Determine scroll direction
         const direction = currentScrollY > lastScrollY.current ? 'down' : 'up';
         
-        // Reset accumulator when direction changes
         if (direction !== scrollDirection.current) {
           scrollDirection.current = direction;
           scrollAccumulator.current = 0;
@@ -278,7 +274,6 @@ const IkeaBelt = () => {
         
         scrollAccumulator.current += scrollDelta;
         
-        // Trigger transition when threshold is reached
         if (scrollAccumulator.current >= scrollThreshold) {
           scrollAccumulator.current = 0;
           triggerTransition(direction);
@@ -418,7 +413,7 @@ const IkeaBelt = () => {
                   {firstSet.map((item, gridIndex) => (
                     <div 
                       key={`first-${item.id}-${gridIndex}`}
-                      className="transition-all duration-500 transform-gpu"
+                      className="transition-all duration-500 transform-gpu min-w-[300px] min-h-[250px]"
                     >
                       <AspectRatio ratio={3 / 2.5} className="overflow-hidden" maxWidth={300}>
                         <Card
@@ -448,7 +443,7 @@ const IkeaBelt = () => {
                   {secondSet.map((item, gridIndex) => (
                     <div 
                       key={`second-${item.id}-${gridIndex}`}
-                      className="transition-all duration-500 transform-gpu"
+                      className="transition-all duration-500 transform-gpu min-w-[300px] min-h-[250px]"
                     >
                       <AspectRatio ratio={3 / 2.5} className="overflow-hidden" maxWidth={300}>
                         <Card
