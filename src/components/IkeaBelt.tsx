@@ -188,43 +188,69 @@ const IkeaBelt = () => {
   // Process the belt items
   const processedItems = processBeltItems(weeklyOffers);
   
-  const scrollThreshold = 150;
+  const scrollThreshold = 150; // Pixels to scroll before triggering a transition
   const lastScrollY = useRef<number>(0);
   const scrollDirection = useRef<'up' | 'down'>('down');
   const scrollAccumulator = useRef<number>(0);
   
+  // Timing and transition queue management
   const lastTransitionTime = useRef<number>(Date.now());
-  const minimumDisplayTime = 1000;
+  const minimumDisplayTime = 1000; // 1 second minimum display time
   const transitionQueue = useRef<number[]>([]);
   const isTransitioning = useRef<boolean>(false);
+  const isProcessingQueue = useRef<boolean>(false);
 
+  // Process the transition queue with guaranteed minimum display time
   const processTransitionQueue = () => {
+    if (isProcessingQueue.current) return;
+    
     if (transitionQueue.current.length > 0 && !isTransitioning.current) {
-      const currentTime = Date.now();
-      const timeElapsed = currentTime - lastTransitionTime.current;
+      isProcessingQueue.current = true;
+      isTransitioning.current = true;
       
-      if (timeElapsed >= minimumDisplayTime) {
-        isTransitioning.current = true;
-        
-        const nextIndex = transitionQueue.current.shift();
-        
-        if (nextIndex !== undefined) {
-          if (isMobile) {
-            setVisibleMobileIndex(nextIndex);
-          } else {
-            setFocusedIndex(nextIndex);
-          }
-          
-          triggerHaptic();
-          lastTransitionTime.current = currentTime;
-          
-          setTimeout(() => {
-            isTransitioning.current = false;
-            processTransitionQueue();
-          }, minimumDisplayTime);
-        }
+      const nextIndex = transitionQueue.current.shift() as number;
+      
+      // Update the visible index
+      if (isMobile) {
+        setVisibleMobileIndex(nextIndex);
+      } else {
+        setFocusedIndex(nextIndex);
       }
+      
+      // Provide haptic feedback
+      triggerHaptic();
+      
+      // Update the last transition time
+      lastTransitionTime.current = Date.now();
+      
+      // Wait for minimum display time before processing the next item
+      setTimeout(() => {
+        isTransitioning.current = false;
+        isProcessingQueue.current = false;
+        
+        // Process the next item in the queue if available
+        if (transitionQueue.current.length > 0) {
+          processTransitionQueue();
+        }
+      }, minimumDisplayTime);
     }
+  };
+
+  // Queue a transition to a specific index
+  const queueTransition = (index: number) => {
+    // Prevent adding duplicate consecutive transitions
+    if (transitionQueue.current.length > 0) {
+      const lastQueuedIndex = transitionQueue.current[transitionQueue.current.length - 1];
+      if (lastQueuedIndex === index) return;
+    } else if ((isMobile ? visibleMobileIndex : focusedIndex) === index) {
+      return;
+    }
+    
+    // Add the transition to the queue
+    transitionQueue.current.push(index);
+    
+    // Start processing the queue if not already processing
+    processTransitionQueue();
   };
 
   useEffect(() => {
@@ -245,12 +271,12 @@ const IkeaBelt = () => {
     
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
-      
       const direction = currentScrollY > lastScrollY.current ? 'down' : 'up';
-      
       const scrollDelta = Math.abs(currentScrollY - lastScrollY.current);
       
+      // Only process if there's a meaningful scroll
       if (scrollDelta > 5) {
+        // Update or reset scroll accumulator based on direction change
         if (direction === scrollDirection.current) {
           scrollAccumulator.current += scrollDelta;
         } else {
@@ -258,24 +284,25 @@ const IkeaBelt = () => {
           scrollAccumulator.current = scrollDelta;
         }
         
-        const currentTime = Date.now();
-        const timeElapsed = currentTime - lastTransitionTime.current;
-        
+        // Check if we've scrolled enough to trigger item changes
         if (scrollAccumulator.current >= scrollThreshold) {
+          // Calculate how many items to move
           const itemsToMove = Math.floor(scrollAccumulator.current / scrollThreshold);
+          scrollAccumulator.current = scrollAccumulator.current % scrollThreshold;
           
-          let newIndex = visibleMobileIndex;
-          if (direction === 'down') {
-            newIndex = Math.min(visibleMobileIndex + itemsToMove, processedItems.length - 1);
-          } else {
-            newIndex = Math.max(visibleMobileIndex - itemsToMove, 0);
-          }
+          // Determine the new index based on direction
+          let currentIndex = isMobile ? visibleMobileIndex : (focusedIndex || 0);
           
-          if (newIndex !== visibleMobileIndex) {
-            transitionQueue.current.push(newIndex);
-            processTransitionQueue();
+          // Process multiple transitions if needed
+          for (let i = 0; i < itemsToMove; i++) {
+            if (direction === 'down') {
+              currentIndex = Math.min(currentIndex + 1, processedItems.length - 1);
+            } else {
+              currentIndex = Math.max(currentIndex - 1, 0);
+            }
             
-            scrollAccumulator.current = scrollAccumulator.current % scrollThreshold;
+            // Queue this transition
+            queueTransition(currentIndex);
           }
         }
         
@@ -291,7 +318,7 @@ const IkeaBelt = () => {
     return () => {
       window.removeEventListener('scroll', handleScroll);
     };
-  }, [isMobile, visibleMobileIndex, triggerHaptic, processedItems.length]);
+  }, [isMobile, visibleMobileIndex, focusedIndex, triggerHaptic]);
 
   useEffect(() => {
     if (!isMobile || !beltRef.current) return;
@@ -315,18 +342,8 @@ const IkeaBelt = () => {
         const leftmostItem = visibleEntries[0];
         const index = Number(leftmostItem.target.getAttribute('data-index'));
         
-        const currentTime = Date.now();
-        const timeElapsed = currentTime - lastTransitionTime.current;
-        
-        if (focusedIndex !== index) {
-          transitionQueue.current.push(index);
-          processTransitionQueue();
-          
-          const now = Date.now();
-          if (now - lastHapticTime.current > 150) {
-            triggerHaptic();
-            lastHapticTime.current = now;
-          }
+        if ((isMobile ? visibleMobileIndex : (focusedIndex || 0)) !== index) {
+          queueTransition(index);
         }
       }
     };
@@ -338,7 +355,7 @@ const IkeaBelt = () => {
     });
     
     return () => observer.disconnect();
-  }, [isMobile, focusedIndex, triggerHaptic]);
+  }, [isMobile, visibleMobileIndex, focusedIndex, triggerHaptic]);
 
   return (
     <div className="py-8">
