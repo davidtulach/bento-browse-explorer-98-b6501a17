@@ -1,3 +1,4 @@
+
 import { useRef, useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import { useHapticFeedback } from '@/hooks/use-haptic';
@@ -418,65 +419,68 @@ const IkeaBelt = () => {
           </div>
         ) : (
           <div className="relative px-4">
-            <div className="relative overflow-hidden" style={{ height: '320px' }}>
-              <div 
-                className={cn(
-                  "absolute inset-0 grid grid-cols-4 gap-4 transition-all duration-500 transform-gpu will-change-transform",
-                )}
-                style={{
-                  transformStyle: 'preserve-3d',
-                  transform: desktopSetIndex === 0 
-                    ? 'translate3d(0, 0, 0)' 
-                    : 'translate3d(0, -100%, 0)',
-                  opacity: 1,
-                  zIndex: 10
-                }}
-              >
-                {firstSet.map((item, gridIndex) => (
-                  <div 
-                    key={`first-${item.id}-${gridIndex}`}
-                    className="transition-all duration-500 transform-gpu"
-                  >
-                    <AspectRatio ratio={3 / 2.5} className="overflow-hidden">
-                      <Card
-                        className="h-full w-full overflow-hidden border-0 shadow-md transition-all duration-200 !rounded-none"
-                        style={{ borderRadius: 0 }}
-                      >
-                        <ContentCard item={item} isFocused={false} />
-                      </Card>
-                    </AspectRatio>
-                  </div>
-                ))}
-              </div>
+            <div className="relative overflow-hidden perspective-1000" style={{ height: '320px' }}>
+              {/* Updated desktop view with container transform animation */}
+              <div className="h-full w-full relative">
+                <div 
+                  className={cn(
+                    "absolute inset-0 grid grid-cols-4 gap-4 transition-all duration-500 transform-gpu will-change-transform",
+                  )}
+                  style={{
+                    transformStyle: 'preserve-3d',
+                    transform: desktopSetIndex === 0 
+                      ? 'translate3d(0, 0, 0) scale(1)' 
+                      : 'translate3d(0, -30%, 0) scale(0.9)',
+                    opacity: desktopSetIndex === 0 ? 1 : 0,
+                    zIndex: desktopSetIndex === 0 ? 10 : 5
+                  }}
+                >
+                  {firstSet.map((item, gridIndex) => (
+                    <div 
+                      key={`first-${item.id}-${gridIndex}`}
+                      className="transition-all duration-500 transform-gpu"
+                    >
+                      <AspectRatio ratio={3 / 2.5} className="overflow-hidden">
+                        <Card
+                          className="h-full w-full overflow-hidden border-0 shadow-md transition-all duration-200 !rounded-none"
+                          style={{ borderRadius: 0 }}
+                        >
+                          <ContentCard item={item} isFocused={false} />
+                        </Card>
+                      </AspectRatio>
+                    </div>
+                  ))}
+                </div>
 
-              <div 
-                className={cn(
-                  "absolute inset-0 grid grid-cols-4 gap-4 transition-all duration-500 transform-gpu will-change-transform",
-                )}
-                style={{
-                  transformStyle: 'preserve-3d',
-                  transform: desktopSetIndex === 1
-                    ? 'translate3d(0, 0, 0)' 
-                    : 'translate3d(0, 100%, 0)',
-                  opacity: 1,
-                  zIndex: desktopSetIndex === 1 ? 10 : 5
-                }}
-              >
-                {secondSet.map((item, gridIndex) => (
-                  <div 
-                    key={`second-${item.id}-${gridIndex}`}
-                    className="transition-all duration-500 transform-gpu"
-                  >
-                    <AspectRatio ratio={3 / 2.5} className="overflow-hidden">
-                      <Card
-                        className="h-full w-full overflow-hidden border-0 shadow-md transition-all duration-200 !rounded-none"
-                        style={{ borderRadius: 0 }}
-                      >
-                        <ContentCard item={item} isFocused={false} />
-                      </Card>
-                    </AspectRatio>
-                  </div>
-                ))}
+                <div 
+                  className={cn(
+                    "absolute inset-0 grid grid-cols-4 gap-4 transition-all duration-500 transform-gpu will-change-transform",
+                  )}
+                  style={{
+                    transformStyle: 'preserve-3d',
+                    transform: desktopSetIndex === 1
+                      ? 'translate3d(0, 0, 0) scale(1)' 
+                      : 'translate3d(0, 30%, 0) scale(0.9)',
+                    opacity: desktopSetIndex === 1 ? 1 : 0,
+                    zIndex: desktopSetIndex === 1 ? 10 : 5
+                  }}
+                >
+                  {secondSet.map((item, gridIndex) => (
+                    <div 
+                      key={`second-${item.id}-${gridIndex}`}
+                      className="transition-all duration-500 transform-gpu"
+                    >
+                      <AspectRatio ratio={3 / 2.5} className="overflow-hidden">
+                        <Card
+                          className="h-full w-full overflow-hidden border-0 shadow-md transition-all duration-200 !rounded-none"
+                          style={{ borderRadius: 0 }}
+                        >
+                          <ContentCard item={item} isFocused={false} />
+                        </Card>
+                      </AspectRatio>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
             
