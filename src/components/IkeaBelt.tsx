@@ -1,3 +1,4 @@
+
 import { useRef, useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import { useHapticFeedback } from '@/hooks/use-haptic';
@@ -187,6 +188,10 @@ const IkeaBelt = () => {
   const scrollDirection = useRef<'up' | 'down'>('down');
   const scrollAccumulator = useRef<number>(0);
   
+  // New refs for handling minimum display time
+  const lastTransitionTime = useRef<number>(Date.now());
+  const minimumDisplayTime = 1000; // 1 second in milliseconds
+  
   const processedItems = processBeltItems(weeklyOffers);
 
   const aspectRatio = 3 / 2.5;
@@ -222,7 +227,11 @@ const IkeaBelt = () => {
           scrollAccumulator.current = scrollDelta;
         }
         
-        if (scrollAccumulator.current >= scrollThreshold) {
+        // Check if minimum display time has passed
+        const currentTime = Date.now();
+        const timeElapsed = currentTime - lastTransitionTime.current;
+        
+        if (scrollAccumulator.current >= scrollThreshold && timeElapsed >= minimumDisplayTime) {
           const itemsToMove = Math.floor(scrollAccumulator.current / scrollThreshold);
           
           let newIndex = visibleMobileIndex;
@@ -236,6 +245,9 @@ const IkeaBelt = () => {
             setVisibleMobileIndex(newIndex);
             triggerHaptic();
             
+            // Update the last transition time
+            lastTransitionTime.current = currentTime;
+            
             scrollAccumulator.current = scrollAccumulator.current % scrollThreshold;
           }
         }
@@ -247,6 +259,7 @@ const IkeaBelt = () => {
     window.addEventListener('scroll', handleScroll, { passive: true });
     
     lastScrollY.current = window.scrollY;
+    lastTransitionTime.current = Date.now(); // Initialize transition time
     
     return () => {
       window.removeEventListener('scroll', handleScroll);
@@ -275,8 +288,15 @@ const IkeaBelt = () => {
         const leftmostItem = visibleEntries[0];
         const index = Number(leftmostItem.target.getAttribute('data-index'));
         
-        if (focusedIndex !== index) {
+        // Check if minimum display time has passed
+        const currentTime = Date.now();
+        const timeElapsed = currentTime - lastTransitionTime.current;
+        
+        if (focusedIndex !== index && timeElapsed >= minimumDisplayTime) {
           setFocusedIndex(index);
+          
+          // Update the last transition time
+          lastTransitionTime.current = currentTime;
           
           const now = Date.now();
           if (now - lastHapticTime.current > 150) {
