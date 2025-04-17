@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useRef } from 'react';
 import { cn } from '@/lib/utils';
 import Header from '@/components/Header';
@@ -15,6 +16,7 @@ import { useHapticFeedback } from '@/hooks/use-haptic';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { useTheme } from '@/context/ThemeContext';
 import PillButtonsRow from '@/components/PillButtonsRow';
+import TopicsBelt from '@/components/TopicsBelt';
 
 const pillButtons = [
   { 
@@ -158,6 +160,12 @@ const Index = () => {
         </div>
         
         <PinterestGrid />
+        
+        <div className="py-2">
+          <div className="h-[1px] bg-gradient-to-r from-transparent via-gray-200 dark:via-gray-700 to-transparent" />
+        </div>
+        
+        <TopicsBelt />
         
         <div className="py-2">
           <div className="h-[1px] bg-gradient-to-r from-transparent via-gray-200 dark:via-gray-700 to-transparent" />
