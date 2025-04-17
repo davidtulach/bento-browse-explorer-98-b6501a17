@@ -1,4 +1,3 @@
-
 import { useRef, useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import { useHapticFeedback } from '@/hooks/use-haptic';
@@ -182,7 +181,7 @@ const IkeaBelt = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   
   // New refs for scroll tracking
-  const scrollThreshold = 60; // Changed from 40 to 60 pixels needed to change card
+  const scrollThreshold = 120; // Changed from 60 to 120 pixels needed to change card
   const lastScrollY = useRef<number>(0);
   const scrollDirection = useRef<'up' | 'down'>('down');
   const scrollAccumulator = useRef<number>(0);
