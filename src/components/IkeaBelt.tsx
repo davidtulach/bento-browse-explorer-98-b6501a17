@@ -1,3 +1,4 @@
+
 import { useRef, useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import { useHapticFeedback } from '@/hooks/use-haptic';
@@ -146,7 +147,7 @@ const ContentCard = ({
         </div>
       )}
       
-      {(item as any).sponsor && (
+      {(item as any).sponsor && item.isAd && (
         <div className="absolute top-4 right-4 z-10">
           <Badge variant="secondary" className="px-2 py-1 bg-white/90 text-primary shadow-sm backdrop-blur-sm">
             <span className="text-xs font-medium">Sponsored</span>
@@ -164,7 +165,7 @@ const ContentCard = ({
         <h3 className="text-white text-2xl font-extrabold leading-tight">
           {item.title}
         </h3>
-        {(item as any).sponsor && (
+        {(item as any).sponsor && item.isAd && (
           <p className="text-white/80 text-sm mt-1">
             By {(item as any).sponsor}
           </p>
