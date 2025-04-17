@@ -6,8 +6,6 @@ import { useIsMobile } from '@/hooks/use-mobile';
 import { ListTodo } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Card } from '@/components/ui/card';
-import Lottie from 'lottie-react';
-import shoppingAnimation from '@/lottie/shopping.json';
 
 interface AdItem {
   id: number;
@@ -181,8 +179,6 @@ const IkeaBelt = () => {
   const itemRefs = useRef<(HTMLDivElement | null)[]>([]);
   const lastHapticTime = useRef<number>(0);
   const [visibleMobileIndex, setVisibleMobileIndex] = useState(0);
-  const [isScrolling, setIsScrolling] = useState(false);
-  const observerRef = useRef<IntersectionObserver | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   
   // New refs for scroll tracking
@@ -223,7 +219,6 @@ const IkeaBelt = () => {
       
       // Determine scroll direction
       const direction = currentScrollY > lastScrollY.current ? 'down' : 'up';
-      scrollDirection.current = direction;
       
       // Calculate scroll delta since last check
       const scrollDelta = Math.abs(currentScrollY - lastScrollY.current);
@@ -235,6 +230,7 @@ const IkeaBelt = () => {
           scrollAccumulator.current += scrollDelta;
         } else {
           // Reset accumulator when direction changes
+          scrollDirection.current = direction;
           scrollAccumulator.current = scrollDelta;
         }
         
@@ -256,12 +252,8 @@ const IkeaBelt = () => {
             setVisibleMobileIndex(newIndex);
             triggerHaptic();
             
-            // Show animation feedback
-            setIsScrolling(true);
-            setTimeout(() => setIsScrolling(false), 300);
-            
             // Reset accumulator after changing content
-            scrollAccumulator.current = 0;
+            scrollAccumulator.current = scrollAccumulator.current % scrollThreshold;
           }
         }
         
@@ -345,8 +337,9 @@ const IkeaBelt = () => {
                 key={item.id}
                 className={cn(
                   "absolute inset-0 w-full transition-all duration-300",
-                  visibleMobileIndex === index ? "opacity-100 z-10 translate-x-0" : 
-                    index < visibleMobileIndex ? "opacity-0 -translate-x-full z-0" : "opacity-0 translate-x-full z-0"
+                  visibleMobileIndex === index 
+                    ? "opacity-100 z-10 scale-100" 
+                    : "opacity-0 z-0 scale-95"
                 )}
               >
                 {item.isAdStack ? (
@@ -356,15 +349,6 @@ const IkeaBelt = () => {
                 )}
               </div>
             ))}
-            
-            {/* Loading indicator during active scrolling */}
-            {isScrolling && (
-              <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-20">
-                <div className="w-12 h-12">
-                  <Lottie animationData={shoppingAnimation} loop={true} />
-                </div>
-              </div>
-            )}
             
             {/* Scroll indicator */}
             <div className="absolute bottom-4 right-4 flex gap-1">
