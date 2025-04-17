@@ -374,19 +374,27 @@ const IkeaBelt = () => {
             <AspectRatio ratio={3 / 2.5} className="w-full">
               <div 
                 ref={containerRef}
-                className="w-full h-full relative overflow-hidden"
+                className="w-full h-full relative overflow-hidden perspective-1000"
               >
                 {processedItems.map((item, index) => (
                   <div 
                     key={item.id}
                     className={cn(
-                      "absolute inset-0 w-full h-full transition-all duration-500",
+                      "absolute inset-0 w-full h-full transition-all duration-500 transform-gpu will-change-transform",
                       visibleMobileIndex === index 
-                        ? "opacity-100 z-10 translate-y-0" 
+                        ? "opacity-100 z-10 translate-3d-0" 
                         : index < visibleMobileIndex
-                          ? "opacity-0 z-0 -translate-y-full" 
-                          : "opacity-0 z-0 translate-y-full"
+                          ? "opacity-0 z-0 -translate-3d-y-30 scale-90" 
+                          : "opacity-0 z-0 translate-3d-y-30 scale-90"
                     )}
+                    style={{
+                      transformStyle: 'preserve-3d',
+                      transform: visibleMobileIndex === index 
+                        ? 'translate3d(0, 0, 0) scale(1)' 
+                        : index < visibleMobileIndex
+                          ? 'translate3d(0, -30%, 0) scale(0.9)'
+                          : 'translate3d(0, 30%, 0) scale(0.9)'
+                    }}
                   >
                     <ContentCard item={item} isFocused={false} />
                   </div>
@@ -413,16 +421,21 @@ const IkeaBelt = () => {
             <div className="relative overflow-hidden" style={{ height: '320px' }}>
               <div 
                 className={cn(
-                  "absolute inset-0 grid grid-cols-4 gap-4 transition-all duration-500",
-                  desktopSetIndex === 0 
-                    ? "opacity-100 z-10 translate-y-0" 
-                    : "opacity-0 z-0 -translate-y-full"
+                  "absolute inset-0 grid grid-cols-4 gap-4 transition-all duration-500 transform-gpu will-change-transform",
                 )}
+                style={{
+                  transformStyle: 'preserve-3d',
+                  transform: desktopSetIndex === 0 
+                    ? 'translate3d(0, 0, 0)' 
+                    : 'translate3d(0, -100%, 0)',
+                  opacity: 1,
+                  zIndex: 10
+                }}
               >
                 {firstSet.map((item, gridIndex) => (
                   <div 
                     key={`first-${item.id}-${gridIndex}`}
-                    className="transition-all duration-200 transform-gpu"
+                    className="transition-all duration-500 transform-gpu"
                   >
                     <AspectRatio ratio={3 / 2.5} className="overflow-hidden">
                       <Card
@@ -438,16 +451,21 @@ const IkeaBelt = () => {
 
               <div 
                 className={cn(
-                  "absolute inset-0 grid grid-cols-4 gap-4 transition-all duration-500",
-                  desktopSetIndex === 1
-                    ? "opacity-100 z-10 translate-y-0" 
-                    : "opacity-0 z-0 translate-y-full"
+                  "absolute inset-0 grid grid-cols-4 gap-4 transition-all duration-500 transform-gpu will-change-transform",
                 )}
+                style={{
+                  transformStyle: 'preserve-3d',
+                  transform: desktopSetIndex === 1
+                    ? 'translate3d(0, 0, 0)' 
+                    : 'translate3d(0, 100%, 0)',
+                  opacity: 1,
+                  zIndex: desktopSetIndex === 1 ? 10 : 5
+                }}
               >
                 {secondSet.map((item, gridIndex) => (
                   <div 
                     key={`second-${item.id}-${gridIndex}`}
-                    className="transition-all duration-200 transform-gpu"
+                    className="transition-all duration-500 transform-gpu"
                   >
                     <AspectRatio ratio={3 / 2.5} className="overflow-hidden">
                       <Card

@@ -264,11 +264,14 @@ const PriceHitsBelt = () => {
               ref={el => productItemRefs.current[index] = el}
               data-index={index}
               className={cn(
-                "flex-shrink-0 snap-start overflow-hidden transition-all relative",
-                focusedProductIndex === index && "scale-105 shadow-md rounded-lg",
+                "flex-shrink-0 snap-start overflow-hidden transition-all relative transform-gpu will-change-transform",
+                focusedProductIndex === index ? "scale-105 shadow-md rounded-lg" : "scale-100",
                 "style-width-150px"
               )}
-              style={{ width: '150px' }}
+              style={{ 
+                width: '150px', 
+                transition: 'all 300ms cubic-bezier(0.23, 1, 0.32, 1)'
+              }}
             >
               <div className="relative">
                 <AnimatedImage
@@ -276,8 +279,8 @@ const PriceHitsBelt = () => {
                   alt={product.title}
                   aspectRatio="aspect-square"
                   className={cn(
-                    "w-full rounded-lg transition-all duration-300",
-                    focusedProductIndex === index && "border-2 border-primary/20"
+                    "w-full rounded-lg transition-all duration-300 transform-gpu will-change-transform",
+                    focusedProductIndex === index ? "border-2 border-primary/20" : ""
                   )}
                   objectFit="cover"
                 />
@@ -330,7 +333,7 @@ const PriceHitsBelt = () => {
                   {cart[product.id] ? (
                     <div 
                       className={cn(
-                        "flex items-center justify-center bg-primary text-white rounded-full transition-all duration-300 ease-in-out transform",
+                        "flex items-center justify-center bg-primary text-white rounded-full transition-all duration-300 ease-in-out transform-gpu will-change-transform",
                         expandedItems[product.id] 
                           ? "w-[80px] h-8 scale-100" 
                           : "w-8 h-8 scale-95"
@@ -366,7 +369,7 @@ const PriceHitsBelt = () => {
                     </div>
                   ) : (
                     <button 
-                      className="w-8 h-8 flex items-center justify-center bg-primary text-white rounded-full hover:bg-primary/90 transition-all duration-200 transform hover:scale-110"
+                      className="w-8 h-8 flex items-center justify-center bg-primary text-white rounded-full hover:bg-primary/90 transition-all duration-200 transform hover:scale-110 transform-gpu will-change-transform"
                       onClick={() => handleAddToCart(product.id, product.title)}
                       aria-label="Add to cart"
                     >
