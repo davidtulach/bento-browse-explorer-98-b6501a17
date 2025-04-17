@@ -183,6 +183,7 @@ const IkeaBelt = () => {
   const itemRefs = useRef<(HTMLDivElement | null)[]>([]);
   const lastHapticTime = useRef<number>(0);
   const [visibleMobileIndex, setVisibleMobileIndex] = useState(0);
+  const [visibleDesktopItems, setVisibleDesktopItems] = useState<number[]>([0, 1, 2, 3]);
   const containerRef = useRef<HTMLDivElement>(null);
   
   // Process the belt items
@@ -214,6 +215,14 @@ const IkeaBelt = () => {
       if (isMobile) {
         setVisibleMobileIndex(nextIndex);
       } else {
+        // For desktop, update the 4 visible items
+        const newVisibleItems = [
+          nextIndex,
+          (nextIndex + 1) % processedItems.length,
+          (nextIndex + 2) % processedItems.length,
+          (nextIndex + 3) % processedItems.length
+        ];
+        setVisibleDesktopItems(newVisibleItems);
         setFocusedIndex(nextIndex);
       }
       
@@ -267,8 +276,7 @@ const IkeaBelt = () => {
   }, []);
 
   useEffect(() => {
-    if (!isMobile) return;
-    
+    // Apply scroll-based transitions to both mobile and desktop
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
       const direction = currentScrollY > lastScrollY.current ? 'down' : 'up';
@@ -408,36 +416,46 @@ const IkeaBelt = () => {
           </div>
         ) : (
           <div className="relative px-4">
-            <div 
-              ref={beltRef} 
-              className="flex overflow-x-auto snap-x snap-mandatory gap-4 pb-6 scrollbar-hide" 
-              style={{
-                scrollbarWidth: 'none',
-                msOverflowStyle: 'none',
-                paddingRight: '16px'
-              }}
-            >
-              {processedItems.map((item, index) => (
+            <div className="grid grid-cols-4 gap-4">
+              {visibleDesktopItems.map((itemIndex, gridIndex) => {
+                const item = processedItems[itemIndex];
+                return (
+                  <div 
+                    key={`${item.id}-${gridIndex}`}
+                    className={cn(
+                      "transition-all duration-500",
+                      "transform-gpu"
+                    )}
+                  >
+                    <AspectRatio ratio={3 / 2.5} className="overflow-hidden">
+                      <Card
+                        className={cn(
+                          "h-full w-full overflow-hidden border-0 shadow-md",
+                          "transition-all duration-200",
+                          focusedIndex === itemIndex && "scale-[1.02] shadow-lg",
+                          "!rounded-none"
+                        )}
+                        style={{ borderRadius: 0 }}
+                      >
+                        <ContentCard item={item} isFocused={focusedIndex === itemIndex} />
+                      </Card>
+                    </AspectRatio>
+                  </div>
+                );
+              })}
+            </div>
+            
+            <div className="flex justify-center mt-4 gap-1">
+              {processedItems.map((_, index) => (
                 <div 
-                  key={item.id}
-                  ref={el => itemRefs.current[index] = el}
-                  data-index={index}
-                  className="flex-shrink-0 snap-start w-[350px]"
-                >
-                  <AspectRatio ratio={3 / 2.5} className="overflow-hidden">
-                    <Card
-                      className={cn(
-                        "h-full w-full flex-shrink-0 snap-start overflow-hidden border-0 shadow-md",
-                        "transition-all duration-200",
-                        focusedIndex === index && "scale-[1.02] shadow-lg",
-                        "!rounded-none"
-                      )}
-                      style={{ borderRadius: 0 }}
-                    >
-                      <ContentCard item={item} isFocused={focusedIndex === index} />
-                    </Card>
-                  </AspectRatio>
-                </div>
+                  key={index}
+                  className={cn(
+                    "w-2 h-2 rounded-full transition-all duration-300",
+                    visibleDesktopItems.includes(index)
+                      ? "bg-primary scale-125" 
+                      : "bg-primary/40"
+                  )}
+                />
               ))}
             </div>
           </div>
