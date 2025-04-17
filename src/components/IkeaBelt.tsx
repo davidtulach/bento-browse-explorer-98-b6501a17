@@ -109,7 +109,6 @@ const ContentCard = ({
           alt={item.title} 
           className="w-full h-full object-cover" 
           loading="eager"
-          fetchPriority="high"
         />
       </div>
       
@@ -162,7 +161,6 @@ const StackedAdCard = ({
               alt={ad.title} 
               className="w-full h-full object-cover" 
               loading="eager"
-              fetchPriority="high"
             />
             
             <div className="absolute inset-0 bg-gradient-to-b from-black/10 to-black/70" />
@@ -180,6 +178,11 @@ const IkeaBelt = () => {
   const [focusedIndex, setFocusedIndex] = useState<number | null>(0);
   const itemRefs = useRef<(HTMLDivElement | null)[]>([]);
   const lastHapticTime = useRef<number>(0);
+  const [visibleMobileIndex, setVisibleMobileIndex] = useState(0);
+  const [isScrolling, setIsScrolling] = useState(false);
+  const observerRef = useRef<IntersectionObserver | null>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const scrollOffset = useRef(0);
 
   const cardWidth = 350;
   const visibleCardPercentage = isMobile ? 0.85 : 1;
@@ -206,6 +209,57 @@ const IkeaBelt = () => {
       }
     });
   }, []);
+
+  // Scroll-based content transition for mobile
+  useEffect(() => {
+    if (!isMobile || !containerRef.current) return;
+
+    const handleScroll = () => {
+      if (!containerRef.current) return;
+      
+      const rect = containerRef.current.getBoundingClientRect();
+      const viewportHeight = window.innerHeight;
+      
+      // Check if the container is in viewport
+      if (rect.top < viewportHeight && rect.bottom > 0) {
+        // Calculate scroll progress within the container
+        const containerVisible = Math.min(viewportHeight, rect.bottom) - Math.max(0, rect.top);
+        const containerVisiblePercentage = containerVisible / standardCardHeight;
+        
+        // Determine which item should be visible based on scroll position
+        const scrollY = window.scrollY;
+        const relativeScroll = scrollY - (scrollOffset.current || 0);
+        const itemIndex = Math.min(
+          Math.floor(relativeScroll / 60), // Every 60px of scroll, show next item
+          weeklyOffers.items.length - 1
+        );
+        
+        if (itemIndex !== visibleMobileIndex && itemIndex >= 0) {
+          setVisibleMobileIndex(itemIndex);
+          triggerHaptic();
+          setIsScrolling(true);
+          setTimeout(() => setIsScrolling(false), 300);
+        }
+      }
+    };
+
+    // Store initial offset
+    const updateOffset = () => {
+      if (containerRef.current) {
+        const rect = containerRef.current.getBoundingClientRect();
+        scrollOffset.current = window.scrollY - rect.top;
+      }
+    };
+    
+    updateOffset();
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    window.addEventListener('resize', updateOffset);
+    
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('resize', updateOffset);
+    };
+  }, [isMobile, visibleMobileIndex, triggerHaptic]);
 
   useEffect(() => {
     if (!isMobile || !beltRef.current) return;
@@ -258,15 +312,21 @@ const IkeaBelt = () => {
         </div>
         
         {isMobile ? (
-          // Mobile view: vertical column layout with edge-to-edge design
-          <div className="flex flex-col w-full">
+          // Mobile view: fixed aspect ratio card that changes on scroll
+          <div 
+            ref={containerRef}
+            className="w-full relative"
+            style={{ 
+              height: weeklyOffers.items[visibleMobileIndex]?.isAdStack ? adStackCardHeight : standardCardHeight
+            }}
+          >
             {weeklyOffers.items.map((item, index) => (
               <div 
                 key={item.id}
-                className="w-full"
-                style={{ 
-                  height: item.isAdStack ? adStackCardHeight : standardCardHeight
-                }}
+                className={cn(
+                  "absolute inset-0 w-full transition-opacity duration-300",
+                  visibleMobileIndex === index ? "opacity-100 z-10" : "opacity-0 z-0"
+                )}
               >
                 {item.isAdStack ? (
                   <StackedAdCard item={item} isFocused={false} />
@@ -275,6 +335,21 @@ const IkeaBelt = () => {
                 )}
               </div>
             ))}
+            
+            {/* Optional scroll indicator */}
+            <div className="absolute bottom-4 right-4 flex gap-1">
+              {weeklyOffers.items.map((_, index) => (
+                <div 
+                  key={index}
+                  className={cn(
+                    "w-2 h-2 rounded-full transition-all duration-300",
+                    visibleMobileIndex === index 
+                      ? "bg-white scale-125" 
+                      : "bg-white/40"
+                  )}
+                />
+              ))}
+            </div>
           </div>
         ) : (
           // Desktop view: horizontal scroll belt
