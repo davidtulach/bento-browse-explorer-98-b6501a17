@@ -198,11 +198,12 @@ const IkeaBelt = () => {
   const isTransitioning = useRef<boolean>(false);
   const isProcessingQueue = useRef<boolean>(false);
 
-  const firstSet = [0, 1, 2, 3];
-  const secondSet = [4, 5, 6, 7].filter(i => i < processedItems.length);
-
+  const firstSet = processedItems.slice(0, 4);
+  const secondSet = processedItems.slice(4);
+  
   while (secondSet.length < 4 && processedItems.length > 0) {
-    secondSet.push(secondSet.length % processedItems.length);
+    const indexToAdd = secondSet.length % processedItems.length;
+    secondSet.push(processedItems[indexToAdd]);
   }
 
   const processTransitionQueue = () => {
@@ -217,8 +218,7 @@ const IkeaBelt = () => {
       if (isMobile) {
         setVisibleMobileIndex(nextIndex);
       } else {
-        setDesktopSetIndex(desktopSetIndex === 0 ? 1 : 0);
-        setFocusedIndex(nextIndex);
+        setDesktopSetIndex(nextIndex > 0 ? 1 : 0);
       }
       
       triggerHaptic();
@@ -238,9 +238,14 @@ const IkeaBelt = () => {
 
   const queueTransition = (index: number) => {
     if (!isMobile) {
-      if (transitionQueue.current.length > 0) return;
+      const targetIndex = desktopSetIndex === 0 ? 1 : 0;
       
-      transitionQueue.current.push(index);
+      if (transitionQueue.current.length > 0) {
+        const lastQueuedIndex = transitionQueue.current[transitionQueue.current.length - 1];
+        if (lastQueuedIndex === targetIndex) return;
+      }
+      
+      transitionQueue.current.push(targetIndex);
     } else {
       if (transitionQueue.current.length > 0) {
         const lastQueuedIndex = transitionQueue.current[transitionQueue.current.length - 1];
@@ -286,7 +291,7 @@ const IkeaBelt = () => {
           const itemsToMove = Math.floor(scrollAccumulator.current / scrollThreshold);
           scrollAccumulator.current = scrollAccumulator.current % scrollThreshold;
           
-          let currentIndex = isMobile ? visibleMobileIndex : 0;
+          let currentIndex = isMobile ? visibleMobileIndex : desktopSetIndex;
           
           for (let i = 0; i < itemsToMove; i++) {
             if (isMobile) {
@@ -296,7 +301,7 @@ const IkeaBelt = () => {
                 currentIndex = Math.max(currentIndex - 1, 0);
               }
             } else {
-              currentIndex = desktopSetIndex === 0 ? 1 : 0;
+              currentIndex = currentIndex === 0 ? 1 : 0;
             }
             
             queueTransition(currentIndex);
@@ -354,8 +359,6 @@ const IkeaBelt = () => {
     return () => observer.disconnect();
   }, [isMobile, visibleMobileIndex, triggerHaptic]);
 
-  const currentDesktopSet = desktopSetIndex === 0 ? firstSet : secondSet;
-
   return (
     <div className="py-8">
       <div className="mb-8">
@@ -407,79 +410,55 @@ const IkeaBelt = () => {
           </div>
         ) : (
           <div className="relative px-4">
-            <div className="relative overflow-hidden">
+            <div className="relative overflow-hidden" style={{ height: '320px' }}>
               <div 
                 className={cn(
-                  "grid grid-cols-4 gap-4 transition-all duration-500",
-                )}
-              >
-                <div className={cn(
-                  "grid grid-cols-4 gap-4 absolute inset-0 w-full transition-all duration-500",
+                  "absolute inset-0 grid grid-cols-4 gap-4 transition-all duration-500",
                   desktopSetIndex === 0 
                     ? "opacity-100 z-10 translate-y-0" 
                     : "opacity-0 z-0 -translate-y-8"
-                )}>
-                  {firstSet.map((itemIndex, gridIndex) => {
-                    if (itemIndex >= processedItems.length) return null;
-                    const item = processedItems[itemIndex];
-                    return (
-                      <div 
-                        key={`${item.id}-${gridIndex}`}
-                        className={cn(
-                          "transition-all duration-200",
-                          "transform-gpu"
-                        )}
+                )}
+              >
+                {firstSet.map((item, gridIndex) => (
+                  <div 
+                    key={`first-${item.id}-${gridIndex}`}
+                    className="transition-all duration-200 transform-gpu"
+                  >
+                    <AspectRatio ratio={3 / 2.5} className="overflow-hidden">
+                      <Card
+                        className="h-full w-full overflow-hidden border-0 shadow-md transition-all duration-200 !rounded-none"
+                        style={{ borderRadius: 0 }}
                       >
-                        <AspectRatio ratio={3 / 2.5} className="overflow-hidden">
-                          <Card
-                            className={cn(
-                              "h-full w-full overflow-hidden border-0 shadow-md",
-                              "transition-all duration-200",
-                              "!rounded-none"
-                            )}
-                            style={{ borderRadius: 0 }}
-                          >
-                            <ContentCard item={item} isFocused={false} />
-                          </Card>
-                        </AspectRatio>
-                      </div>
-                    );
-                  })}
-                </div>
+                        <ContentCard item={item} isFocused={false} />
+                      </Card>
+                    </AspectRatio>
+                  </div>
+                ))}
+              </div>
 
-                <div className={cn(
-                  "grid grid-cols-4 gap-4 absolute inset-0 w-full transition-all duration-500",
+              <div 
+                className={cn(
+                  "absolute inset-0 grid grid-cols-4 gap-4 transition-all duration-500",
                   desktopSetIndex === 1
                     ? "opacity-100 z-10 translate-y-0" 
                     : "opacity-0 z-0 translate-y-8"
-                )}>
-                  {secondSet.map((itemIndex, gridIndex) => {
-                    if (itemIndex >= processedItems.length) return null;
-                    const item = processedItems[itemIndex];
-                    return (
-                      <div 
-                        key={`${item.id}-${gridIndex}`}
-                        className={cn(
-                          "transition-all duration-200",
-                          "transform-gpu"
-                        )}
+                )}
+              >
+                {secondSet.map((item, gridIndex) => (
+                  <div 
+                    key={`second-${item.id}-${gridIndex}`}
+                    className="transition-all duration-200 transform-gpu"
+                  >
+                    <AspectRatio ratio={3 / 2.5} className="overflow-hidden">
+                      <Card
+                        className="h-full w-full overflow-hidden border-0 shadow-md transition-all duration-200 !rounded-none"
+                        style={{ borderRadius: 0 }}
                       >
-                        <AspectRatio ratio={3 / 2.5} className="overflow-hidden">
-                          <Card
-                            className={cn(
-                              "h-full w-full overflow-hidden border-0 shadow-md",
-                              "transition-all duration-200",
-                              "!rounded-none"
-                            )}
-                            style={{ borderRadius: 0 }}
-                          >
-                            <ContentCard item={item} isFocused={false} />
-                          </Card>
-                        </AspectRatio>
-                      </div>
-                    );
-                  })}
-                </div>
+                        <ContentCard item={item} isFocused={false} />
+                      </Card>
+                    </AspectRatio>
+                  </div>
+                ))}
               </div>
             </div>
             
