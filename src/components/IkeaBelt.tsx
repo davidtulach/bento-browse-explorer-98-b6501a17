@@ -182,7 +182,7 @@ const IkeaBelt = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   
   // New refs for scroll tracking
-  const scrollThreshold = 40; // Pixels needed to change card
+  const scrollThreshold = 60; // Changed from 40 to 60 pixels needed to change card
   const lastScrollY = useRef<number>(0);
   const scrollDirection = useRef<'up' | 'down'>('down');
   const scrollAccumulator = useRef<number>(0);
