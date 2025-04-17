@@ -1,4 +1,3 @@
-
 import { useRef, useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import { useHapticFeedback } from '@/hooks/use-haptic';
@@ -138,7 +137,7 @@ const ContentCard = ({
         />
       </div>
       
-      {item.badge && (
+      {item.badge && !item.isAd && (
         <div className="absolute top-4 left-4 z-10">
           <Badge variant="secondary" className="px-2 py-1 bg-white/90 text-primary shadow-sm backdrop-blur-sm flex items-center gap-1.5">
             <ListTodo className="w-3.5 h-3.5" />
@@ -219,11 +218,10 @@ const IkeaBelt = () => {
         setVisibleMobileIndex(prev => Math.max(prev - 1, 0));
       }
     } else {
-      // For desktop, correctly handle both directions
       if (direction === 'down') {
-        setDesktopSetIndex(1); // Move to second set when scrolling down
+        setDesktopSetIndex(1);
       } else {
-        setDesktopSetIndex(0); // Move to first set when scrolling up
+        setDesktopSetIndex(0);
       }
     }
     
@@ -267,10 +265,8 @@ const IkeaBelt = () => {
       const scrollDelta = Math.abs(currentScrollY - lastScrollY.current);
       
       if (scrollDelta > 5) {
-        // Determine scroll direction
         const direction = currentScrollY > lastScrollY.current ? 'down' : 'up';
         
-        // Reset accumulator when direction changes
         if (direction !== scrollDirection.current) {
           scrollDirection.current = direction;
           scrollAccumulator.current = 0;
@@ -278,7 +274,6 @@ const IkeaBelt = () => {
         
         scrollAccumulator.current += scrollDelta;
         
-        // Trigger transition when threshold is reached
         if (scrollAccumulator.current >= scrollThreshold) {
           scrollAccumulator.current = 0;
           triggerTransition(direction);
