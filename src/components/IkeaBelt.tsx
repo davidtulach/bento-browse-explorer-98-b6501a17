@@ -6,6 +6,8 @@ import { useIsMobile } from '@/hooks/use-mobile';
 import { ListTodo } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Card } from '@/components/ui/card';
+import Lottie from 'lottie-react';
+import shoppingAnimation from '@/lottie/shopping.json';
 
 interface AdItem {
   id: number;
@@ -182,21 +184,18 @@ const IkeaBelt = () => {
   const [isScrolling, setIsScrolling] = useState(false);
   const observerRef = useRef<IntersectionObserver | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
-  const scrollStartRef = useRef(0);
-  const lastScrollPositionRef = useRef(0);
-  const scrollDirectionRef = useRef<'up' | 'down'>('down');
-
-  const cardWidth = 350;
-  const visibleCardPercentage = isMobile ? 0.85 : 1;
-  const mobileCardWidth = cardWidth * visibleCardPercentage;
+  
+  // New refs for scroll tracking
+  const scrollThreshold = 40; // Pixels needed to change card
+  const lastScrollY = useRef<number>(0);
+  const scrollDirection = useRef<'up' | 'down'>('down');
+  const scrollAccumulator = useRef<number>(0);
 
   // The aspect ratio for regular and ad cards
   const standardCardHeight = 500;  
   const adStackCardHeight = 600; // 3:2.5 aspect ratio maintained
-  
-  // Scroll increment needed to change the card (in pixels)
-  const scrollThreshold = 40;
 
+  // Preload images
   useEffect(() => {
     weeklyOffers.items.forEach(item => {
       if (item.isAdStack) {
@@ -215,84 +214,73 @@ const IkeaBelt = () => {
     });
   }, []);
 
-  // Scroll-based content transition for mobile
+  // Attach global scroll listener for mobile view
   useEffect(() => {
-    if (!isMobile || !containerRef.current) return;
-
-    // Initialize scroll position tracking
-    const initializeScrollTracking = () => {
-      if (containerRef.current) {
-        const rect = containerRef.current.getBoundingClientRect();
-        scrollStartRef.current = window.scrollY;
-        lastScrollPositionRef.current = window.scrollY;
-      }
-    };
-
-    initializeScrollTracking();
-
+    if (!isMobile) return;
+    
     const handleScroll = () => {
-      if (!containerRef.current) return;
+      const currentScrollY = window.scrollY;
       
-      const rect = containerRef.current.getBoundingClientRect();
-      const viewportHeight = window.innerHeight;
+      // Determine scroll direction
+      const direction = currentScrollY > lastScrollY.current ? 'down' : 'up';
+      scrollDirection.current = direction;
       
-      // Check if the container is in viewport
-      if (rect.top < viewportHeight && rect.bottom > 0) {
-        // Determine scroll direction
-        const currentScrollY = window.scrollY;
-        scrollDirectionRef.current = currentScrollY > lastScrollPositionRef.current ? 'down' : 'up';
+      // Calculate scroll delta since last check
+      const scrollDelta = Math.abs(currentScrollY - lastScrollY.current);
+      
+      // Only update if we've scrolled enough to register
+      if (scrollDelta > 5) {
+        // Accumulate scroll distance in the current direction
+        if (direction === scrollDirection.current) {
+          scrollAccumulator.current += scrollDelta;
+        } else {
+          // Reset accumulator when direction changes
+          scrollAccumulator.current = scrollDelta;
+        }
         
-        // Calculate relative scroll since last position check
-        const scrollDelta = Math.abs(currentScrollY - lastScrollPositionRef.current);
-        
-        // Only process if we've scrolled enough to trigger a change
-        if (scrollDelta >= scrollThreshold) {
-          // Calculate which content item should be visible
-          const relativeScrollDistance = currentScrollY - scrollStartRef.current;
-          const itemIndexCalculated = Math.floor(relativeScrollDistance / scrollThreshold);
+        // Check if we've scrolled enough to trigger a content change
+        if (scrollAccumulator.current >= scrollThreshold) {
+          // Calculate how many items to move
+          const itemsToMove = Math.floor(scrollAccumulator.current / scrollThreshold);
           
-          // Clamp the index to valid range and handle direction
-          let newIndex;
-          
-          if (scrollDirectionRef.current === 'down') {
-            newIndex = Math.min(
-              Math.max(0, itemIndexCalculated), 
-              weeklyOffers.items.length - 1
-            );
+          // Update visible index based on direction
+          let newIndex = visibleMobileIndex;
+          if (direction === 'down') {
+            newIndex = Math.min(visibleMobileIndex + itemsToMove, weeklyOffers.items.length - 1);
           } else {
-            // For upward scrolling, we want to go to the previous item
-            newIndex = Math.max(
-              0, 
-              visibleMobileIndex - 1
-            );
+            newIndex = Math.max(visibleMobileIndex - itemsToMove, 0);
           }
           
           // Only update if the index would change
           if (newIndex !== visibleMobileIndex) {
             setVisibleMobileIndex(newIndex);
             triggerHaptic();
+            
+            // Show animation feedback
             setIsScrolling(true);
             setTimeout(() => setIsScrolling(false), 300);
             
-            // Update last position for next scroll check
-            lastScrollPositionRef.current = currentScrollY;
+            // Reset accumulator after changing content
+            scrollAccumulator.current = 0;
           }
-        } else if (scrollDelta > 0) {
-          // Still update the last position even if we didn't change items
-          lastScrollPositionRef.current = currentScrollY;
         }
+        
+        // Update last scroll position
+        lastScrollY.current = currentScrollY;
       }
     };
     
     window.addEventListener('scroll', handleScroll, { passive: true });
-    window.addEventListener('resize', initializeScrollTracking);
+    
+    // Initialize starting position
+    lastScrollY.current = window.scrollY;
     
     return () => {
       window.removeEventListener('scroll', handleScroll);
-      window.removeEventListener('resize', initializeScrollTracking);
     };
   }, [isMobile, visibleMobileIndex, triggerHaptic]);
 
+  // Intersection Observer for desktop horizontal belt
   useEffect(() => {
     if (!isMobile || !beltRef.current) return;
     
@@ -347,7 +335,7 @@ const IkeaBelt = () => {
           // Mobile view: fixed aspect ratio card that changes on scroll
           <div 
             ref={containerRef}
-            className="w-full relative"
+            className="w-full relative overflow-hidden"
             style={{ 
               height: weeklyOffers.items[visibleMobileIndex]?.isAdStack ? adStackCardHeight : standardCardHeight
             }}
@@ -357,7 +345,8 @@ const IkeaBelt = () => {
                 key={item.id}
                 className={cn(
                   "absolute inset-0 w-full transition-all duration-300",
-                  visibleMobileIndex === index ? "opacity-100 z-10" : "opacity-0 z-0"
+                  visibleMobileIndex === index ? "opacity-100 z-10 translate-x-0" : 
+                    index < visibleMobileIndex ? "opacity-0 -translate-x-full z-0" : "opacity-0 translate-x-full z-0"
                 )}
               >
                 {item.isAdStack ? (
@@ -367,6 +356,15 @@ const IkeaBelt = () => {
                 )}
               </div>
             ))}
+            
+            {/* Loading indicator during active scrolling */}
+            {isScrolling && (
+              <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-20">
+                <div className="w-12 h-12">
+                  <Lottie animationData={shoppingAnimation} loop={true} />
+                </div>
+              </div>
+            )}
             
             {/* Scroll indicator */}
             <div className="absolute bottom-4 right-4 flex gap-1">
