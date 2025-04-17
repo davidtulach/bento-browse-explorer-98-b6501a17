@@ -1,3 +1,4 @@
+
 import { useRef, useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import { useHapticFeedback } from '@/hooks/use-haptic';
@@ -181,14 +182,13 @@ const IkeaBelt = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   
   // New refs for scroll tracking
-  const scrollThreshold = 120; // Changed from 60 to 120 pixels needed to change card
+  const scrollThreshold = 200; // Changed from 120 to 200 pixels needed to change card
   const lastScrollY = useRef<number>(0);
   const scrollDirection = useRef<'up' | 'down'>('down');
   const scrollAccumulator = useRef<number>(0);
 
-  // The aspect ratio for regular and ad cards
-  const standardCardHeight = 500;  
-  const adStackCardHeight = 600; // 3:2.5 aspect ratio maintained
+  // Fixed size for all content cards (both standard and ad stacks)
+  const fixedCardHeight = 550;  
 
   // Preload images
   useEffect(() => {
@@ -327,9 +327,7 @@ const IkeaBelt = () => {
           <div 
             ref={containerRef}
             className="w-full relative overflow-hidden"
-            style={{ 
-              height: weeklyOffers.items[visibleMobileIndex]?.isAdStack ? adStackCardHeight : standardCardHeight
-            }}
+            style={{ height: fixedCardHeight }}
           >
             {weeklyOffers.items.map((item, index) => (
               <div 
@@ -337,8 +335,10 @@ const IkeaBelt = () => {
                 className={cn(
                   "absolute inset-0 w-full transition-all duration-300",
                   visibleMobileIndex === index 
-                    ? "opacity-100 z-10 scale-100" 
-                    : "opacity-0 z-0 scale-95"
+                    ? "opacity-100 z-10 translate-y-0 scale-100" 
+                    : index < visibleMobileIndex
+                      ? "opacity-0 z-0 -translate-y-8 scale-95" 
+                      : "opacity-0 z-0 translate-y-8 scale-95"
                 )}
               >
                 {item.isAdStack ? (
@@ -390,7 +390,7 @@ const IkeaBelt = () => {
                   style={{
                     borderRadius: 0,
                     width: '350px',
-                    height: item.isAdStack ? '600px' : '500px'
+                    height: fixedCardHeight
                   }}
                 >
                   {item.isAdStack ? (
