@@ -1,3 +1,4 @@
+
 import { useRef, useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import { useHapticFeedback } from '@/hooks/use-haptic';
@@ -32,6 +33,31 @@ interface BeltSection {
   title: string;
   items: BeltItem[];
 }
+
+// Process the data to flatten the ad items
+const processBeltItems = (section: BeltSection): BeltItem[] => {
+  const processedItems: BeltItem[] = [];
+  
+  section.items.forEach(item => {
+    if (item.isAdStack && item.ads) {
+      // Add each ad as individual items instead of stacked
+      item.ads.forEach(ad => {
+        processedItems.push({
+          id: ad.id,
+          title: ad.title,
+          image: ad.image,
+          fallbackSrc: ad.image,
+          isAd: true,
+          sponsor: ad.sponsor
+        } as BeltItem);
+      });
+    } else {
+      processedItems.push(item);
+    }
+  });
+  
+  return processedItems;
+};
 
 const weeklyOffers: BeltSection = {
   id: 1,
@@ -121,6 +147,14 @@ const ContentCard = ({
         </div>
       )}
       
+      {(item as any).sponsor && (
+        <div className="absolute top-4 right-4 z-10">
+          <Badge variant="secondary" className="px-2 py-1 bg-white/90 text-primary shadow-sm backdrop-blur-sm">
+            <span className="text-xs font-medium">Sponsored</span>
+          </Badge>
+        </div>
+      )}
+      
       <div className={cn(
         "absolute inset-0 bg-gradient-to-b from-black/10 to-black/70",
         "transition-opacity duration-200",
@@ -131,42 +165,12 @@ const ContentCard = ({
         <h3 className="text-white text-2xl font-extrabold leading-tight">
           {item.title}
         </h3>
+        {(item as any).sponsor && (
+          <p className="text-white/80 text-sm mt-1">
+            By {(item as any).sponsor}
+          </p>
+        )}
       </div>
-    </div>
-  );
-};
-
-const StackedAdCard = ({ 
-  item, 
-  isFocused 
-}: { 
-  item: BeltItem, 
-  isFocused: boolean 
-}) => {
-  if (!item.isAdStack || !item.ads) return null;
-  
-  return (
-    <div className="relative h-full w-full">
-      {item.ads.map((ad, adIndex) => (
-        <div 
-          key={ad.id} 
-          className={cn(
-            "absolute inset-x-0 w-full",
-            adIndex === 0 ? "top-0 h-[49.5%]" : "bottom-0 h-[49.5%]"
-          )}
-        >
-          <div className="relative h-full w-full">
-            <img 
-              src={ad.image} 
-              alt={ad.title} 
-              className="w-full h-full object-cover" 
-              loading="eager"
-            />
-            
-            <div className="absolute inset-0 bg-gradient-to-b from-black/10 to-black/70" />
-          </div>
-        </div>
-      ))}
     </div>
   );
 };
@@ -181,32 +185,20 @@ const IkeaBelt = () => {
   const [visibleMobileIndex, setVisibleMobileIndex] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
   
-  const scrollThreshold = 200;
+  const scrollThreshold = 200; // Increased to 200px
   const lastScrollY = useRef<number>(0);
   const scrollDirection = useRef<'up' | 'down'>('down');
   const scrollAccumulator = useRef<number>(0);
-
-  const aspectRatio = 6 / 5;
   
-  const getContentHeight = () => {
-    if (typeof window !== 'undefined') {
-      const viewportWidth = window.innerWidth;
-      const contentWidth = viewportWidth - 32;
-      return contentWidth / aspectRatio;
-    }
-    return 450;
-  };
-  
-  const [contentHeight, setContentHeight] = useState(getContentHeight());
+  // Process belt items to separate stacked ads into individual slides
+  const processedItems = processBeltItems(weeklyOffers);
 
+  // Fixed aspect ratio of 3:2.5
+  const aspectRatio = 3 / 2.5;
+  
   useEffect(() => {
-    weeklyOffers.items.forEach(item => {
-      if (item.isAdStack) {
-        item.ads?.forEach(ad => {
-          const img = new Image();
-          img.src = ad.image;
-        });
-      } else if (item.image) {
+    processedItems.forEach(item => {
+      if (item.image) {
         const img = new Image();
         img.src = item.image;
         if (item.fallbackSrc) {
@@ -215,15 +207,6 @@ const IkeaBelt = () => {
         }
       }
     });
-  }, []);
-
-  useEffect(() => {
-    const handleResize = () => {
-      setContentHeight(getContentHeight());
-    };
-    
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
   }, []);
 
   useEffect(() => {
@@ -249,7 +232,7 @@ const IkeaBelt = () => {
           
           let newIndex = visibleMobileIndex;
           if (direction === 'down') {
-            newIndex = Math.min(visibleMobileIndex + itemsToMove, weeklyOffers.items.length - 1);
+            newIndex = Math.min(visibleMobileIndex + itemsToMove, processedItems.length - 1);
           } else {
             newIndex = Math.max(visibleMobileIndex - itemsToMove, 0);
           }
@@ -273,7 +256,7 @@ const IkeaBelt = () => {
     return () => {
       window.removeEventListener('scroll', handleScroll);
     };
-  }, [isMobile, visibleMobileIndex, triggerHaptic]);
+  }, [isMobile, visibleMobileIndex, triggerHaptic, processedItems.length]);
 
   useEffect(() => {
     if (!isMobile || !beltRef.current) return;
@@ -326,34 +309,33 @@ const IkeaBelt = () => {
         </div>
         
         {isMobile ? (
-          <div className="px-4">
-            <AspectRatio ratio={6/5} className="overflow-hidden">
+          <div className={cn(
+            "relative overflow-hidden",
+            "w-full" // Full width on mobile
+          )}>
+            <AspectRatio ratio={aspectRatio} className="w-full">
               <div 
                 ref={containerRef}
                 className="w-full h-full relative overflow-hidden"
               >
-                {weeklyOffers.items.map((item, index) => (
+                {processedItems.map((item, index) => (
                   <div 
                     key={item.id}
                     className={cn(
-                      "absolute inset-0 w-full h-full transition-all duration-300",
+                      "absolute inset-0 w-full h-full transition-all duration-500",
                       visibleMobileIndex === index 
-                        ? "opacity-100 z-10 translate-y-0 scale-100" 
+                        ? "opacity-100 z-10 translate-y-0" 
                         : index < visibleMobileIndex
-                          ? "opacity-0 z-0 -translate-y-8 scale-95" 
-                          : "opacity-0 z-0 translate-y-8 scale-95"
+                          ? "opacity-0 z-0 -translate-y-8" 
+                          : "opacity-0 z-0 translate-y-8"
                     )}
                   >
-                    {item.isAdStack ? (
-                      <StackedAdCard item={item} isFocused={false} />
-                    ) : (
-                      <ContentCard item={item} isFocused={false} />
-                    )}
+                    <ContentCard item={item} isFocused={false} />
                   </div>
                 ))}
                 
                 <div className="absolute bottom-4 right-4 flex gap-1">
-                  {weeklyOffers.items.map((_, index) => (
+                  {processedItems.map((_, index) => (
                     <div 
                       key={index}
                       className={cn(
@@ -379,14 +361,14 @@ const IkeaBelt = () => {
                 paddingRight: '16px'
               }}
             >
-              {weeklyOffers.items.map((item, index) => (
+              {processedItems.map((item, index) => (
                 <div 
                   key={item.id}
                   ref={el => itemRefs.current[index] = el}
                   data-index={index}
                   className="flex-shrink-0 snap-start w-[350px]"
                 >
-                  <AspectRatio ratio={6/5} className="overflow-hidden">
+                  <AspectRatio ratio={aspectRatio} className="overflow-hidden">
                     <Card
                       className={cn(
                         "h-full w-full flex-shrink-0 snap-start overflow-hidden border-0 shadow-md",
@@ -396,11 +378,7 @@ const IkeaBelt = () => {
                       )}
                       style={{ borderRadius: 0 }}
                     >
-                      {item.isAdStack ? (
-                        <StackedAdCard item={item} isFocused={focusedIndex === index} />
-                      ) : (
-                        <ContentCard item={item} isFocused={focusedIndex === index} />
-                      )}
+                      <ContentCard item={item} isFocused={focusedIndex === index} />
                     </Card>
                   </AspectRatio>
                 </div>
