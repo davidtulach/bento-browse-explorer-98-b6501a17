@@ -1,3 +1,4 @@
+
 import { useRef, useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import { useHapticFeedback } from '@/hooks/use-haptic';
@@ -137,7 +138,7 @@ const ContentCard = ({
         />
       </div>
       
-      {item.badge && (
+      {item.badge && !item.isAd && (
         <div className="absolute top-4 left-4 z-10">
           <Badge variant="secondary" className="px-2 py-1 bg-white/90 text-primary shadow-sm backdrop-blur-sm flex items-center gap-1.5">
             <ListTodo className="w-3.5 h-3.5" />
