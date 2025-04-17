@@ -1,4 +1,3 @@
-
 import { useRef, useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import { useHapticFeedback } from '@/hooks/use-haptic';
@@ -6,6 +5,7 @@ import { useIsMobile } from '@/hooks/use-mobile';
 import { ListTodo } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Card } from '@/components/ui/card';
+import { AspectRatio } from '@/components/ui/aspect-ratio';
 
 interface AdItem {
   id: number;
@@ -181,16 +181,24 @@ const IkeaBelt = () => {
   const [visibleMobileIndex, setVisibleMobileIndex] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
   
-  // New refs for scroll tracking
-  const scrollThreshold = 200; // Changed from 120 to 200 pixels needed to change card
+  const scrollThreshold = 200;
   const lastScrollY = useRef<number>(0);
   const scrollDirection = useRef<'up' | 'down'>('down');
   const scrollAccumulator = useRef<number>(0);
 
-  // Fixed size for all content cards (both standard and ad stacks)
-  const fixedCardHeight = 550;  
+  const aspectRatio = 6 / 5;
+  
+  const getContentHeight = () => {
+    if (typeof window !== 'undefined') {
+      const viewportWidth = window.innerWidth;
+      const contentWidth = viewportWidth - 32;
+      return contentWidth / aspectRatio;
+    }
+    return 450;
+  };
+  
+  const [contentHeight, setContentHeight] = useState(getContentHeight());
 
-  // Preload images
   useEffect(() => {
     weeklyOffers.items.forEach(item => {
       if (item.isAdStack) {
@@ -209,36 +217,36 @@ const IkeaBelt = () => {
     });
   }, []);
 
-  // Attach global scroll listener for mobile view
+  useEffect(() => {
+    const handleResize = () => {
+      setContentHeight(getContentHeight());
+    };
+    
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   useEffect(() => {
     if (!isMobile) return;
     
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
       
-      // Determine scroll direction
       const direction = currentScrollY > lastScrollY.current ? 'down' : 'up';
       
-      // Calculate scroll delta since last check
       const scrollDelta = Math.abs(currentScrollY - lastScrollY.current);
       
-      // Only update if we've scrolled enough to register
       if (scrollDelta > 5) {
-        // Accumulate scroll distance in the current direction
         if (direction === scrollDirection.current) {
           scrollAccumulator.current += scrollDelta;
         } else {
-          // Reset accumulator when direction changes
           scrollDirection.current = direction;
           scrollAccumulator.current = scrollDelta;
         }
         
-        // Check if we've scrolled enough to trigger a content change
         if (scrollAccumulator.current >= scrollThreshold) {
-          // Calculate how many items to move
           const itemsToMove = Math.floor(scrollAccumulator.current / scrollThreshold);
           
-          // Update visible index based on direction
           let newIndex = visibleMobileIndex;
           if (direction === 'down') {
             newIndex = Math.min(visibleMobileIndex + itemsToMove, weeklyOffers.items.length - 1);
@@ -246,24 +254,20 @@ const IkeaBelt = () => {
             newIndex = Math.max(visibleMobileIndex - itemsToMove, 0);
           }
           
-          // Only update if the index would change
           if (newIndex !== visibleMobileIndex) {
             setVisibleMobileIndex(newIndex);
             triggerHaptic();
             
-            // Reset accumulator after changing content
             scrollAccumulator.current = scrollAccumulator.current % scrollThreshold;
           }
         }
         
-        // Update last scroll position
         lastScrollY.current = currentScrollY;
       }
     };
     
     window.addEventListener('scroll', handleScroll, { passive: true });
     
-    // Initialize starting position
     lastScrollY.current = window.scrollY;
     
     return () => {
@@ -271,7 +275,6 @@ const IkeaBelt = () => {
     };
   }, [isMobile, visibleMobileIndex, triggerHaptic]);
 
-  // Intersection Observer for desktop horizontal belt
   useEffect(() => {
     if (!isMobile || !beltRef.current) return;
     
@@ -323,49 +326,49 @@ const IkeaBelt = () => {
         </div>
         
         {isMobile ? (
-          // Mobile view: fixed aspect ratio card that changes on scroll
-          <div 
-            ref={containerRef}
-            className="w-full relative overflow-hidden"
-            style={{ height: fixedCardHeight }}
-          >
-            {weeklyOffers.items.map((item, index) => (
+          <div className="px-4">
+            <AspectRatio ratio={6/5} className="overflow-hidden">
               <div 
-                key={item.id}
-                className={cn(
-                  "absolute inset-0 w-full transition-all duration-300",
-                  visibleMobileIndex === index 
-                    ? "opacity-100 z-10 translate-y-0 scale-100" 
-                    : index < visibleMobileIndex
-                      ? "opacity-0 z-0 -translate-y-8 scale-95" 
-                      : "opacity-0 z-0 translate-y-8 scale-95"
-                )}
+                ref={containerRef}
+                className="w-full h-full relative overflow-hidden"
               >
-                {item.isAdStack ? (
-                  <StackedAdCard item={item} isFocused={false} />
-                ) : (
-                  <ContentCard item={item} isFocused={false} />
-                )}
+                {weeklyOffers.items.map((item, index) => (
+                  <div 
+                    key={item.id}
+                    className={cn(
+                      "absolute inset-0 w-full h-full transition-all duration-300",
+                      visibleMobileIndex === index 
+                        ? "opacity-100 z-10 translate-y-0 scale-100" 
+                        : index < visibleMobileIndex
+                          ? "opacity-0 z-0 -translate-y-8 scale-95" 
+                          : "opacity-0 z-0 translate-y-8 scale-95"
+                    )}
+                  >
+                    {item.isAdStack ? (
+                      <StackedAdCard item={item} isFocused={false} />
+                    ) : (
+                      <ContentCard item={item} isFocused={false} />
+                    )}
+                  </div>
+                ))}
+                
+                <div className="absolute bottom-4 right-4 flex gap-1">
+                  {weeklyOffers.items.map((_, index) => (
+                    <div 
+                      key={index}
+                      className={cn(
+                        "w-2 h-2 rounded-full transition-all duration-300",
+                        visibleMobileIndex === index 
+                          ? "bg-white scale-125" 
+                          : "bg-white/40"
+                      )}
+                    />
+                  ))}
+                </div>
               </div>
-            ))}
-            
-            {/* Scroll indicator */}
-            <div className="absolute bottom-4 right-4 flex gap-1">
-              {weeklyOffers.items.map((_, index) => (
-                <div 
-                  key={index}
-                  className={cn(
-                    "w-2 h-2 rounded-full transition-all duration-300",
-                    visibleMobileIndex === index 
-                      ? "bg-white scale-125" 
-                      : "bg-white/40"
-                  )}
-                />
-              ))}
-            </div>
+            </AspectRatio>
           </div>
         ) : (
-          // Desktop view: horizontal scroll belt
           <div className="relative px-4">
             <div 
               ref={beltRef} 
@@ -377,28 +380,30 @@ const IkeaBelt = () => {
               }}
             >
               {weeklyOffers.items.map((item, index) => (
-                <Card
+                <div 
                   key={item.id}
                   ref={el => itemRefs.current[index] = el}
                   data-index={index}
-                  className={cn(
-                    "flex-shrink-0 snap-start overflow-hidden border-0 shadow-md",
-                    "transition-all duration-200",
-                    focusedIndex === index && "scale-[1.02] shadow-lg",
-                    "!rounded-none"
-                  )}
-                  style={{
-                    borderRadius: 0,
-                    width: '350px',
-                    height: fixedCardHeight
-                  }}
+                  className="flex-shrink-0 snap-start w-[350px]"
                 >
-                  {item.isAdStack ? (
-                    <StackedAdCard item={item} isFocused={focusedIndex === index} />
-                  ) : (
-                    <ContentCard item={item} isFocused={focusedIndex === index} />
-                  )}
-                </Card>
+                  <AspectRatio ratio={6/5} className="overflow-hidden">
+                    <Card
+                      className={cn(
+                        "h-full w-full flex-shrink-0 snap-start overflow-hidden border-0 shadow-md",
+                        "transition-all duration-200",
+                        focusedIndex === index && "scale-[1.02] shadow-lg",
+                        "!rounded-none"
+                      )}
+                      style={{ borderRadius: 0 }}
+                    >
+                      {item.isAdStack ? (
+                        <StackedAdCard item={item} isFocused={focusedIndex === index} />
+                      ) : (
+                        <ContentCard item={item} isFocused={focusedIndex === index} />
+                      )}
+                    </Card>
+                  </AspectRatio>
+                </div>
               ))}
             </div>
           </div>
