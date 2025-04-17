@@ -353,7 +353,7 @@ const IkeaBelt = () => {
             "relative overflow-hidden",
             "w-full"
           )}>
-            <AspectRatio ratio={3 / 2.5} className="w-full">
+            <AspectRatio ratio={3 / 2.5} className="w-full" maxWidth={800}>
               <div 
                 ref={containerRef}
                 className="w-full h-full relative overflow-hidden perspective-1000"
@@ -400,7 +400,7 @@ const IkeaBelt = () => {
           </div>
         ) : (
           <div className="relative px-4">
-            <div className="relative overflow-hidden perspective-1000" style={{ height: '320px' }}>
+            <div className="relative overflow-hidden perspective-1000 mx-auto" style={{ height: '320px', maxWidth: '1200px' }}>
               <div className="h-full w-full relative">
                 <div 
                   className={cn(
@@ -420,7 +420,7 @@ const IkeaBelt = () => {
                       key={`first-${item.id}-${gridIndex}`}
                       className="transition-all duration-500 transform-gpu"
                     >
-                      <AspectRatio ratio={3 / 2.5} className="overflow-hidden">
+                      <AspectRatio ratio={3 / 2.5} className="overflow-hidden" maxWidth={300}>
                         <Card
                           className="h-full w-full overflow-hidden border-0 shadow-md transition-all duration-200 !rounded-none"
                           style={{ borderRadius: 0 }}
@@ -450,7 +450,7 @@ const IkeaBelt = () => {
                       key={`second-${item.id}-${gridIndex}`}
                       className="transition-all duration-500 transform-gpu"
                     >
-                      <AspectRatio ratio={3 / 2.5} className="overflow-hidden">
+                      <AspectRatio ratio={3 / 2.5} className="overflow-hidden" maxWidth={300}>
                         <Card
                           className="h-full w-full overflow-hidden border-0 shadow-md transition-all duration-200 !rounded-none"
                           style={{ borderRadius: 0 }}
