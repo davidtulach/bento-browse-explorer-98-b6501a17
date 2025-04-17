@@ -1,4 +1,3 @@
-
 import { useRef, useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import { useHapticFeedback } from '@/hooks/use-haptic';
@@ -188,17 +187,17 @@ const IkeaBelt = () => {
   
   const processedItems = processBeltItems(weeklyOffers);
   
-  const scrollThreshold = 150;
   const lastScrollY = useRef<number>(0);
   const scrollDirection = useRef<'up' | 'down'>('down');
   const scrollAccumulator = useRef<number>(0);
+  const scrollThreshold = 150;
   
   const lastTransitionTime = useRef<number>(Date.now());
   const minimumDisplayTime = 1000;
-  const transitionQueue = useRef<number[]>([]);
   const isTransitioning = useRef<boolean>(false);
-  const isProcessingQueue = useRef<boolean>(false);
-
+  const scrollEventThrottled = useRef<boolean>(false);
+  const scrollLocked = useRef<boolean>(false);
+  
   const firstSet = processedItems.slice(0, 4);
   const secondSet = processedItems.slice(4);
   
@@ -207,58 +206,39 @@ const IkeaBelt = () => {
     secondSet.push(processedItems[indexToAdd]);
   }
 
-  const processTransitionQueue = () => {
-    if (isProcessingQueue.current) return;
+  const triggerTransition = (direction: 'up' | 'down') => {
+    if (isTransitioning.current || scrollLocked.current) return;
     
-    if (transitionQueue.current.length > 0 && !isTransitioning.current) {
-      isProcessingQueue.current = true;
-      isTransitioning.current = true;
-      
-      const nextIndex = transitionQueue.current.shift() as number;
-      
-      if (isMobile) {
-        setVisibleMobileIndex(nextIndex);
+    isTransitioning.current = true;
+    
+    if (isMobile) {
+      if (direction === 'down') {
+        setVisibleMobileIndex(prev => Math.min(prev + 1, processedItems.length - 1));
       } else {
-        setDesktopSetIndex(nextIndex > 0 ? 1 : 0);
+        setVisibleMobileIndex(prev => Math.max(prev - 1, 0));
       }
-      
-      triggerHaptic();
-      
-      lastTransitionTime.current = Date.now();
-      
-      setTimeout(() => {
-        isTransitioning.current = false;
-        isProcessingQueue.current = false;
-        
-        if (transitionQueue.current.length > 0) {
-          processTransitionQueue();
-        }
-      }, minimumDisplayTime);
-    }
-  };
-
-  const queueTransition = (index: number) => {
-    if (!isMobile) {
-      const targetIndex = desktopSetIndex === 0 ? 1 : 0;
-      
-      if (transitionQueue.current.length > 0) {
-        const lastQueuedIndex = transitionQueue.current[transitionQueue.current.length - 1];
-        if (lastQueuedIndex === targetIndex) return;
-      }
-      
-      transitionQueue.current.push(targetIndex);
     } else {
-      if (transitionQueue.current.length > 0) {
-        const lastQueuedIndex = transitionQueue.current[transitionQueue.current.length - 1];
-        if (lastQueuedIndex === index) return;
-      } else if (visibleMobileIndex === index) {
+      const targetIndex = direction === 'down' ? 1 : 0;
+      if (desktopSetIndex !== targetIndex) {
+        setDesktopSetIndex(targetIndex);
+      } else {
+        isTransitioning.current = false;
         return;
       }
-      
-      transitionQueue.current.push(index);
     }
     
-    processTransitionQueue();
+    triggerHaptic();
+    
+    lastTransitionTime.current = Date.now();
+    
+    setTimeout(() => {
+      isTransitioning.current = false;
+    }, minimumDisplayTime);
+    
+    scrollLocked.current = true;
+    setTimeout(() => {
+      scrollLocked.current = false;
+    }, 800);
   };
 
   useEffect(() => {
@@ -276,37 +256,29 @@ const IkeaBelt = () => {
 
   useEffect(() => {
     const handleScroll = () => {
+      if (scrollEventThrottled.current || scrollLocked.current) return;
+      
+      scrollEventThrottled.current = true;
+      setTimeout(() => {
+        scrollEventThrottled.current = false;
+      }, 50);
+      
       const currentScrollY = window.scrollY;
-      const direction = currentScrollY > lastScrollY.current ? 'down' : 'up';
       const scrollDelta = Math.abs(currentScrollY - lastScrollY.current);
       
       if (scrollDelta > 5) {
-        if (direction === scrollDirection.current) {
-          scrollAccumulator.current += scrollDelta;
-        } else {
+        const direction = currentScrollY > lastScrollY.current ? 'down' : 'up';
+        
+        if (direction !== scrollDirection.current) {
           scrollDirection.current = direction;
-          scrollAccumulator.current = scrollDelta;
-        }
+          scrollAccumulator.current = 0;
+        } 
+        
+        scrollAccumulator.current += scrollDelta;
         
         if (scrollAccumulator.current >= scrollThreshold) {
-          const itemsToMove = Math.floor(scrollAccumulator.current / scrollThreshold);
-          scrollAccumulator.current = scrollAccumulator.current % scrollThreshold;
-          
-          let currentIndex = isMobile ? visibleMobileIndex : desktopSetIndex;
-          
-          for (let i = 0; i < itemsToMove; i++) {
-            if (isMobile) {
-              if (direction === 'down') {
-                currentIndex = Math.min(currentIndex + 1, processedItems.length - 1);
-              } else {
-                currentIndex = Math.max(currentIndex - 1, 0);
-              }
-            } else {
-              currentIndex = currentIndex === 0 ? 1 : 0;
-            }
-            
-            queueTransition(currentIndex);
-          }
+          scrollAccumulator.current = 0;
+          triggerTransition(direction);
         }
         
         lastScrollY.current = currentScrollY;
@@ -321,7 +293,7 @@ const IkeaBelt = () => {
     return () => {
       window.removeEventListener('scroll', handleScroll);
     };
-  }, [isMobile, visibleMobileIndex, desktopSetIndex, triggerHaptic]);
+  }, [isMobile, triggerHaptic]);
 
   useEffect(() => {
     if (!isMobile || !beltRef.current) return;
@@ -333,6 +305,8 @@ const IkeaBelt = () => {
     };
     
     const handleIntersection = (entries: IntersectionObserverEntry[]) => {
+      if (isTransitioning.current) return;
+      
       const visibleEntries = entries
         .filter(entry => entry.isIntersecting)
         .sort((a, b) => {
@@ -346,7 +320,11 @@ const IkeaBelt = () => {
         const index = Number(leftmostItem.target.getAttribute('data-index'));
         
         if (visibleMobileIndex !== index) {
-          queueTransition(index);
+          const direction = index > visibleMobileIndex ? 'down' : 'up';
+          if (!isTransitioning.current) {
+            setVisibleMobileIndex(index);
+            triggerHaptic();
+          }
         }
       }
     };
@@ -420,7 +398,6 @@ const IkeaBelt = () => {
         ) : (
           <div className="relative px-4">
             <div className="relative overflow-hidden perspective-1000" style={{ height: '320px' }}>
-              {/* Updated desktop view with container transform animation */}
               <div className="h-full w-full relative">
                 <div 
                   className={cn(
