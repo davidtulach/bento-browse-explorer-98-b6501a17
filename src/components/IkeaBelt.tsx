@@ -1,4 +1,3 @@
-
 import { useRef, useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import { useHapticFeedback } from '@/hooks/use-haptic';
@@ -34,13 +33,11 @@ interface BeltSection {
   items: BeltItem[];
 }
 
-// Process the data to flatten the ad items
 const processBeltItems = (section: BeltSection): BeltItem[] => {
   const processedItems: BeltItem[] = [];
   
   section.items.forEach(item => {
     if (item.isAdStack && item.ads) {
-      // Add each ad as individual items instead of stacked
       item.ads.forEach(ad => {
         processedItems.push({
           id: ad.id,
@@ -185,15 +182,13 @@ const IkeaBelt = () => {
   const [visibleMobileIndex, setVisibleMobileIndex] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
   
-  const scrollThreshold = 200; // Increased to 200px
+  const scrollThreshold = 150; // Changed from 200 to 150px
   const lastScrollY = useRef<number>(0);
   const scrollDirection = useRef<'up' | 'down'>('down');
   const scrollAccumulator = useRef<number>(0);
   
-  // Process belt items to separate stacked ads into individual slides
   const processedItems = processBeltItems(weeklyOffers);
 
-  // Fixed aspect ratio of 3:2.5
   const aspectRatio = 3 / 2.5;
   
   useEffect(() => {
@@ -311,7 +306,7 @@ const IkeaBelt = () => {
         {isMobile ? (
           <div className={cn(
             "relative overflow-hidden",
-            "w-full" // Full width on mobile
+            "w-full"
           )}>
             <AspectRatio ratio={aspectRatio} className="w-full">
               <div 
