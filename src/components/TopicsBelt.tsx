@@ -1,4 +1,3 @@
-
 import { useRef, useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import { useHapticFeedback } from '@/hooks/use-haptic';
@@ -185,7 +184,8 @@ const TopicsBelt = () => {
   const [visibleMobileIndex, setVisibleMobileIndex] = useState(0);
   const [desktopSetIndex, setDesktopSetIndex] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
-  
+  const [transitioning, setTransitioning] = useState(false);
+
   const processedItems = processBeltItems(weeklyOffers);
   
   const lastScrollY = useRef<number>(0);
@@ -209,9 +209,9 @@ const TopicsBelt = () => {
 
   const triggerTransition = (direction: 'up' | 'down') => {
     if (isTransitioning.current || scrollLocked.current) return;
-    
     isTransitioning.current = true;
-    
+    setTransitioning(true);
+
     if (isMobile) {
       if (direction === 'down') {
         setVisibleMobileIndex(prev => Math.min(prev + 1, processedItems.length - 1));
@@ -227,13 +227,13 @@ const TopicsBelt = () => {
     }
     
     triggerHaptic();
-    
     lastTransitionTime.current = Date.now();
-    
+
     setTimeout(() => {
       isTransitioning.current = false;
+      setTransitioning(false);
     }, minimumDisplayTime);
-    
+
     scrollLocked.current = true;
     setTimeout(() => {
       scrollLocked.current = false;
@@ -354,12 +354,17 @@ const TopicsBelt = () => {
                   <div 
                     key={item.id}
                     className={cn(
-                      "absolute inset-0 w-full h-full transition-all duration-500 transform-gpu will-change-transform",
+                      "absolute inset-0 w-full h-full transition-all",
+                      "will-change-transform",
+                      "duration-200",
                       visibleMobileIndex === index 
                         ? "opacity-100 z-10 translate-3d-0" 
                         : index < visibleMobileIndex
                           ? "opacity-0 z-0 -translate-3d-y-30 scale-90" 
-                          : "opacity-0 z-0 translate-3d-y-30 scale-90"
+                          : "opacity-0 z-0 translate-3d-y-30 scale-90",
+                      transitioning && visibleMobileIndex === index
+                        ? "backdrop-blur-md blur-sm opacity-70"
+                        : ""
                     )}
                     style={{
                       transformStyle: 'preserve-3d',
@@ -396,21 +401,27 @@ const TopicsBelt = () => {
               <div className="h-full w-full relative">
                 <div 
                   className={cn(
-                    "absolute inset-0 grid grid-cols-4 gap-4 transition-all duration-500 transform-gpu will-change-transform",
+                    "absolute inset-0 grid grid-cols-4 gap-4 transition-all will-change-transform",
+                    "duration-250",
+                    desktopSetIndex === 0 
+                      ? "opacity-100"
+                      : "opacity-0",
+                    transitioning && desktopSetIndex === 0 
+                      ? "backdrop-blur-md blur-sm opacity-70"
+                      : ""
                   )}
                   style={{
                     transformStyle: 'preserve-3d',
                     transform: desktopSetIndex === 0 
                       ? 'translate3d(0, 0, 0) scale(1)' 
                       : 'translate3d(0, -30%, 0) scale(0.9)',
-                    opacity: desktopSetIndex === 0 ? 1 : 0,
                     zIndex: desktopSetIndex === 0 ? 10 : 5
                   }}
                 >
                   {firstSet.map((item, gridIndex) => (
                     <div 
                       key={`first-${item.id}-${gridIndex}`}
-                      className="transition-all duration-500 transform-gpu"
+                      className="transition-all duration-250 transform-gpu"
                     >
                       <AspectRatio ratio={3 / 2.5} className="overflow-hidden">
                         <Card
@@ -426,21 +437,27 @@ const TopicsBelt = () => {
 
                 <div 
                   className={cn(
-                    "absolute inset-0 grid grid-cols-4 gap-4 transition-all duration-500 transform-gpu will-change-transform",
+                    "absolute inset-0 grid grid-cols-4 gap-4 transition-all will-change-transform",
+                    "duration-250",
+                    desktopSetIndex === 1 
+                      ? "opacity-100"
+                      : "opacity-0",
+                    transitioning && desktopSetIndex === 1 
+                      ? "backdrop-blur-md blur-sm opacity-70"
+                      : ""
                   )}
                   style={{
                     transformStyle: 'preserve-3d',
                     transform: desktopSetIndex === 1
                       ? 'translate3d(0, 0, 0) scale(1)' 
                       : 'translate3d(0, 30%, 0) scale(0.9)',
-                    opacity: desktopSetIndex === 1 ? 1 : 0,
                     zIndex: desktopSetIndex === 1 ? 10 : 5
                   }}
                 >
                   {secondSet.map((item, gridIndex) => (
                     <div 
                       key={`second-${item.id}-${gridIndex}`}
-                      className="transition-all duration-500 transform-gpu"
+                      className="transition-all duration-250 transform-gpu"
                     >
                       <AspectRatio ratio={3 / 2.5} className="overflow-hidden">
                         <Card
