@@ -175,19 +175,4 @@
   .story-circle-inner {
     @apply w-full h-full rounded-full border-2 border-white dark:border-gray-800 bg-gray-100 dark:bg-gray-800 flex items-center justify-center overflow-hidden;
   }
-  
-  /* Added for enhanced belt animations */
-  .belt-transition {
-    @apply transition-all duration-300 transform-gpu will-change-transform;
-    transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
-  }
-  
-  .perspective-container {
-    perspective: 1000px;
-    transform-style: preserve-3d;
-  }
-  
-  .staggered-item {
-    @apply transition-all transform-gpu will-change-transform;
-  }
 }

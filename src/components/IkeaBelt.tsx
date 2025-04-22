@@ -1,3 +1,4 @@
+
 import { useRef, useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import { useHapticFeedback } from '@/hooks/use-haptic';
@@ -193,12 +194,10 @@ const IkeaBelt = () => {
   const scrollThreshold = 150;
   
   const lastTransitionTime = useRef<number>(Date.now());
-  const minimumDisplayTime = 600;
+  const minimumDisplayTime = 1000;
   const isTransitioning = useRef<boolean>(false);
   const scrollEventThrottled = useRef<boolean>(false);
   const scrollLocked = useRef<boolean>(false);
-  const scrollVelocity = useRef<number>(0);
-  const lastScrollTime = useRef<number>(Date.now());
   
   const firstSet = processedItems.slice(0, 4);
   const secondSet = processedItems.slice(4);
@@ -212,11 +211,6 @@ const IkeaBelt = () => {
     if (isTransitioning.current || scrollLocked.current) return;
     
     isTransitioning.current = true;
-    
-    const now = Date.now();
-    const timeDelta = now - lastScrollTime.current;
-    scrollVelocity.current = scrollAccumulator.current / Math.max(1, timeDelta);
-    lastScrollTime.current = now;
     
     if (isMobile) {
       if (direction === 'down') {
@@ -243,7 +237,7 @@ const IkeaBelt = () => {
     scrollLocked.current = true;
     setTimeout(() => {
       scrollLocked.current = false;
-    }, 500);
+    }, 800);
   };
 
   useEffect(() => {
@@ -266,7 +260,7 @@ const IkeaBelt = () => {
       scrollEventThrottled.current = true;
       setTimeout(() => {
         scrollEventThrottled.current = false;
-      }, 30);
+      }, 50);
       
       const currentScrollY = window.scrollY;
       const scrollDelta = Math.abs(currentScrollY - lastScrollY.current);
@@ -343,19 +337,6 @@ const IkeaBelt = () => {
     return () => observer.disconnect();
   }, [isMobile, visibleMobileIndex, triggerHaptic]);
 
-  const getTransformValues = (isActive: boolean, direction: 'up' | 'down') => {
-    const baseScale = isActive ? 1 : 0.85;
-    const baseRotation = direction === 'down' ? 2 : -2;
-    const velocityFactor = Math.min(1, scrollVelocity.current / 0.5);
-    
-    return {
-      scale: isActive ? 1 : baseScale,
-      rotation: isActive ? 0 : baseRotation * velocityFactor,
-      blur: isActive ? 0 : 2,
-      x: direction === 'down' ? (isActive ? 0 : -5) : (isActive ? 0 : 5)
-    };
-  };
-
   return (
     <div className="py-8">
       <div className="mb-8">
@@ -373,35 +354,29 @@ const IkeaBelt = () => {
                 ref={containerRef}
                 className="w-full h-full relative overflow-hidden perspective-1000"
               >
-                {processedItems.map((item, index) => {
-                  const isVisible = visibleMobileIndex === index;
-                  const isBeforeCurrent = index < visibleMobileIndex;
-                  const direction = scrollDirection.current;
-                  
-                  return (
-                    <div 
-                      key={item.id}
-                      className={cn(
-                        "absolute inset-0 w-full h-full transition-all duration-300 transform-gpu will-change-transform",
-                        isVisible 
-                          ? "opacity-100 z-10" 
-                          : "opacity-0 z-0"
-                      )}
-                      style={{
-                        transformStyle: 'preserve-3d',
-                        transform: isVisible 
-                          ? 'translate3d(0, 0, 0) rotate(0deg) scale(1)' 
-                          : isBeforeCurrent
-                            ? `translate3d(${direction === 'down' ? '-8%' : '8%'}, -30%, 0) rotate(${direction === 'down' ? '-3deg' : '3deg'}) scale(0.85)`
-                            : `translate3d(${direction === 'down' ? '8%' : '-8%'}, 30%, 0) rotate(${direction === 'down' ? '3deg' : '-3deg'}) scale(0.85)`,
-                        filter: isVisible ? 'blur(0)' : 'blur(2px)',
-                        transition: 'all 300ms cubic-bezier(0.22, 1, 0.36, 1)',
-                      }}
-                    >
-                      <ContentCard item={item} isFocused={false} />
-                    </div>
-                  );
-                })}
+                {processedItems.map((item, index) => (
+                  <div 
+                    key={item.id}
+                    className={cn(
+                      "absolute inset-0 w-full h-full transition-all duration-500 transform-gpu will-change-transform",
+                      visibleMobileIndex === index 
+                        ? "opacity-100 z-10 translate-3d-0" 
+                        : index < visibleMobileIndex
+                          ? "opacity-0 z-0 -translate-3d-y-30 scale-90" 
+                          : "opacity-0 z-0 translate-3d-y-30 scale-90"
+                    )}
+                    style={{
+                      transformStyle: 'preserve-3d',
+                      transform: visibleMobileIndex === index 
+                        ? 'translate3d(0, 0, 0) scale(1)' 
+                        : index < visibleMobileIndex
+                          ? 'translate3d(0, -30%, 0) scale(0.9)'
+                          : 'translate3d(0, 30%, 0) scale(0.9)'
+                    }}
+                  >
+                    <ContentCard item={item} isFocused={false} />
+                  </div>
+                ))}
                 
                 <div className="absolute bottom-4 right-4 flex gap-1">
                   {processedItems.map((_, index) => (
@@ -425,26 +400,21 @@ const IkeaBelt = () => {
               <div className="h-full w-full relative">
                 <div 
                   className={cn(
-                    "absolute inset-0 grid grid-cols-4 gap-4 transition-all duration-300 transform-gpu will-change-transform",
+                    "absolute inset-0 grid grid-cols-4 gap-4 transition-all duration-500 transform-gpu will-change-transform",
                   )}
                   style={{
                     transformStyle: 'preserve-3d',
                     transform: desktopSetIndex === 0 
-                      ? 'translate3d(0, 0, 0) rotate(0deg) scale(1)' 
-                      : 'translate3d(-5%, -30%, 0) rotate(-3deg) scale(0.85)',
+                      ? 'translate3d(0, 0, 0) scale(1)' 
+                      : 'translate3d(0, -30%, 0) scale(0.9)',
                     opacity: desktopSetIndex === 0 ? 1 : 0,
-                    zIndex: desktopSetIndex === 0 ? 10 : 5,
-                    filter: desktopSetIndex === 0 ? 'blur(0)' : 'blur(1px)',
-                    transition: 'all 300ms cubic-bezier(0.22, 1, 0.36, 1)',
+                    zIndex: desktopSetIndex === 0 ? 10 : 5
                   }}
                 >
                   {firstSet.map((item, gridIndex) => (
                     <div 
                       key={`first-${item.id}-${gridIndex}`}
-                      className="transition-all duration-300 transform-gpu"
-                      style={{
-                        transition: `all ${300 + gridIndex * 30}ms cubic-bezier(0.22, 1, 0.36, 1)`,
-                      }}
+                      className="transition-all duration-500 transform-gpu"
                     >
                       <AspectRatio ratio={3 / 2.5} className="overflow-hidden">
                         <Card
@@ -460,26 +430,21 @@ const IkeaBelt = () => {
 
                 <div 
                   className={cn(
-                    "absolute inset-0 grid grid-cols-4 gap-4 transition-all duration-300 transform-gpu will-change-transform",
+                    "absolute inset-0 grid grid-cols-4 gap-4 transition-all duration-500 transform-gpu will-change-transform",
                   )}
                   style={{
                     transformStyle: 'preserve-3d',
                     transform: desktopSetIndex === 1
-                      ? 'translate3d(0, 0, 0) rotate(0deg) scale(1)' 
-                      : 'translate3d(5%, 30%, 0) rotate(3deg) scale(0.85)',
+                      ? 'translate3d(0, 0, 0) scale(1)' 
+                      : 'translate3d(0, 30%, 0) scale(0.9)',
                     opacity: desktopSetIndex === 1 ? 1 : 0,
-                    zIndex: desktopSetIndex === 1 ? 10 : 5,
-                    filter: desktopSetIndex === 1 ? 'blur(0)' : 'blur(1px)',
-                    transition: 'all 300ms cubic-bezier(0.22, 1, 0.36, 1)',
+                    zIndex: desktopSetIndex === 1 ? 10 : 5
                   }}
                 >
                   {secondSet.map((item, gridIndex) => (
                     <div 
                       key={`second-${item.id}-${gridIndex}`}
-                      className="transition-all duration-300 transform-gpu"
-                      style={{
-                        transition: `all ${300 + gridIndex * 30}ms cubic-bezier(0.22, 1, 0.36, 1)`,
-                      }}
+                      className="transition-all duration-500 transform-gpu"
                     >
                       <AspectRatio ratio={3 / 2.5} className="overflow-hidden">
                         <Card
