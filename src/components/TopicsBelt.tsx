@@ -11,6 +11,8 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel"
 import { TopicCard } from './TopicCard'
+import useEmblaCarousel from 'embla-carousel-react'
+import type { EmblaCarouselType } from 'embla-carousel'
 
 interface AdItem {
   id: number
@@ -147,7 +149,10 @@ const TopicsBelt = () => {
         {isMobile ? (
           <Carousel 
             className="w-full"
-            onSelect={(api) => {
+            opts={{
+              loop: true,
+            }}
+            onSelect={(api: EmblaCarouselType) => {
               setCurrentSlide(api.selectedScrollSnap())
             }}
           >
