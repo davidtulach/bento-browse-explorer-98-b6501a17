@@ -1,8 +1,6 @@
-
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { cn } from '@/lib/utils'
 import { useIsMobile } from '@/hooks/use-mobile'
-import { Card } from '@/components/ui/card'
 import { AspectRatio } from '@/components/ui/aspect-ratio'
 import {
   Carousel,
@@ -10,11 +8,9 @@ import {
   CarouselItem,
   CarouselNext,
   CarouselPrevious,
-  type CarouselApi
 } from "@/components/ui/carousel"
 import { TopicCard } from './TopicCard'
-import useEmblaCarousel from 'embla-carousel-react'
-import type { EmblaCarouselType } from 'embla-carousel'
+import { useTopics } from '@/context/TopicsContext'
 
 interface AdItem {
   id: number
@@ -130,9 +126,8 @@ const weeklyOffers: BeltSection = {
 
 const TopicsBelt = () => {
   const isMobile = useIsMobile()
-  const [currentSlide, setCurrentSlide] = useState(0)
+  const { currentSlide, setCurrentSlide, api, setApi } = useTopics();
   const processedItems = processBeltItems(weeklyOffers)
-  const [mobileApi, setMobileApi] = useState<CarouselApi>()
   
   const firstSet = processedItems.slice(0, 4)
   const secondSet = processedItems.slice(4)
@@ -141,24 +136,6 @@ const TopicsBelt = () => {
     const indexToAdd = secondSet.length % processedItems.length
     secondSet.push(processedItems[indexToAdd])
   }
-
-  // Update current slide when the mobile API changes slides
-  useEffect(() => {
-    if (!mobileApi) return
-
-    const onSelect = () => {
-      setCurrentSlide(mobileApi.selectedScrollSnap() || 0)
-    }
-
-    mobileApi.on("select", onSelect)
-    
-    // Initial call to set the current slide
-    onSelect()
-
-    return () => {
-      mobileApi.off("select", onSelect)
-    }
-  }, [mobileApi])
 
   return (
     <div className="py-8">
@@ -173,7 +150,7 @@ const TopicsBelt = () => {
             opts={{
               loop: true,
             }}
-            setApi={setMobileApi}
+            setApi={setApi}
           >
             <CarouselContent>
               {processedItems.map((item) => (
@@ -235,7 +212,7 @@ const TopicsBelt = () => {
         )}
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default TopicsBelt
+export default TopicsBelt;

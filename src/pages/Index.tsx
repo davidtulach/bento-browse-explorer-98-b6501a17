@@ -15,6 +15,8 @@ import { useHapticFeedback } from '@/hooks/use-haptic';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { useTheme } from '@/context/ThemeContext';
 import PillButtonsRow from '@/components/PillButtonsRow';
+import TopicsBelt from '@/components/TopicsBelt';
+import { TopicsProvider } from '@/context/TopicsContext';
 
 const pillButtons = [
   { 
@@ -135,50 +137,62 @@ const Index = () => {
         "flex-1 pb-20 w-full",
         isMobile && "pt-0"
       )}>
-        <StoryScroller />
-        
-        <CategoryBelt />
-        
-        <PillButtonsRow buttons={pillButtons} />
-        
-        <div className="py-2">
-          <div className="h-[1px] bg-gradient-to-r from-transparent via-gray-200 dark:via-gray-700 to-transparent" />
-        </div>
-        
-        <IkeaBelt />
-        
-        <div className="py-2">
-          <div className="h-[1px] bg-gradient-to-r from-transparent via-gray-200 dark:via-gray-700 to-transparent" />
-        </div>
-        
-        <BrandsBelt />
-        
-        <div className="py-2">
-          <div className="h-[1px] bg-gradient-to-r from-transparent via-gray-200 dark:via-gray-700 to-transparent" />
-        </div>
-        
-        <PinterestGrid />
-        
-        <div className="py-2">
-          <div className="h-[1px] bg-gradient-to-r from-transparent via-gray-200 dark:via-gray-700 to-transparent" />
-        </div>
-        
-        <PriceHitsBelt />
-        
-        <div className="py-2">
-          <div className="h-[1px] bg-gradient-to-r from-transparent via-gray-200 dark:via-gray-700 to-transparent" />
-        </div>
-        
-        <ShoppableImage />
-        
-        <div className="py-2">
-          <div className="h-[1px] bg-gradient-to-r from-transparent via-gray-200 dark:via-gray-700 to-transparent" />
-        </div>
-        
-        <DiscountCode 
-          code="XHAU8254" 
-          description="Your unique discount code for free delivery:" 
-        />
+        <TopicsProvider>
+          <StoryScroller />
+          <CategoryBelt />
+          <PillButtonsRow buttons={pillButtons} />
+          
+          <div className="py-2">
+            <div className="h-[1px] bg-gradient-to-r from-transparent via-gray-200 dark:via-gray-700 to-transparent" />
+          </div>
+          
+          <TopicsBelt />
+          
+          <div className="py-2">
+            <div className="h-[1px] bg-gradient-to-r from-transparent via-gray-200 dark:via-gray-700 to-transparent" />
+          </div>
+          
+          <IkeaBelt />
+          
+          <div className="py-2">
+            <div className="h-[1px] bg-gradient-to-r from-transparent via-gray-200 dark:via-gray-700 to-transparent" />
+          </div>
+          
+          <BrandsBelt />
+          
+          <div className="py-2">
+            <div className="h-[1px] bg-gradient-to-r from-transparent via-gray-200 dark:via-gray-700 to-transparent" />
+          </div>
+          
+          <PinterestGrid />
+          
+          <div className="py-2">
+            <div className="h-[1px] bg-gradient-to-r from-transparent via-gray-200 dark:via-gray-700 to-transparent" />
+          </div>
+          
+          <TopicsBelt />
+          
+          <div className="py-2">
+            <div className="h-[1px] bg-gradient-to-r from-transparent via-gray-200 dark:via-gray-700 to-transparent" />
+          </div>
+          
+          <PriceHitsBelt />
+          
+          <div className="py-2">
+            <div className="h-[1px] bg-gradient-to-r from-transparent via-gray-200 dark:via-gray-700 to-transparent" />
+          </div>
+          
+          <ShoppableImage />
+          
+          <div className="py-2">
+            <div className="h-[1px] bg-gradient-to-r from-transparent via-gray-200 dark:via-gray-700 to-transparent" />
+          </div>
+          
+          <DiscountCode 
+            code="XHAU8254" 
+            description="Your unique discount code for free delivery:" 
+          />
+        </TopicsProvider>
       </main>
       
       {!isAtBottom && (
