@@ -1,5 +1,5 @@
 
-import { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { cn } from '@/lib/utils';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { ListTodo } from 'lucide-react';
@@ -86,6 +86,14 @@ const ContentCard = ({
           </h3>
         </div>
       )}
+      
+      {item.isAd && item.sponsor && (
+        <div className="absolute inset-x-0 bottom-0 p-6">
+          <Badge variant="outline" className="bg-black/30 text-white border-white/20 px-2 py-1">
+            {item.sponsor}
+          </Badge>
+        </div>
+      )}
     </div>
   );
 };
@@ -95,8 +103,8 @@ const TopicsBelt: React.FC = () => {
   const isMobile = useIsMobile();
   const containerRef = useRef<HTMLDivElement>(null);
   
-  // Use all 6 ad items from the sequence instead of just 2
-  const [adItems, setAdItems] = useState<AdItem[]>([
+  // Use all 6 ad items from the sequence
+  const [adItems] = useState<AdItem[]>([
     topicsBeltSequence[0],
     topicsBeltSequence[1],
     topicsBeltSequence[2],
@@ -143,8 +151,8 @@ const TopicsBelt: React.FC = () => {
     nextContent, 
     prevContent 
   } = useContentTransitions(contentItems.length, isMobile, {
-    minimumDisplayTime: 3000,
-    scrollThreshold: 120, // Slightly reduced threshold for more responsive triggers
+    minimumDisplayTime: 2500, // Slightly reduced time for more responsiveness
+    scrollThreshold: 100, // Reduced threshold for easier triggering
     enableScrollTriggers: true
   });
   
@@ -172,7 +180,7 @@ const TopicsBelt: React.FC = () => {
     touchStartX.current = null;
   };
 
-  // Calculate how many items to show per page based on screen size
+  // Calculate how many items per page based on screen size
   const itemsPerPage = isMobile ? 1 : 4;
   const pageCount = Math.ceil(contentItems.length / itemsPerPage);
   
@@ -204,29 +212,33 @@ const TopicsBelt: React.FC = () => {
           
           {/* Content grid with crossfade animation between pages */}
           <div className="absolute inset-0 grid grid-cols-4 gap-4">
-            {contentItems.map((item, index) => (
-              <div 
-                key={`item-${item.id}-${index}`}
-                className={cn(
-                  "transition-opacity duration-700 ease-in-out",
-                  Math.floor(index / itemsPerPage) === currentPage
-                    ? "opacity-100 z-10" 
-                    : "opacity-0 z-0"
-                )}
-              >
-                <AspectRatio ratio={3 / 2.5} className="overflow-hidden">
-                  <Card
-                    className="h-full w-full overflow-hidden border-0 shadow-md transition-all duration-200 !rounded-none"
-                    style={{ borderRadius: 0 }}
-                  >
-                    <ContentCard 
-                      item={item} 
-                      isFocused={index === activeIndex}
-                    />
-                  </Card>
-                </AspectRatio>
-              </div>
-            ))}
+            {contentItems.map((item, index) => {
+              // Calculate if this item should be visible on current page
+              const itemPage = Math.floor(index / itemsPerPage);
+              const isVisible = itemPage === currentPage;
+              
+              return (
+                <div 
+                  key={`item-${item.id}-${index}`}
+                  className={cn(
+                    "transition-opacity duration-700 ease-in-out",
+                    isVisible ? "opacity-100 z-10" : "opacity-0 z-0"
+                  )}
+                >
+                  <AspectRatio ratio={3 / 2.5} className="overflow-hidden">
+                    <Card
+                      className="h-full w-full overflow-hidden border-0 shadow-md transition-all duration-200 !rounded-none"
+                      style={{ borderRadius: 0 }}
+                    >
+                      <ContentCard 
+                        item={item} 
+                        isFocused={index === activeIndex}
+                      />
+                    </Card>
+                  </AspectRatio>
+                </div>
+              );
+            })}
           </div>
         </div>
       </div>
@@ -261,7 +273,7 @@ const TopicsBelt: React.FC = () => {
         >
           {contentItems.map((item, index) => (
             <div 
-              key={item.id}
+              key={`mobile-item-${item.id}-${index}`}
               className={cn(
                 "absolute inset-0 w-full h-full transition-opacity duration-700",
                 activeIndex === index 

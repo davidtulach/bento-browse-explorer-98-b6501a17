@@ -1,4 +1,3 @@
-
 import { useState, useRef, useEffect } from 'react';
 import { useHapticFeedback } from '@/hooks/use-haptic';
 
@@ -25,6 +24,7 @@ export function useContentTransitions(
   const transitionTimer = useRef<number | null>(null);
   const manualControlTimer = useRef<number | null>(null);
   const scrollThrottleTimer = useRef<number | null>(null);
+  const lastTransitionTime = useRef<number>(Date.now());
   
   // Default settings
   const minimumDisplayTime = settings?.minimumDisplayTime || 3000;
@@ -62,6 +62,9 @@ export function useContentTransitions(
       setIsManuallyControlled(false);
       manualControlTimer.current = null;
     }, minimumDisplayTime * 2);
+    
+    // Update last transition time
+    lastTransitionTime.current = Date.now();
   };
 
   // Go to next content item
@@ -76,17 +79,42 @@ export function useContentTransitions(
 
   // Process the queue of transitions
   const processTransitionQueue = () => {
-    if (transitionQueue.current.length === 0 || isTransitioning.current) {
+    // Don't process if queue is empty or already transitioning
+    if (transitionQueue.current.length === 0) {
       isTransitioning.current = false;
       return;
     }
-
+    
+    // Check if minimum display time has passed since last transition
+    const now = Date.now();
+    const timeSinceLastTransition = now - lastTransitionTime.current;
+    
+    if (timeSinceLastTransition < minimumDisplayTime) {
+      // Wait for the remaining time before transitioning
+      const timeToWait = minimumDisplayTime - timeSinceLastTransition;
+      
+      transitionTimer.current = window.setTimeout(() => {
+        processNextInQueue();
+      }, timeToWait);
+      
+      return;
+    }
+    
+    // Process next item immediately if enough time has passed
+    processNextInQueue();
+  };
+  
+  // Process the next item in the transition queue
+  const processNextInQueue = () => {
+    if (transitionQueue.current.length === 0) return;
+    
     isTransitioning.current = true;
     const nextIndex = transitionQueue.current.shift();
     
     if (nextIndex !== undefined) {
       setActiveIndex(nextIndex);
       triggerHaptic();
+      lastTransitionTime.current = Date.now();
       
       transitionTimer.current = window.setTimeout(() => {
         isTransitioning.current = false;
@@ -113,16 +141,18 @@ export function useContentTransitions(
       // Determine scroll direction
       const direction = currentScrollY > lastScrollY.current ? 'down' : 'up';
       
-      // Reset accumulator if direction changed
+      // If direction changed, reset accumulator but maintain direction
       if (direction !== scrollDirection.current) {
         scrollDirection.current = direction;
-        scrollAccumulator.current = 0;
+        scrollAccumulator.current = scrollDelta; // Start with current delta instead of 0
+      } else {
+        // Direction unchanged, add to accumulator
+        scrollAccumulator.current += scrollDelta;
       }
-      
-      scrollAccumulator.current += scrollDelta;
       
       // Trigger content transition if threshold is reached
       if (scrollAccumulator.current >= scrollThreshold) {
+        // Reset accumulator but remember direction
         scrollAccumulator.current = 0;
         
         // Calculate next index based on scroll direction
@@ -130,9 +160,14 @@ export function useContentTransitions(
           ? (activeIndex + 1) % itemCount 
           : (activeIndex - 1 + itemCount) % itemCount;
         
-        if (!transitionQueue.current.includes(nextIndex)) {
+        // Only add to queue if not already there to avoid duplicates
+        if (!transitionQueue.current.includes(nextIndex) && nextIndex !== activeIndex) {
           transitionQueue.current.push(nextIndex);
-          processTransitionQueue();
+          
+          // Start processing if not already transitioning
+          if (!isTransitioning.current) {
+            processTransitionQueue();
+          }
         }
       }
       
@@ -149,6 +184,7 @@ export function useContentTransitions(
       return () => {
         window.removeEventListener('scroll', handleScroll);
         
+        // Clean up all timers
         if (transitionTimer.current) {
           window.clearTimeout(transitionTimer.current);
         }
