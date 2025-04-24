@@ -1,4 +1,3 @@
-
 import { useRef, useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import { useHapticFeedback } from '@/hooks/use-haptic';
@@ -116,9 +115,13 @@ const TopicsBelt: React.FC = () => {
   const scrollEventThrottled = useRef<boolean>(false);
   const scrollLocked = useRef<boolean>(false);
   
+  const MAX_QUEUE_SIZE = 3;
+  const VISIBILITY_THRESHOLD = 0.5;
   const transitionQueue = useRef<Array<'up' | 'down'>>([]);
   const processQueueTimeout = useRef<number | null>(null);
-  
+  const intersectionObserver = useRef<IntersectionObserver | null>(null);
+  const contentVisible = useRef<boolean>(false);
+
   const [adSequenceIndex, setAdSequenceIndex] = useState(0);
   const [currentAds, setCurrentAds] = useState<AdItem[]>([
     topicsBeltSequence[0], 
@@ -171,6 +174,10 @@ const TopicsBelt: React.FC = () => {
   };
 
   const queueTransition = (direction: 'up' | 'down') => {
+    if (transitionQueue.current.length >= MAX_QUEUE_SIZE || !contentVisible.current) {
+      return;
+    }
+    
     transitionQueue.current.push(direction);
     
     if (!isTransitioning.current) {
@@ -307,6 +314,27 @@ const TopicsBelt: React.FC = () => {
     
     return () => observer.disconnect();
   }, [isMobile, visibleMobileIndex, triggerHaptic]);
+
+  useEffect(() => {
+    if (!beltRef.current) return;
+    
+    intersectionObserver.current = new IntersectionObserver(
+      (entries) => {
+        entries.forEach(entry => {
+          contentVisible.current = entry.intersectionRatio >= VISIBILITY_THRESHOLD;
+        });
+      },
+      { threshold: [0, 0.25, 0.5, 0.75, 1] }
+    );
+    
+    intersectionObserver.current.observe(beltRef.current);
+    
+    return () => {
+      if (intersectionObserver.current) {
+        intersectionObserver.current.disconnect();
+      }
+    };
+  }, []);
 
   return (
     <div className="py-8" ref={beltRef}>

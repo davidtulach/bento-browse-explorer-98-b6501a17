@@ -132,9 +132,13 @@ const IkeaBelt = () => {
   const scrollEventThrottled = useRef<boolean>(false);
   const scrollLocked = useRef<boolean>(false);
   
+  const MAX_QUEUE_SIZE = 3;
+  const VISIBILITY_THRESHOLD = 0.5;
   const transitionQueue = useRef<Array<'up' | 'down'>>([]);
   const processQueueTimeout = useRef<number | null>(null);
-  
+  const intersectionObserver = useRef<IntersectionObserver | null>(null);
+  const contentVisible = useRef<boolean>(false);
+
   const firstSet = processedItems.slice(0, 4);
   const secondSet = [...processedItems.slice(2, 4), ...processedItems.slice(0, 2)];
 
@@ -157,6 +161,10 @@ const IkeaBelt = () => {
   };
 
   const queueTransition = (direction: 'up' | 'down') => {
+    if (transitionQueue.current.length >= MAX_QUEUE_SIZE || !contentVisible.current) {
+      return;
+    }
+    
     transitionQueue.current.push(direction);
     
     if (!isTransitioning.current) {
@@ -293,6 +301,27 @@ const IkeaBelt = () => {
     
     return () => observer.disconnect();
   }, [isMobile, visibleMobileIndex, triggerHaptic]);
+
+  useEffect(() => {
+    if (!beltRef.current) return;
+    
+    intersectionObserver.current = new IntersectionObserver(
+      (entries) => {
+        entries.forEach(entry => {
+          contentVisible.current = entry.intersectionRatio >= VISIBILITY_THRESHOLD;
+        });
+      },
+      { threshold: [0, 0.25, 0.5, 0.75, 1] }
+    );
+    
+    intersectionObserver.current.observe(beltRef.current);
+    
+    return () => {
+      if (intersectionObserver.current) {
+        intersectionObserver.current.disconnect();
+      }
+    };
+  }, []);
 
   return (
     <div className="py-8" ref={beltRef}>
