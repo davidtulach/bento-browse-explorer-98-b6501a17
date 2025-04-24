@@ -103,18 +103,20 @@ const IkeaBelt = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   
   const [adSequenceIndex, setAdSequenceIndex] = useState(0);
-  const [currentAd1, setCurrentAd1] = useState(ikeaBeltSequence[0]);
-  const [currentAd2, setCurrentAd2] = useState(ikeaBeltSequence[1]);
+  const [currentAds, setCurrentAds] = useState<AdItem[]>([
+    ikeaBeltSequence[0], 
+    ikeaBeltSequence[1]
+  ]);
   
   const processedItems: BeltItem[] = [
     weeklyOffers.items[0],
     { 
-      ...currentAd1, 
+      ...currentAds[0], 
       isAd: true 
     },
     weeklyOffers.items[1],
     { 
-      ...currentAd2, 
+      ...currentAds[1], 
       isAd: true 
     }
   ];
@@ -131,23 +133,24 @@ const IkeaBelt = () => {
   const scrollLocked = useRef<boolean>(false);
   
   const firstSet = processedItems.slice(0, 4);
-  const secondSet = processedItems.slice(4);
-  
-  while (secondSet.length < 4 && processedItems.length > 0) {
-    const indexToAdd = secondSet.length % processedItems.length;
-    secondSet.push(processedItems[indexToAdd]);
-  }
+  const secondSet = [...processedItems.slice(2, 4), ...processedItems.slice(0, 2)];
 
   const updateAds = (direction: 'up' | 'down') => {
     const directionMapping = direction === 'down' ? 'next' : 'prev';
     
-    const nextAd1 = getNextAd(ikeaBeltSequence, adSequenceIndex, directionMapping);
-    setCurrentAd1(nextAd1.ad);
+    const nextAd1 = getNextAd(ikeaBeltSequence, adSequenceIndex, directionMapping, [currentAds[1]]);
     
-    const nextAd2 = getNextAd(ikeaBeltSequence, (nextAd1.index + 1) % ikeaBeltSequence.length, directionMapping);
-    setCurrentAd2(nextAd2.ad);
+    const nextAd2 = getNextAd(
+      ikeaBeltSequence, 
+      (nextAd1.index + 1) % ikeaBeltSequence.length, 
+      directionMapping, 
+      [nextAd1.ad]
+    );
     
+    setCurrentAds([nextAd1.ad, nextAd2.ad]);
     setAdSequenceIndex(nextAd1.index);
+    
+    console.log("IkeaBelt - Updated ads:", nextAd1.ad.title, nextAd2.ad.title);
   };
 
   const triggerTransition = (direction: 'up' | 'down') => {
@@ -164,11 +167,7 @@ const IkeaBelt = () => {
         setVisibleMobileIndex(prev => Math.max(prev - 1, 0));
       }
     } else {
-      if (direction === 'down') {
-        setDesktopSetIndex(1);
-      } else {
-        setDesktopSetIndex(0);
-      }
+      setDesktopSetIndex(prev => prev === 0 ? 1 : 0);
     }
     
     triggerHaptic();

@@ -52,17 +52,26 @@ export const topicsBeltSequence: AdItem[] = [
   adPool[1], // Kitchin Ketchup
   adPool[2], // BENU
   adPool[3], // Papp Udia
+  adPool[4], // Yutto Popcorn
+  adPool[5], // Bio Yutto
 ];
 
 export const ikeaBeltSequence: AdItem[] = [
-  adPool[4], // Yutto Popcorn
   adPool[5], // Bio Yutto
-  adPool[2], // BENU (reused but in different sequence)
-  adPool[1], // Kitchin Ketchup (reused but in different sequence)
+  adPool[4], // Yutto Popcorn
+  adPool[3], // Papp Udia
+  adPool[2], // BENU
+  adPool[1], // Kitchin Ketchup
+  adPool[0], // OREA
 ];
 
-// Helper function to get next ad from a sequence
-export const getNextAd = (sequence: AdItem[], currentIndex: number, direction: 'next' | 'prev'): { ad: AdItem; index: number } => {
+// Updated helper function to ensure no duplicates are shown
+export const getNextAd = (
+  sequence: AdItem[], 
+  currentIndex: number, 
+  direction: 'next' | 'prev',
+  currentAds: AdItem[]
+): { ad: AdItem; index: number } => {
   const sequenceLength = sequence.length;
   let newIndex;
   
@@ -72,6 +81,18 @@ export const getNextAd = (sequence: AdItem[], currentIndex: number, direction: '
     newIndex = (currentIndex - 1 + sequenceLength) % sequenceLength;
   }
   
-  return { ad: sequence[newIndex], index: newIndex };
+  // Check if the ad at the new index is already in use
+  const newAd = sequence[newIndex];
+  const isAdAlreadyInUse = currentAds.some(ad => ad.id === newAd.id);
+  
+  // If the ad is already in use, skip to the next one in the sequence
+  if (isAdAlreadyInUse) {
+    if (direction === 'next') {
+      return getNextAd(sequence, newIndex, direction, currentAds);
+    } else {
+      return getNextAd(sequence, newIndex, direction, currentAds);
+    }
+  }
+  
+  return { ad: newAd, index: newIndex };
 };
-
