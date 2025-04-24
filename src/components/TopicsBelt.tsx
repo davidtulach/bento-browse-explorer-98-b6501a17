@@ -1,3 +1,4 @@
+
 import { useRef, useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import { useHapticFeedback } from '@/hooks/use-haptic';
@@ -103,6 +104,21 @@ const TopicsBelt: React.FC = () => {
   const [visibleMobileIndex, setVisibleMobileIndex] = useState(0);
   const [desktopSetIndex, setDesktopSetIndex] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
+  
+  // Add missing refs and variables
+  const lastScrollY = useRef<number>(0);
+  const scrollDirection = useRef<'up' | 'down'>('down');
+  const scrollAccumulator = useRef<number>(0);
+  const scrollThreshold = 150;
+  
+  const lastTransitionTime = useRef<number>(Date.now());
+  const minimumDisplayTime = 1000; // 1 second minimum viewing time
+  const isTransitioning = useRef<boolean>(false);
+  const scrollEventThrottled = useRef<boolean>(false);
+  const scrollLocked = useRef<boolean>(false);
+  
+  const transitionQueue = useRef<Array<'up' | 'down'>>([]);
+  const processQueueTimeout = useRef<number | null>(null);
   
   const [adSequenceIndex, setAdSequenceIndex] = useState(0);
   const [currentAds, setCurrentAds] = useState<AdItem[]>([
