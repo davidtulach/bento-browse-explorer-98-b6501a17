@@ -1,14 +1,13 @@
-
-import React, { useRef, useState, useEffect } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
+import { useHapticFeedback } from '@/hooks/use-haptic';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { ListTodo } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Card } from '@/components/ui/card';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
-import { AdItem, ikeaBeltSequence } from '@/utils/adSequences';
+import { AdItem, ikeaBeltSequence, getNextAd } from '@/utils/adSequences';
 import AnimatedImage from '@/components/AnimatedImage';
-import { useContentTransitions } from '@/hooks/use-content-transitions';
 
 interface BeltItem {
   id: number;
@@ -89,46 +88,111 @@ const ContentCard = ({
           </h3>
         </div>
       )}
-      
-      {item.isAd && item.sponsor && (
-        <div className="absolute inset-x-0 bottom-0 p-6">
-          <Badge variant="outline" className="bg-black/30 text-white border-white/20 px-2 py-1">
-            {item.sponsor}
-          </Badge>
-        </div>
-      )}
     </div>
   );
 };
 
 const IkeaBelt = () => {
   const beltRef = useRef<HTMLDivElement>(null);
+  const { triggerHaptic } = useHapticFeedback();
   const isMobile = useIsMobile();
+  const [focusedIndex, setFocusedIndex] = useState<number | null>(0);
+  const itemRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const [visibleMobileIndex, setVisibleMobileIndex] = useState(0);
+  const [desktopSetIndex, setDesktopSetIndex] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
   
-  // Use all 6 ad items from the sequence
-  const [adItems] = useState<AdItem[]>([
-    ikeaBeltSequence[0],
-    ikeaBeltSequence[1],
-    ikeaBeltSequence[2],
-    ikeaBeltSequence[3],
-    ikeaBeltSequence[4],
-    ikeaBeltSequence[5]
+  const [adSequenceIndex, setAdSequenceIndex] = useState(0);
+  const [currentAds, setCurrentAds] = useState<AdItem[]>([
+    ikeaBeltSequence[0], 
+    ikeaBeltSequence[1]
   ]);
   
-  // Generate content items including all ads
-  const contentItems: BeltItem[] = [
+  const processedItems: BeltItem[] = [
     weeklyOffers.items[0],
-    { ...adItems[0], isAd: true },
-    { ...adItems[1], isAd: true },
-    { ...adItems[2], isAd: true },
+    { 
+      ...currentAds[0], 
+      isAd: true 
+    },
     weeklyOffers.items[1],
-    { ...adItems[3], isAd: true },
-    { ...adItems[4], isAd: true },
-    { ...adItems[5], isAd: true }
+    { 
+      ...currentAds[1], 
+      isAd: true 
+    }
   ];
   
-  // Pre-load all images
+  const lastScrollY = useRef<number>(0);
+  const scrollDirection = useRef<'up' | 'down'>('down');
+  const scrollAccumulator = useRef<number>(0);
+  const scrollThreshold = 150;
+  
+  const lastTransitionTime = useRef<number>(Date.now());
+  const minimumDisplayTime = 3000;
+  const isTransitioning = useRef<boolean>(false);
+  const scrollEventThrottled = useRef<boolean>(false);
+  const scrollLocked = useRef<boolean>(false);
+  
+  const transitionQueue = useRef<Array<'up' | 'down'>>([]);
+  const processQueueTimeout = useRef<number | null>(null);
+  
+  const firstSet = processedItems.slice(0, 4);
+  const secondSet = [...processedItems.slice(2, 4), ...processedItems.slice(0, 2)];
+
+  const updateAds = (direction: 'up' | 'down') => {
+    const directionMapping = direction === 'down' ? 'next' : 'prev';
+    
+    const nextAd1 = getNextAd(ikeaBeltSequence, adSequenceIndex, directionMapping, [currentAds[1]]);
+    
+    const nextAd2 = getNextAd(
+      ikeaBeltSequence, 
+      (nextAd1.index + 1) % ikeaBeltSequence.length, 
+      directionMapping, 
+      [nextAd1.ad]
+    );
+    
+    setCurrentAds([nextAd1.ad, nextAd2.ad]);
+    setAdSequenceIndex(nextAd1.index);
+    
+    console.log("IkeaBelt - Updated ads:", nextAd1.ad.title, nextAd2.ad.title);
+  };
+
+  const queueTransition = (direction: 'up' | 'down') => {
+    transitionQueue.current.push(direction);
+    
+    if (!isTransitioning.current) {
+      isTransitioning.current = true;
+      processTransitionQueue();
+    }
+  };
+
+  const processTransitionQueue = () => {
+    if (transitionQueue.current.length === 0) {
+      isTransitioning.current = false;
+      return;
+    }
+
+    const nextDirection = transitionQueue.current.shift();
+    if (nextDirection) {
+      updateAds(nextDirection);
+      
+      if (isMobile) {
+        if (nextDirection === 'down') {
+          setVisibleMobileIndex(prev => Math.min(prev + 1, processedItems.length - 1));
+        } else {
+          setVisibleMobileIndex(prev => Math.max(prev - 1, 0));
+        }
+      } else {
+        setDesktopSetIndex(prev => prev === 0 ? 1 : 0);
+      }
+      
+      triggerHaptic();
+      
+      processQueueTimeout.current = window.setTimeout(() => {
+        processTransitionQueue();
+      }, minimumDisplayTime);
+    }
+  };
+
   useEffect(() => {
     weeklyOffers.items.forEach(item => {
       if (item.image) {
@@ -147,148 +211,89 @@ const IkeaBelt = () => {
     });
   }, []);
 
-  // Content transition hook for managing content changes
-  const { 
-    activeIndex, 
-    goToContent, 
-    nextContent, 
-    prevContent 
-  } = useContentTransitions(contentItems.length, isMobile, {
-    minimumDisplayTime: 2500, // Slightly reduced for more responsiveness
-    scrollThreshold: 100, // Reduced threshold for easier triggering
-    enableScrollTriggers: true
-  });
-  
-  // Handle swipe gesture for mobile
-  const touchStartX = useRef<number | null>(null);
-  
-  const handleTouchStart = (e: React.TouchEvent) => {
-    touchStartX.current = e.touches[0].clientX;
-  };
-  
-  const handleTouchEnd = (e: React.TouchEvent) => {
-    if (!touchStartX.current) return;
-    
-    const touchEndX = e.changedTouches[0].clientX;
-    const diff = touchStartX.current - touchEndX;
-    
-    if (Math.abs(diff) > 50) {
-      if (diff > 0) {
-        nextContent();
-      } else {
-        prevContent();
-      }
-    }
-    
-    touchStartX.current = null;
-  };
-
-  // Calculate how many items per page based on screen size
-  const itemsPerPage = isMobile ? 1 : 4;
-  const pageCount = Math.ceil(contentItems.length / itemsPerPage);
-  
-  const currentPage = isMobile ? activeIndex : Math.floor(activeIndex / itemsPerPage);
-
-  // For desktop view
-  const desktopView = (
-    <div className="relative px-4">
-      <div className="relative overflow-hidden" style={{ height: '320px' }}>
-        <div className="h-full w-full relative">
-          {/* Content grid with crossfade animation between pages */}
-          <div className="absolute inset-0 grid grid-cols-4 gap-4">
-            {contentItems.map((item, index) => {
-              // Calculate if this item should be visible on current page
-              const itemPage = Math.floor(index / itemsPerPage);
-              const isVisible = itemPage === currentPage;
-              
-              return (
-                <div 
-                  key={`item-${item.id}-${index}`}
-                  className={cn(
-                    "transition-opacity duration-700 ease-in-out",
-                    isVisible ? "opacity-100 z-10" : "opacity-0 z-0"
-                  )}
-                >
-                  <AspectRatio ratio={3 / 2.5} className="overflow-hidden">
-                    <Card
-                      className="h-full w-full overflow-hidden border-0 shadow-md transition-all duration-200 !rounded-none"
-                      style={{ borderRadius: 0 }}
-                    >
-                      <ContentCard 
-                        item={item} 
-                        isFocused={index === activeIndex}
-                      />
-                    </Card>
-                  </AspectRatio>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      </div>
+  useEffect(() => {
+    const handleScroll = () => {
+      if (scrollEventThrottled.current) return;
       
-      {/* Page dots */}
-      <div className="flex justify-center mt-4 gap-1">
-        {Array.from({ length: pageCount }).map((_, pageIndex) => (
-          <button 
-            key={pageIndex}
-            onClick={() => goToContent(pageIndex * itemsPerPage)}
-            className={cn(
-              "w-2 h-2 rounded-full transition-all duration-300",
-              currentPage === pageIndex
-                ? "bg-primary scale-125" 
-                : "bg-primary/40 hover:bg-primary/60"
-            )}
-          />
-        ))}
-      </div>
-    </div>
-  );
-  
-  // For mobile view, show one item at a time with crossfade
-  const mobileView = (
-    <div className="relative overflow-hidden w-full">
-      <AspectRatio ratio={3 / 2.5} className="w-full">
-        <div 
-          ref={containerRef}
-          className="w-full h-full relative overflow-hidden"
-          onTouchStart={handleTouchStart}
-          onTouchEnd={handleTouchEnd}
-        >
-          {contentItems.map((item, index) => (
-            <div 
-              key={`mobile-item-${item.id}-${index}`}
-              className={cn(
-                "absolute inset-0 w-full h-full transition-opacity duration-700",
-                activeIndex === index 
-                  ? "opacity-100 z-10" 
-                  : "opacity-0 z-0"
-              )}
-            >
-              <ContentCard item={item} isFocused={false} />
-            </div>
-          ))}
-          
-          {/* Page dots for mobile */}
-          <div className="absolute bottom-4 right-4 flex gap-1">
-            {contentItems.map((_, index) => (
-              <button
-                key={index}
-                onClick={() => goToContent(index)}
-                className={cn(
-                  "w-2 h-2 rounded-full transition-all duration-300",
-                  activeIndex === index 
-                    ? "bg-white scale-125" 
-                    : "bg-white/40"
-                )}
-              />
-            ))}
-          </div>
-        </div>
-      </AspectRatio>
-    </div>
-  );
-  
+      scrollEventThrottled.current = true;
+      setTimeout(() => {
+        scrollEventThrottled.current = false;
+      }, 50);
+      
+      const currentScrollY = window.scrollY;
+      const scrollDelta = Math.abs(currentScrollY - lastScrollY.current);
+      
+      if (scrollDelta > 5) {
+        const direction = currentScrollY > lastScrollY.current ? 'down' : 'up';
+        
+        if (direction !== scrollDirection.current) {
+          scrollDirection.current = direction;
+          scrollAccumulator.current = 0;
+        } 
+        
+        scrollAccumulator.current += scrollDelta;
+        
+        if (scrollAccumulator.current >= scrollThreshold) {
+          scrollAccumulator.current = 0;
+          queueTransition(direction);
+        }
+        
+        lastScrollY.current = currentScrollY;
+      }
+    };
+    
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      if (processQueueTimeout.current) {
+        clearTimeout(processQueueTimeout.current);
+      }
+    };
+  }, [isMobile, triggerHaptic]);
+
+  useEffect(() => {
+    if (!isMobile || !beltRef.current) return;
+    
+    const options = {
+      root: null,
+      rootMargin: '0px',
+      threshold: 0.7
+    };
+    
+    const handleIntersection = (entries: IntersectionObserverEntry[]) => {
+      if (isTransitioning.current) return;
+      
+      const visibleEntries = entries
+        .filter(entry => entry.isIntersecting)
+        .sort((a, b) => {
+          const rectA = a.boundingClientRect;
+          const rectB = b.boundingClientRect;
+          return rectA.left - rectB.left;
+        });
+      
+      if (visibleEntries.length > 0) {
+        const leftmostItem = visibleEntries[0];
+        const index = Number(leftmostItem.target.getAttribute('data-index'));
+        
+        if (visibleMobileIndex !== index) {
+          const direction = index > visibleMobileIndex ? 'down' : 'up';
+          if (!isTransitioning.current) {
+            setVisibleMobileIndex(index);
+            triggerHaptic();
+          }
+        }
+      }
+    };
+    
+    const observer = new IntersectionObserver(handleIntersection, options);
+    
+    itemRefs.current.forEach(item => {
+      if (item) observer.observe(item);
+    });
+    
+    return () => observer.disconnect();
+  }, [isMobile, visibleMobileIndex, triggerHaptic]);
+
   return (
     <div className="py-8" ref={beltRef}>
       <div className="mb-8">
@@ -296,7 +301,121 @@ const IkeaBelt = () => {
           <h2 className="text-xl font-semibold">{weeklyOffers.title}</h2>
         </div>
         
-        {isMobile ? mobileView : desktopView}
+        {isMobile ? (
+          <div className="relative overflow-hidden w-full">
+            <AspectRatio ratio={3 / 2.5} className="w-full">
+              <div 
+                ref={containerRef}
+                className="w-full h-full relative overflow-hidden"
+              >
+                {processedItems.map((item, index) => (
+                  <div 
+                    key={item.id}
+                    className={cn(
+                      "absolute inset-0 w-full h-full transition-opacity duration-[3000ms]",
+                      visibleMobileIndex === index 
+                        ? "opacity-100 z-10" 
+                        : "opacity-0 z-0"
+                    )}
+                  >
+                    <ContentCard item={item} isFocused={false} />
+                  </div>
+                ))}
+                
+                <div className="absolute bottom-4 right-4 flex gap-1">
+                  {processedItems.map((_, index) => (
+                    <div 
+                      key={index}
+                      className={cn(
+                        "w-2 h-2 rounded-full transition-all duration-300",
+                        visibleMobileIndex === index 
+                          ? "bg-white scale-125" 
+                          : "bg-white/40"
+                      )}
+                    />
+                  ))}
+                </div>
+              </div>
+            </AspectRatio>
+          </div>
+        ) : (
+          <div className="relative px-4">
+            <div className="relative overflow-hidden" style={{ height: '320px' }}>
+              <div className="h-full w-full relative">
+                <div 
+                  className={cn(
+                    "absolute inset-0 grid grid-cols-4 gap-4 transition-all duration-3000",
+                    "opacity-transition",
+                    desktopSetIndex === 0
+                      ? "opacity-100 z-10"
+                      : "opacity-0 z-0"
+                  )}
+                >
+                  {firstSet.map((item, gridIndex) => (
+                    <div 
+                      key={`first-${item.id}-${gridIndex}`}
+                      className="transition-all duration-500 transform-gpu"
+                    >
+                      <AspectRatio ratio={3 / 2.5} className="overflow-hidden">
+                        <Card
+                          className="h-full w-full overflow-hidden border-0 shadow-md transition-all duration-200 !rounded-none"
+                          style={{ borderRadius: 0 }}
+                        >
+                          <ContentCard item={item} isFocused={false} />
+                        </Card>
+                      </AspectRatio>
+                    </div>
+                  ))}
+                </div>
+
+                <div 
+                  className={cn(
+                    "absolute inset-0 grid grid-cols-4 gap-4 transition-all duration-3000",
+                    "opacity-transition",
+                    desktopSetIndex === 1
+                      ? "opacity-100 z-10"
+                      : "opacity-0 z-0"
+                  )}
+                >
+                  {secondSet.map((item, gridIndex) => (
+                    <div 
+                      key={`second-${item.id}-${gridIndex}`}
+                      className="transition-all duration-500 transform-gpu"
+                    >
+                      <AspectRatio ratio={3 / 2.5} className="overflow-hidden">
+                        <Card
+                          className="h-full w-full overflow-hidden border-0 shadow-md transition-all duration-200 !rounded-none"
+                          style={{ borderRadius: 0 }}
+                        >
+                          <ContentCard item={item} isFocused={false} />
+                        </Card>
+                      </AspectRatio>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+            
+            <div className="flex justify-center mt-4 gap-1">
+              <div 
+                className={cn(
+                  "w-2 h-2 rounded-full transition-all duration-300",
+                  desktopSetIndex === 0 
+                    ? "bg-primary scale-125" 
+                    : "bg-primary/40"
+                )}
+              />
+              <div 
+                className={cn(
+                  "w-2 h-2 rounded-full transition-all duration-300",
+                  desktopSetIndex === 1 
+                    ? "bg-primary scale-125" 
+                    : "bg-primary/40"
+                )}
+              />
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
