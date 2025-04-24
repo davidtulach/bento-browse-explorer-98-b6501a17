@@ -127,7 +127,7 @@ const IkeaBelt = () => {
   const scrollThreshold = 150;
   
   const lastTransitionTime = useRef<number>(Date.now());
-  const minimumDisplayTime = 1000; // 1 second minimum viewing time
+  const minimumDisplayTime = 3000; // Changed from 1000 to 3000ms for 3-second transitions
   const isTransitioning = useRef<boolean>(false);
   const scrollEventThrottled = useRef<boolean>(false);
   const scrollLocked = useRef<boolean>(false);
@@ -312,10 +312,10 @@ const IkeaBelt = () => {
                   <div 
                     key={item.id}
                     className={cn(
-                      "absolute inset-0 w-full h-full",
+                      "absolute inset-0 w-full h-full transition-opacity duration-[3000ms]",
                       visibleMobileIndex === index 
-                        ? "opacity-100 z-10 animate-blur-fade-in" 
-                        : "opacity-0 z-0 animate-blur-fade-out"
+                        ? "opacity-100 z-10" 
+                        : "opacity-0 z-0"
                     )}
                   >
                     <ContentCard item={item} isFocused={false} />
@@ -344,10 +344,10 @@ const IkeaBelt = () => {
               <div className="h-full w-full relative">
                 <div 
                   className={cn(
-                    "absolute inset-0 grid grid-cols-4 gap-4",
+                    "absolute inset-0 grid grid-cols-4 gap-4 transition-all duration-[3000ms]",
                     desktopSetIndex === 0
-                      ? "opacity-100 z-10 animate-blur-fade-in"
-                      : "opacity-0 z-0 animate-blur-fade-out"
+                      ? "opacity-100 z-10"
+                      : "opacity-0 z-0"
                   )}
                 >
                   {firstSet.map((item, gridIndex) => (
@@ -369,10 +369,10 @@ const IkeaBelt = () => {
 
                 <div 
                   className={cn(
-                    "absolute inset-0 grid grid-cols-4 gap-4",
+                    "absolute inset-0 grid grid-cols-4 gap-4 transition-all duration-[3000ms]",
                     desktopSetIndex === 1
-                      ? "opacity-100 z-10 animate-blur-fade-in"
-                      : "opacity-0 z-0 animate-blur-fade-out"
+                      ? "opacity-100 z-10"
+                      : "opacity-0 z-0"
                   )}
                 >
                   {secondSet.map((item, gridIndex) => (
