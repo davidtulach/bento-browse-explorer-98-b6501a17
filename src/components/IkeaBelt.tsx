@@ -132,6 +132,9 @@ const IkeaBelt = () => {
   const scrollEventThrottled = useRef<boolean>(false);
   const scrollLocked = useRef<boolean>(false);
   
+  const transitionQueue = useRef<Array<'up' | 'down'>>([]);
+  const processQueueTimeout = useRef<number | null>(null);
+  
   const firstSet = processedItems.slice(0, 4);
   const secondSet = [...processedItems.slice(2, 4), ...processedItems.slice(0, 2)];
 
@@ -153,31 +156,41 @@ const IkeaBelt = () => {
     console.log("IkeaBelt - Updated ads:", nextAd1.ad.title, nextAd2.ad.title);
   };
 
-  const triggerTransition = (direction: 'up' | 'down') => {
-    if (isTransitioning.current || scrollLocked.current) return;
+  const queueTransition = (direction: 'up' | 'down') => {
+    transitionQueue.current.push(direction);
     
-    isTransitioning.current = true;
-    
-    updateAds(direction);
-    
-    if (isMobile) {
-      if (direction === 'down') {
-        setVisibleMobileIndex(prev => Math.min(prev + 1, processedItems.length - 1));
-      } else {
-        setVisibleMobileIndex(prev => Math.max(prev - 1, 0));
-      }
-    } else {
-      setDesktopSetIndex(prev => prev === 0 ? 1 : 0);
+    if (!isTransitioning.current) {
+      isTransitioning.current = true;
+      processTransitionQueue();
     }
-    
-    triggerHaptic();
-    
-    scrollLocked.current = true;
-    
-    setTimeout(() => {
+  };
+
+  const processTransitionQueue = () => {
+    if (transitionQueue.current.length === 0) {
       isTransitioning.current = false;
-      scrollLocked.current = false;
-    }, minimumDisplayTime);
+      return;
+    }
+
+    const nextDirection = transitionQueue.current.shift();
+    if (nextDirection) {
+      updateAds(nextDirection);
+      
+      if (isMobile) {
+        if (nextDirection === 'down') {
+          setVisibleMobileIndex(prev => Math.min(prev + 1, processedItems.length - 1));
+        } else {
+          setVisibleMobileIndex(prev => Math.max(prev - 1, 0));
+        }
+      } else {
+        setDesktopSetIndex(prev => prev === 0 ? 1 : 0);
+      }
+      
+      triggerHaptic();
+      
+      processQueueTimeout.current = window.setTimeout(() => {
+        processTransitionQueue();
+      }, minimumDisplayTime);
+    }
   };
 
   useEffect(() => {
@@ -200,7 +213,7 @@ const IkeaBelt = () => {
 
   useEffect(() => {
     const handleScroll = () => {
-      if (scrollEventThrottled.current || scrollLocked.current) return;
+      if (scrollEventThrottled.current) return;
       
       scrollEventThrottled.current = true;
       setTimeout(() => {
@@ -222,7 +235,7 @@ const IkeaBelt = () => {
         
         if (scrollAccumulator.current >= scrollThreshold) {
           scrollAccumulator.current = 0;
-          triggerTransition(direction);
+          queueTransition(direction);
         }
         
         lastScrollY.current = currentScrollY;
@@ -230,7 +243,12 @@ const IkeaBelt = () => {
     };
     
     window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      if (processQueueTimeout.current) {
+        clearTimeout(processQueueTimeout.current);
+      }
+    };
   }, [isMobile, triggerHaptic]);
 
   useEffect(() => {
