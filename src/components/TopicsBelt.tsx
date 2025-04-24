@@ -123,22 +123,19 @@ const TopicsBelt: React.FC = () => {
     }
   ];
   
-  const lastScrollY = useRef<number>(0);
-  const scrollDirection = useRef<'up' | 'down'>('down');
-  const scrollAccumulator = useRef<number>(0);
-  const scrollThreshold = 150;
-  
-  const lastTransitionTime = useRef<number>(Date.now());
-  const minimumDisplayTime = 1000; // 1 second minimum viewing time
-  const isTransitioning = useRef<boolean>(false);
-  const scrollEventThrottled = useRef<boolean>(false);
-  const scrollLocked = useRef<boolean>(false);
-  
-  const transitionQueue = useRef<Array<'up' | 'down'>>([]);
-  const processQueueTimeout = useRef<number | null>(null);
-  
-  const firstSet = processedItems.slice(0, 4);
-  const secondSet = [...processedItems.slice(2, 4), ...processedItems.slice(0, 2)];
+  const firstSet = processedItems;
+  const secondSet = [
+    weeklyContentItems[0],
+    { 
+      ...currentAds[1], 
+      isAd: true 
+    },
+    weeklyContentItems[1],
+    { 
+      ...currentAds[0], 
+      isAd: true 
+    }
+  ];
 
   const updateAds = (direction: 'up' | 'down') => {
     const directionMapping = direction === 'down' ? 'next' : 'prev';
