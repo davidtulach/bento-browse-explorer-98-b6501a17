@@ -345,6 +345,7 @@ const IkeaBelt = () => {
                 <div 
                   className={cn(
                     "absolute inset-0 grid grid-cols-4 gap-4 transition-all duration-[3000ms]",
+                    "opacity-transition",
                     desktopSetIndex === 0
                       ? "opacity-100 z-10"
                       : "opacity-0 z-0"
@@ -370,6 +371,7 @@ const IkeaBelt = () => {
                 <div 
                   className={cn(
                     "absolute inset-0 grid grid-cols-4 gap-4 transition-all duration-[3000ms]",
+                    "opacity-transition",
                     desktopSetIndex === 1
                       ? "opacity-100 z-10"
                       : "opacity-0 z-0"
