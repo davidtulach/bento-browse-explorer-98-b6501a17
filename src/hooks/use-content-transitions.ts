@@ -130,12 +130,9 @@ export function useContentTransitions(
           ? (activeIndex + 1) % itemCount 
           : (activeIndex - 1 + itemCount) % itemCount;
         
-        // Only queue transitions on mobile or if specified
-        if (isMobile || !isMobile) {
-          if (!transitionQueue.current.includes(nextIndex)) {
-            transitionQueue.current.push(nextIndex);
-            processTransitionQueue();
-          }
+        if (!transitionQueue.current.includes(nextIndex)) {
+          transitionQueue.current.push(nextIndex);
+          processTransitionQueue();
         }
       }
       
@@ -147,6 +144,7 @@ export function useContentTransitions(
   useEffect(() => {
     if (enableScrollTriggers) {
       window.addEventListener('scroll', handleScroll, { passive: true });
+      lastScrollY.current = window.scrollY; // Initialize scroll position
       
       return () => {
         window.removeEventListener('scroll', handleScroll);
@@ -164,7 +162,7 @@ export function useContentTransitions(
         }
       };
     }
-  }, [activeIndex, isMobile, enableScrollTriggers]);
+  }, [activeIndex, isMobile, enableScrollTriggers, itemCount]);
 
   return {
     activeIndex,

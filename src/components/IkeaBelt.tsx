@@ -99,17 +99,26 @@ const IkeaBelt = () => {
   const isMobile = useIsMobile();
   const containerRef = useRef<HTMLDivElement>(null);
   
+  // Use all 6 ad items from the sequence
   const [adItems, setAdItems] = useState<AdItem[]>([
     ikeaBeltSequence[0],
-    ikeaBeltSequence[1]
+    ikeaBeltSequence[1],
+    ikeaBeltSequence[2],
+    ikeaBeltSequence[3],
+    ikeaBeltSequence[4],
+    ikeaBeltSequence[5]
   ]);
   
-  // Generate content items including ads
+  // Generate content items including all ads
   const contentItems: BeltItem[] = [
     weeklyOffers.items[0],
     { ...adItems[0], isAd: true },
+    { ...adItems[1], isAd: true },
+    { ...adItems[2], isAd: true },
     weeklyOffers.items[1],
-    { ...adItems[1], isAd: true }
+    { ...adItems[3], isAd: true },
+    { ...adItems[4], isAd: true },
+    { ...adItems[5], isAd: true }
   ];
   
   // Pre-load all images
@@ -139,7 +148,7 @@ const IkeaBelt = () => {
     prevContent 
   } = useContentTransitions(contentItems.length, isMobile, {
     minimumDisplayTime: 3000,
-    scrollThreshold: 150,
+    scrollThreshold: 120,
     enableScrollTriggers: true
   });
   
@@ -167,7 +176,13 @@ const IkeaBelt = () => {
     touchStartX.current = null;
   };
 
-  // For desktop view, create two sets of items for crossfade
+  // Calculate how many items per page based on screen size
+  const itemsPerPage = isMobile ? 1 : 4;
+  const pageCount = Math.ceil(contentItems.length / itemsPerPage);
+  
+  const currentPage = isMobile ? activeIndex : Math.floor(activeIndex / itemsPerPage);
+
+  // For desktop view
   const desktopView = (
     <div className="relative px-4">
       <div className="relative overflow-hidden" style={{ height: '320px' }}>
@@ -191,15 +206,14 @@ const IkeaBelt = () => {
             </button>
           </div>
           
-          {/* Content sets with crossfade animation */}
+          {/* Content grid with crossfade animation between pages */}
           <div className="absolute inset-0 grid grid-cols-4 gap-4">
             {contentItems.map((item, index) => (
               <div 
                 key={`item-${item.id}-${index}`}
                 className={cn(
                   "transition-opacity duration-700 ease-in-out",
-                  Math.floor(activeIndex / 4) * 4 <= index && 
-                  index < Math.floor(activeIndex / 4) * 4 + 4 
+                  Math.floor(index / itemsPerPage) === currentPage
                     ? "opacity-100 z-10" 
                     : "opacity-0 z-0"
                 )}
@@ -223,13 +237,13 @@ const IkeaBelt = () => {
       
       {/* Page dots */}
       <div className="flex justify-center mt-4 gap-1">
-        {[0, 1].map((pageIndex) => (
+        {Array.from({ length: pageCount }).map((_, pageIndex) => (
           <button 
             key={pageIndex}
-            onClick={() => goToContent(pageIndex * 4)}
+            onClick={() => goToContent(pageIndex * itemsPerPage)}
             className={cn(
               "w-2 h-2 rounded-full transition-all duration-300",
-              Math.floor(activeIndex / 4) === pageIndex
+              currentPage === pageIndex
                 ? "bg-primary scale-125" 
                 : "bg-primary/40 hover:bg-primary/60"
             )}

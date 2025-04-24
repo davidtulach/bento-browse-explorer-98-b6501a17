@@ -1,3 +1,4 @@
+
 import { useState, useEffect, useRef } from 'react';
 import { cn } from '@/lib/utils';
 import { useIsMobile } from '@/hooks/use-mobile';
@@ -94,18 +95,29 @@ const TopicsBelt: React.FC = () => {
   const isMobile = useIsMobile();
   const containerRef = useRef<HTMLDivElement>(null);
   
+  // Use all 6 ad items from the sequence instead of just 2
   const [adItems, setAdItems] = useState<AdItem[]>([
     topicsBeltSequence[0],
-    topicsBeltSequence[1]
+    topicsBeltSequence[1],
+    topicsBeltSequence[2],
+    topicsBeltSequence[3],
+    topicsBeltSequence[4],
+    topicsBeltSequence[5]
   ]);
   
+  // Create content items with all 6 ads interspersed with weekly content
   const contentItems: BeltItem[] = [
     weeklyContentItems[0],
     { ...adItems[0], isAd: true },
+    { ...adItems[1], isAd: true },
+    { ...adItems[2], isAd: true },
     weeklyContentItems[1],
-    { ...adItems[1], isAd: true }
+    { ...adItems[3], isAd: true },
+    { ...adItems[4], isAd: true },
+    { ...adItems[5], isAd: true }
   ];
   
+  // Pre-load all images
   useEffect(() => {
     weeklyContentItems.forEach(item => {
       if (item.image) {
@@ -124,6 +136,7 @@ const TopicsBelt: React.FC = () => {
     });
   }, []);
 
+  // Use the improved content transitions hook with proper settings
   const { 
     activeIndex, 
     goToContent, 
@@ -131,10 +144,11 @@ const TopicsBelt: React.FC = () => {
     prevContent 
   } = useContentTransitions(contentItems.length, isMobile, {
     minimumDisplayTime: 3000,
-    scrollThreshold: 150,
+    scrollThreshold: 120, // Slightly reduced threshold for more responsive triggers
     enableScrollTriggers: true
   });
   
+  // Handle swipe gesture for mobile
   const touchStartX = useRef<number | null>(null);
   
   const handleTouchStart = (e: React.TouchEvent) => {
@@ -158,10 +172,18 @@ const TopicsBelt: React.FC = () => {
     touchStartX.current = null;
   };
 
+  // Calculate how many items to show per page based on screen size
+  const itemsPerPage = isMobile ? 1 : 4;
+  const pageCount = Math.ceil(contentItems.length / itemsPerPage);
+  
+  const currentPage = isMobile ? activeIndex : Math.floor(activeIndex / itemsPerPage);
+
+  // For desktop view, create sets of items for grid display
   const desktopView = (
     <div className="relative px-4">
       <div className="relative overflow-hidden" style={{ height: '320px' }}>
         <div className="h-full w-full relative">
+          {/* Navigation controls */}
           <div className="absolute inset-y-0 left-0 z-20 flex items-center">
             <button 
               onClick={prevContent}
@@ -179,15 +201,15 @@ const TopicsBelt: React.FC = () => {
               <ChevronRight className="h-6 w-6 text-white" />
             </button>
           </div>
-
+          
+          {/* Content grid with crossfade animation between pages */}
           <div className="absolute inset-0 grid grid-cols-4 gap-4">
             {contentItems.map((item, index) => (
               <div 
                 key={`item-${item.id}-${index}`}
                 className={cn(
                   "transition-opacity duration-700 ease-in-out",
-                  Math.floor(activeIndex / 4) * 4 <= index && 
-                  index < Math.floor(activeIndex / 4) * 4 + 4 
+                  Math.floor(index / itemsPerPage) === currentPage
                     ? "opacity-100 z-10" 
                     : "opacity-0 z-0"
                 )}
@@ -209,14 +231,15 @@ const TopicsBelt: React.FC = () => {
         </div>
       </div>
       
+      {/* Page dots for desktop view */}
       <div className="flex justify-center mt-4 gap-1">
-        {[0, 1].map((pageIndex) => (
+        {Array.from({ length: pageCount }).map((_, pageIndex) => (
           <button 
             key={pageIndex}
-            onClick={() => goToContent(pageIndex * 4)}
+            onClick={() => goToContent(pageIndex * itemsPerPage)}
             className={cn(
               "w-2 h-2 rounded-full transition-all duration-300",
-              Math.floor(activeIndex / 4) === pageIndex
+              currentPage === pageIndex
                 ? "bg-primary scale-125" 
                 : "bg-primary/40 hover:bg-primary/60"
             )}
@@ -226,6 +249,7 @@ const TopicsBelt: React.FC = () => {
     </div>
   );
   
+  // For mobile view, show one item at a time with crossfade
   const mobileView = (
     <div className="relative overflow-hidden w-full">
       <AspectRatio ratio={3 / 2.5} className="w-full">
@@ -249,6 +273,7 @@ const TopicsBelt: React.FC = () => {
             </div>
           ))}
           
+          {/* Page dots for mobile */}
           <div className="absolute bottom-4 right-4 flex gap-1">
             {contentItems.map((_, index) => (
               <button
