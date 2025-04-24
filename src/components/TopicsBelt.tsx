@@ -174,7 +174,7 @@ const TopicsBelt: React.FC = () => {
   };
 
   const queueTransition = (direction: 'up' | 'down') => {
-    if (transitionQueue.current.length >= MAX_QUEUE_SIZE || !contentVisible.current) {
+    if (!isScrolling.current || transitionQueue.current.length >= MAX_QUEUE_SIZE || !contentVisible.current) {
       return;
     }
     
@@ -214,6 +214,10 @@ const TopicsBelt: React.FC = () => {
     }
   };
 
+  const lastScrollTime = useRef<number>(Date.now());
+  const SCROLL_TIMEOUT = 150; // ms to consider scrolling has stopped
+  const isScrolling = useRef<boolean>(false);
+  
   useEffect(() => {
     weeklyContentItems.forEach(item => {
       if (item.image) {
@@ -245,6 +249,9 @@ const TopicsBelt: React.FC = () => {
       const scrollDelta = Math.abs(currentScrollY - lastScrollY.current);
       
       if (scrollDelta > 5) {
+        isScrolling.current = true;
+        lastScrollTime.current = Date.now();
+        
         const direction = currentScrollY > lastScrollY.current ? 'down' : 'up';
         
         if (direction !== scrollDirection.current) {
@@ -254,7 +261,7 @@ const TopicsBelt: React.FC = () => {
         
         scrollAccumulator.current += scrollDelta;
         
-        if (scrollAccumulator.current >= scrollThreshold) {
+        if (scrollAccumulator.current >= scrollThreshold && contentVisible.current) {
           scrollAccumulator.current = 0;
           queueTransition(direction);
         }
@@ -262,10 +269,20 @@ const TopicsBelt: React.FC = () => {
         lastScrollY.current = currentScrollY;
       }
     };
+
+    const checkScrollStopped = () => {
+      if (Date.now() - lastScrollTime.current > SCROLL_TIMEOUT) {
+        isScrolling.current = false;
+      }
+      requestAnimationFrame(checkScrollStopped);
+    };
     
     window.addEventListener('scroll', handleScroll, { passive: true });
+    const scrollCheckFrame = requestAnimationFrame(checkScrollStopped);
+    
     return () => {
       window.removeEventListener('scroll', handleScroll);
+      cancelAnimationFrame(scrollCheckFrame);
       if (processQueueTimeout.current) {
         clearTimeout(processQueueTimeout.current);
       }
