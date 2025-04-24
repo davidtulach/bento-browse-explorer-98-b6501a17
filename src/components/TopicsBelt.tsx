@@ -115,6 +115,9 @@ const TopicsBelt: React.FC = () => {
   const scrollEventThrottled = useRef<boolean>(false);
   const scrollLocked = useRef<boolean>(false);
   
+  const lastScrollTime = useRef<number>(Date.now());
+  const SCROLL_TIMEOUT = 150; // ms to consider scrolling has stopped
+  const isScrolling = useRef<boolean>(false);
   const transitionAfterScrollTimeout = useRef<number | null>(null);
   
   const MAX_QUEUE_SIZE = 3;
@@ -218,10 +221,6 @@ const TopicsBelt: React.FC = () => {
     }
   };
 
-  const lastScrollTime = useRef<number>(Date.now());
-  const SCROLL_TIMEOUT = 150; // ms to consider scrolling has stopped
-  const isScrolling = useRef<boolean>(false);
-  
   useEffect(() => {
     weeklyContentItems.forEach(item => {
       if (item.image) {
