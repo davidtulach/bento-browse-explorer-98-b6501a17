@@ -115,6 +115,8 @@ const TopicsBelt: React.FC = () => {
   const scrollEventThrottled = useRef<boolean>(false);
   const scrollLocked = useRef<boolean>(false);
   
+  const transitionAfterScrollTimeout = useRef<number | null>(null);
+  
   const MAX_QUEUE_SIZE = 3;
   const VISIBILITY_THRESHOLD = 0.5;
   const transitionQueue = useRef<Array<'up' | 'down'>>([]);
