@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -23,6 +24,14 @@ export default {
     extend: {
       transitionDuration: {
         '3000': '3000ms',
+        '700': '700ms',
+      },
+      willChange: {
+        'opacity': 'opacity',
+        'transform': 'transform',
+      },
+      backfaceVisibility: {
+        'hidden': 'hidden',
       },
       colors: {
         border: 'hsl(var(--border))',
@@ -73,9 +82,6 @@ export default {
         lg: 'var(--radius)',
         md: 'calc(var(--radius) - 2px)',
         sm: 'calc(var(--radius) - 4px)'
-      },
-      willChange: {
-        opacity: 'opacity',
       },
       keyframes: {
         'accordion-down': {

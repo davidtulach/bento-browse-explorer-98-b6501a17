@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -120,8 +121,7 @@
   
   /* Image performance optimizations */
   img {
-    will-change: transform, opacity;
-    backface-visibility: hidden;
+    @apply will-change-transform backface-visibility-hidden;
     transform: translateZ(0);
   }
 }
@@ -173,9 +173,5 @@
 
   .story-circle-inner {
     @apply w-full h-full rounded-full border-2 border-white dark:border-gray-800 bg-gray-100 dark:bg-gray-800 flex items-center justify-center overflow-hidden;
-  }
-
-  .opacity-transition {
-    @apply transition-opacity duration-3000 ease-in-out will-change-opacity;
   }
 }
