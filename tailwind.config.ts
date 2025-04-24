@@ -1,4 +1,3 @@
-
 import type { Config } from "tailwindcss";
 
 export default {
@@ -234,5 +233,14 @@ export default {
       }
     }
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [
+    require("tailwindcss-animate"),
+    function({ addUtilities }) {
+      addUtilities({
+        '.backface-visibility-hidden': {
+          'backface-visibility': 'hidden'
+        }
+      })
+    }
+  ]
 } satisfies Config;
