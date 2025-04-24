@@ -9,7 +9,6 @@ import { AspectRatio } from '@/components/ui/aspect-ratio';
 import { AdItem, ikeaBeltSequence } from '@/utils/adSequences';
 import AnimatedImage from '@/components/AnimatedImage';
 import { useContentTransitions } from '@/hooks/use-content-transitions';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 interface BeltItem {
   id: number;
@@ -195,25 +194,6 @@ const IkeaBelt = () => {
     <div className="relative px-4">
       <div className="relative overflow-hidden" style={{ height: '320px' }}>
         <div className="h-full w-full relative">
-          {/* Navigation controls */}
-          <div className="absolute inset-y-0 left-0 z-20 flex items-center">
-            <button 
-              onClick={prevContent}
-              className="bg-white/20 backdrop-blur-sm p-2 rounded-full hover:bg-white/30 transition-all"
-            >
-              <ChevronLeft className="h-6 w-6 text-white" />
-            </button>
-          </div>
-          
-          <div className="absolute inset-y-0 right-0 z-20 flex items-center">
-            <button 
-              onClick={nextContent}
-              className="bg-white/20 backdrop-blur-sm p-2 rounded-full hover:bg-white/30 transition-all"
-            >
-              <ChevronRight className="h-6 w-6 text-white" />
-            </button>
-          </div>
-          
           {/* Content grid with crossfade animation between pages */}
           <div className="absolute inset-0 grid grid-cols-4 gap-4">
             {contentItems.map((item, index) => {

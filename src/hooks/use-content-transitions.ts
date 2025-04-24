@@ -1,3 +1,4 @@
+
 import { useState, useRef, useEffect } from 'react';
 import { useHapticFeedback } from '@/hooks/use-haptic';
 
@@ -106,7 +107,10 @@ export function useContentTransitions(
   
   // Process the next item in the transition queue
   const processNextInQueue = () => {
-    if (transitionQueue.current.length === 0) return;
+    if (transitionQueue.current.length === 0) {
+      isTransitioning.current = false;
+      return;
+    }
     
     isTransitioning.current = true;
     const nextIndex = transitionQueue.current.shift();
@@ -119,7 +123,7 @@ export function useContentTransitions(
       transitionTimer.current = window.setTimeout(() => {
         isTransitioning.current = false;
         processTransitionQueue();
-      }, minimumDisplayTime);
+      }, 100); // Quick timeout to allow for next queue processing
     }
   };
 
@@ -127,32 +131,21 @@ export function useContentTransitions(
   const handleScroll = () => {
     if (!enableScrollTriggers || isManuallyControlled || isMobile === undefined) return;
     
-    // Throttle scroll events
-    if (scrollThrottleTimer.current) return;
-    
-    scrollThrottleTimer.current = window.setTimeout(() => {
-      scrollThrottleTimer.current = null;
-    }, 50);
-    
+    // Don't throttle scroll events - this was causing issues
     const currentScrollY = window.scrollY;
     const scrollDelta = Math.abs(currentScrollY - lastScrollY.current);
     
     if (scrollDelta > 5) {
       // Determine scroll direction
       const direction = currentScrollY > lastScrollY.current ? 'down' : 'up';
+      scrollDirection.current = direction;
       
-      // If direction changed, reset accumulator but maintain direction
-      if (direction !== scrollDirection.current) {
-        scrollDirection.current = direction;
-        scrollAccumulator.current = scrollDelta; // Start with current delta instead of 0
-      } else {
-        // Direction unchanged, add to accumulator
-        scrollAccumulator.current += scrollDelta;
-      }
+      // Accumulate scroll distance
+      scrollAccumulator.current += scrollDelta;
       
       // Trigger content transition if threshold is reached
       if (scrollAccumulator.current >= scrollThreshold) {
-        // Reset accumulator but remember direction
+        // Reset accumulator
         scrollAccumulator.current = 0;
         
         // Calculate next index based on scroll direction
@@ -160,7 +153,7 @@ export function useContentTransitions(
           ? (activeIndex + 1) % itemCount 
           : (activeIndex - 1 + itemCount) % itemCount;
         
-        // Only add to queue if not already there to avoid duplicates
+        // Only add to queue if not already transitioning to this index
         if (!transitionQueue.current.includes(nextIndex) && nextIndex !== activeIndex) {
           transitionQueue.current.push(nextIndex);
           
