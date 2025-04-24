@@ -21,6 +21,9 @@ export default {
       sans: ['"Geomanist"', 'system-ui', 'sans-serif'],
     },
     extend: {
+      transitionDuration: {
+        '3000': '3000ms',
+      },
       colors: {
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',

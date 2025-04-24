@@ -176,6 +176,6 @@
   }
 
   .opacity-transition {
-    @apply transition-opacity duration-[3000ms] ease-in-out will-change-opacity;
+    @apply transition-opacity duration-3000 ease-in-out will-change-opacity;
   }
 }

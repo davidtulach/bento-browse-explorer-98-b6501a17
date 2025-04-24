@@ -1,3 +1,4 @@
+
 import { useRef, useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import { useHapticFeedback } from '@/hooks/use-haptic';
@@ -354,7 +355,7 @@ const TopicsBelt: React.FC = () => {
                 <div 
                   className={cn(
                     "absolute inset-0 grid grid-cols-4 gap-4",
-                    "transition-opacity duration-[3000ms] ease-in-out",
+                    "transition-opacity duration-3000 ease-in-out",
                     desktopSetIndex === 0
                       ? "opacity-100 z-10"
                       : "opacity-0 z-0"
@@ -380,7 +381,7 @@ const TopicsBelt: React.FC = () => {
                 <div 
                   className={cn(
                     "absolute inset-0 grid grid-cols-4 gap-4",
-                    "transition-opacity duration-[3000ms] ease-in-out",
+                    "transition-opacity duration-3000 ease-in-out",
                     desktopSetIndex === 1
                       ? "opacity-100 z-10"
                       : "opacity-0 z-0"

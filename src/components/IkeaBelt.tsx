@@ -127,7 +127,7 @@ const IkeaBelt = () => {
   const scrollThreshold = 150;
   
   const lastTransitionTime = useRef<number>(Date.now());
-  const minimumDisplayTime = 3000; // Changed from 1000 to 3000ms for 3-second transitions
+  const minimumDisplayTime = 3000;
   const isTransitioning = useRef<boolean>(false);
   const scrollEventThrottled = useRef<boolean>(false);
   const scrollLocked = useRef<boolean>(false);
@@ -344,7 +344,7 @@ const IkeaBelt = () => {
               <div className="h-full w-full relative">
                 <div 
                   className={cn(
-                    "absolute inset-0 grid grid-cols-4 gap-4 transition-all duration-[3000ms]",
+                    "absolute inset-0 grid grid-cols-4 gap-4 transition-all duration-3000",
                     "opacity-transition",
                     desktopSetIndex === 0
                       ? "opacity-100 z-10"
@@ -370,7 +370,7 @@ const IkeaBelt = () => {
 
                 <div 
                   className={cn(
-                    "absolute inset-0 grid grid-cols-4 gap-4 transition-all duration-[3000ms]",
+                    "absolute inset-0 grid grid-cols-4 gap-4 transition-all duration-3000",
                     "opacity-transition",
                     desktopSetIndex === 1
                       ? "opacity-100 z-10"
