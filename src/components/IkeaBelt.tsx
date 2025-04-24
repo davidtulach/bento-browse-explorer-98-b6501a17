@@ -131,6 +131,10 @@ const IkeaBelt = () => {
   const isTransitioning = useRef<boolean>(false);
   const scrollEventThrottled = useRef<boolean>(false);
   const scrollLocked = useRef<boolean>(false);
+  const lastScrollTime = useRef<number>(Date.now());
+  const SCROLL_TIMEOUT = 150; // ms to consider scrolling has stopped
+  const isScrolling = useRef<boolean>(false);
+  const transitionAfterScrollTimeout = useRef<number | null>(null);
   
   const MAX_QUEUE_SIZE = 3;
   const VISIBILITY_THRESHOLD = 0.5;
@@ -138,9 +142,6 @@ const IkeaBelt = () => {
   const processQueueTimeout = useRef<number | null>(null);
   const intersectionObserver = useRef<IntersectionObserver | null>(null);
   const contentVisible = useRef<boolean>(false);
-  const lastScrollTime = useRef<number>(Date.now());
-  const SCROLL_TIMEOUT = 150; // ms to consider scrolling has stopped
-  const isScrolling = useRef<boolean>(false);
   
   const firstSet = processedItems.slice(0, 4);
   const secondSet = [...processedItems.slice(2, 4), ...processedItems.slice(0, 2)];
@@ -198,9 +199,11 @@ const IkeaBelt = () => {
       
       triggerHaptic();
       
-      processQueueTimeout.current = window.setTimeout(() => {
-        processTransitionQueue();
-      }, minimumDisplayTime);
+      if (isScrolling.current) {
+        processQueueTimeout.current = window.setTimeout(() => {
+          processTransitionQueue();
+        }, minimumDisplayTime);
+      }
     }
   };
 
@@ -238,6 +241,11 @@ const IkeaBelt = () => {
         isScrolling.current = true;
         lastScrollTime.current = Date.now();
         
+        if (transitionAfterScrollTimeout.current) {
+          window.clearTimeout(transitionAfterScrollTimeout.current);
+          transitionAfterScrollTimeout.current = null;
+        }
+        
         const direction = currentScrollY > lastScrollY.current ? 'down' : 'up';
         
         if (direction !== scrollDirection.current) {
@@ -258,7 +266,31 @@ const IkeaBelt = () => {
 
     const checkScrollStopped = () => {
       if (Date.now() - lastScrollTime.current > SCROLL_TIMEOUT) {
-        isScrolling.current = false;
+        if (isScrolling.current) {
+          isScrolling.current = false;
+          
+          if (contentVisible.current && !scrollLocked.current) {
+            scrollLocked.current = true;
+            const direction = scrollDirection.current;
+            
+            transitionAfterScrollTimeout.current = window.setTimeout(() => {
+              if (contentVisible.current) {
+                updateAds(direction);
+                if (isMobile) {
+                  if (direction === 'down') {
+                    setVisibleMobileIndex(prev => Math.min(prev + 1, processedItems.length - 1));
+                  } else {
+                    setVisibleMobileIndex(prev => Math.max(prev - 1, 0));
+                  }
+                } else {
+                  setDesktopSetIndex(prev => prev === 0 ? 1 : 0);
+                }
+                triggerHaptic();
+              }
+              scrollLocked.current = false;
+            }, 300);
+          }
+        }
       }
       requestAnimationFrame(checkScrollStopped);
     };
@@ -271,6 +303,9 @@ const IkeaBelt = () => {
       cancelAnimationFrame(scrollCheckFrame);
       if (processQueueTimeout.current) {
         clearTimeout(processQueueTimeout.current);
+      }
+      if (transitionAfterScrollTimeout.current) {
+        clearTimeout(transitionAfterScrollTimeout.current);
       }
     };
   }, [isMobile, triggerHaptic]);
