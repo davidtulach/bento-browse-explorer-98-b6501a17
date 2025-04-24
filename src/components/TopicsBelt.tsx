@@ -7,13 +7,8 @@ import { ListTodo } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Card } from '@/components/ui/card';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
-
-interface AdItem {
-  id: number;
-  title: string;
-  image: string;
-  sponsor: string;
-}
+import { AdItem, topicsBeltSequence, getNextAd } from '@/utils/adSequences';
+import AnimatedImage from '@/components/AnimatedImage';
 
 interface BeltItem {
   id: number;
@@ -36,89 +31,24 @@ interface BeltSection {
   items: BeltItem[];
 }
 
-const processBeltItems = (section: BeltSection): BeltItem[] => {
-  const processedItems: BeltItem[] = [];
-  
-  section.items.forEach(item => {
-    if (item.isAdStack && item.ads) {
-      item.ads.forEach(ad => {
-        processedItems.push({
-          id: ad.id,
-          title: ad.title,
-          image: ad.image,
-          fallbackSrc: ad.image,
-          isAd: true,
-          sponsor: ad.sponsor
-        } as BeltItem);
-      });
-    } else {
-      processedItems.push(item);
+const weeklyContentItems: BeltItem[] = [
+  {
+    id: 101,
+    title: "The Perfect Sunday Breakfast",
+    image: "/lovable-uploads/cbfe3137-a8fe-47b7-b7bb-4e2fdcd931fc.png",
+    fallbackSrc: "/lovable-uploads/cbfe3137-a8fe-47b7-b7bb-4e2fdcd931fc.png",
+    badge: {
+      icon: "ListTodo",
+      text: "Shopping list"
     }
-  });
-  
-  return processedItems;
-};
-
-const weeklyOffers: BeltSection = {
-  id: 1,
-  title: "Weekly Topics",
-  items: [
-    {
-      id: 101,
-      title: "The Perfect Sunday Breakfast",
-      image: "/lovable-uploads/cbfe3137-a8fe-47b7-b7bb-4e2fdcd931fc.png",
-      fallbackSrc: "/lovable-uploads/cbfe3137-a8fe-47b7-b7bb-4e2fdcd931fc.png",
-      badge: {
-        icon: "ListTodo",
-        text: "Shopping list"
-      }
-    }, 
-    {
-      id: 102,
-      title: "Stacked Ads",
-      isAdStack: true,
-      ads: [
-        {
-          id: 1021,
-          title: "Viladomy Pitkovic",
-          image: "/lovable-uploads/90f118dd-41bc-482c-98b0-3763799f43e1.png",
-          sponsor: "Central Group"
-        },
-        {
-          id: 1022,
-          title: "Partners Banka",
-          image: "/lovable-uploads/ae63401e-b7d6-4f1f-817d-2c379b21bd15.png",
-          sponsor: "Partners Banka"
-        }
-      ]
-    }, 
-    {
-      id: 103,
-      title: "Bakery Fresh",
-      image: "/lovable-uploads/449d2a80-7b69-4959-8a66-f74b63814e56.png",
-      fallbackSrc: "/lovable-uploads/449d2a80-7b69-4959-8a66-f74b63814e56.png"
-    }, 
-    {
-      id: 104,
-      title: "Stacked Ads",
-      isAdStack: true,
-      ads: [
-        {
-          id: 1041,
-          title: "Misa Ice Cream",
-          image: "/lovable-uploads/d136c32a-fa95-4a02-ac7a-ca96bdad4f58.png",
-          sponsor: "Misa"
-        },
-        {
-          id: 1042,
-          title: "U-mai Caviar",
-          image: "/lovable-uploads/80409ac3-087c-453d-a031-d3dc5358c401.png",
-          sponsor: "U-mai"
-        }
-      ]
-    }
-  ]
-};
+  },
+  {
+    id: 103,
+    title: "Bakery Fresh",
+    image: "/lovable-uploads/449d2a80-7b69-4959-8a66-f74b63814e56.png",
+    fallbackSrc: "/lovable-uploads/449d2a80-7b69-4959-8a66-f74b63814e56.png"
+  }
+];
 
 const ContentCard = ({ 
   item, 
@@ -130,11 +60,12 @@ const ContentCard = ({
   return (
     <div className="relative h-full w-full">
       <div className="absolute inset-0">
-        <img 
-          src={item.image} 
+        <AnimatedImage 
+          src={item.image || ''} 
           alt={item.title} 
-          className="w-full h-full object-cover" 
-          loading="eager"
+          fallbackSrc={item.fallbackSrc}
+          className="w-full h-full"
+          objectFit="cover"
         />
       </div>
       
@@ -147,7 +78,7 @@ const ContentCard = ({
         </div>
       )}
       
-      {(item as any).sponsor && item.isAd && (
+      {item.sponsor && item.isAd && (
         <div className="absolute top-4 right-4 z-10">
           <Badge variant="secondary" className="px-2 py-1 bg-white/90 text-primary shadow-sm backdrop-blur-sm">
             <span className="text-xs font-medium">Sponsored</span>
@@ -165,9 +96,9 @@ const ContentCard = ({
         <h3 className="text-white text-2xl font-extrabold leading-tight">
           {item.title}
         </h3>
-        {(item as any).sponsor && item.isAd && (
+        {item.sponsor && item.isAd && (
           <p className="text-white/80 text-sm mt-1">
-            By {(item as any).sponsor}
+            By {item.sponsor}
           </p>
         )}
       </div>
@@ -175,18 +106,34 @@ const ContentCard = ({
   );
 };
 
-const TopicsBelt = () => {
+const TopicsBelt: React.FC = () => {
   const beltRef = useRef<HTMLDivElement>(null);
   const { triggerHaptic } = useHapticFeedback();
   const isMobile = useIsMobile();
   const [focusedIndex, setFocusedIndex] = useState<number | null>(0);
   const itemRefs = useRef<(HTMLDivElement | null)[]>([]);
-  const lastHapticTime = useRef<number>(0);
   const [visibleMobileIndex, setVisibleMobileIndex] = useState(0);
   const [desktopSetIndex, setDesktopSetIndex] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
   
-  const processedItems = processBeltItems(weeklyOffers);
+  // Ad management
+  const [adSequenceIndex, setAdSequenceIndex] = useState(0);
+  const [currentAd1, setCurrentAd1] = useState(topicsBeltSequence[0]);
+  const [currentAd2, setCurrentAd2] = useState(topicsBeltSequence[1]);
+  
+  // Combine content items with current ads
+  const processedItems: BeltItem[] = [
+    weeklyContentItems[0],
+    { 
+      ...currentAd1, 
+      isAd: true 
+    },
+    weeklyContentItems[1],
+    { 
+      ...currentAd2, 
+      isAd: true 
+    }
+  ];
   
   const lastScrollY = useRef<number>(0);
   const scrollDirection = useRef<'up' | 'down'>('down');
@@ -199,6 +146,7 @@ const TopicsBelt = () => {
   const scrollEventThrottled = useRef<boolean>(false);
   const scrollLocked = useRef<boolean>(false);
   
+  // Split items for desktop view
   const firstSet = processedItems.slice(0, 4);
   const secondSet = processedItems.slice(4);
   
@@ -207,10 +155,29 @@ const TopicsBelt = () => {
     secondSet.push(processedItems[indexToAdd]);
   }
 
+  // Update ad based on scroll direction
+  const updateAds = (direction: 'up' | 'down') => {
+    const directionMapping = direction === 'down' ? 'next' : 'prev';
+    
+    // Update first ad
+    const nextAd1 = getNextAd(topicsBeltSequence, adSequenceIndex, directionMapping);
+    setCurrentAd1(nextAd1.ad);
+    
+    // Update second ad (use a different position in sequence)
+    const nextAd2 = getNextAd(topicsBeltSequence, (nextAd1.index + 1) % topicsBeltSequence.length, directionMapping);
+    setCurrentAd2(nextAd2.ad);
+    
+    // Update the sequence index
+    setAdSequenceIndex(nextAd1.index);
+  };
+
   const triggerTransition = (direction: 'up' | 'down') => {
     if (isTransitioning.current || scrollLocked.current) return;
     
     isTransitioning.current = true;
+    
+    // Update the ads based on scroll direction
+    updateAds(direction);
     
     if (isMobile) {
       if (direction === 'down') {
@@ -240,8 +207,10 @@ const TopicsBelt = () => {
     }, 800);
   };
 
+  // Preload all ad images
   useEffect(() => {
-    processedItems.forEach(item => {
+    // Preload weekly content images
+    weeklyContentItems.forEach(item => {
       if (item.image) {
         const img = new Image();
         img.src = item.image;
@@ -250,6 +219,12 @@ const TopicsBelt = () => {
           fallbackImg.src = item.fallbackSrc;
         }
       }
+    });
+    
+    // Preload all ads in the sequence
+    topicsBeltSequence.forEach(ad => {
+      const img = new Image();
+      img.src = ad.image;
     });
   }, []);
 
@@ -338,7 +313,7 @@ const TopicsBelt = () => {
   }, [isMobile, visibleMobileIndex, triggerHaptic]);
 
   return (
-    <div className="py-8">
+    <div className="py-8" ref={beltRef}>
       <div className="mb-8">
         {isMobile ? (
           <div className={cn(

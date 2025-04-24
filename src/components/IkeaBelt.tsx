@@ -7,13 +7,8 @@ import { ListTodo } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Card } from '@/components/ui/card';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
-
-interface AdItem {
-  id: number;
-  title: string;
-  image: string;
-  sponsor: string;
-}
+import { AdItem, ikeaBeltSequence, getNextAd } from '@/utils/adSequences';
+import AnimatedImage from '@/components/AnimatedImage';
 
 interface BeltItem {
   id: number;
@@ -30,36 +25,7 @@ interface BeltItem {
   sponsor?: string;
 }
 
-interface BeltSection {
-  id: number;
-  title: string;
-  items: BeltItem[];
-}
-
-const processBeltItems = (section: BeltSection): BeltItem[] => {
-  const processedItems: BeltItem[] = [];
-  
-  section.items.forEach(item => {
-    if (item.isAdStack && item.ads) {
-      item.ads.forEach(ad => {
-        processedItems.push({
-          id: ad.id,
-          title: ad.title,
-          image: ad.image,
-          fallbackSrc: ad.image,
-          isAd: true,
-          sponsor: ad.sponsor
-        } as BeltItem);
-      });
-    } else {
-      processedItems.push(item);
-    }
-  });
-  
-  return processedItems;
-};
-
-const weeklyOffers: BeltSection = {
+const weeklyOffers = {
   id: 1,
   title: "Weekly Topics",
   items: [
@@ -72,50 +38,12 @@ const weeklyOffers: BeltSection = {
         icon: "ListTodo",
         text: "Shopping list"
       }
-    }, 
-    {
-      id: 102,
-      title: "Stacked Ads",
-      isAdStack: true,
-      ads: [
-        {
-          id: 1021,
-          title: "Viladomy Pitkovic",
-          image: "/lovable-uploads/90f118dd-41bc-482c-98b0-3763799f43e1.png",
-          sponsor: "Central Group"
-        },
-        {
-          id: 1022,
-          title: "Partners Banka",
-          image: "/lovable-uploads/ae63401e-b7d6-4f1f-817d-2c379b21bd15.png",
-          sponsor: "Partners Banka"
-        }
-      ]
-    }, 
+    },
     {
       id: 103,
       title: "Bakery Fresh",
       image: "/lovable-uploads/449d2a80-7b69-4959-8a66-f74b63814e56.png",
       fallbackSrc: "/lovable-uploads/449d2a80-7b69-4959-8a66-f74b63814e56.png"
-    }, 
-    {
-      id: 104,
-      title: "Stacked Ads",
-      isAdStack: true,
-      ads: [
-        {
-          id: 1041,
-          title: "Misa Ice Cream",
-          image: "/lovable-uploads/d136c32a-fa95-4a02-ac7a-ca96bdad4f58.png",
-          sponsor: "Misa"
-        },
-        {
-          id: 1042,
-          title: "U-mai Caviar",
-          image: "/lovable-uploads/80409ac3-087c-453d-a031-d3dc5358c401.png",
-          sponsor: "U-mai"
-        }
-      ]
     }
   ]
 };
@@ -130,11 +58,12 @@ const ContentCard = ({
   return (
     <div className="relative h-full w-full">
       <div className="absolute inset-0">
-        <img 
-          src={item.image} 
+        <AnimatedImage 
+          src={item.image || ''} 
           alt={item.title} 
-          className="w-full h-full object-cover" 
-          loading="eager"
+          fallbackSrc={item.fallbackSrc}
+          className="w-full h-full"
+          objectFit="cover"
         />
       </div>
       
@@ -147,7 +76,7 @@ const ContentCard = ({
         </div>
       )}
       
-      {(item as any).sponsor && item.isAd && (
+      {item.sponsor && item.isAd && (
         <div className="absolute top-4 right-4 z-10">
           <Badge variant="secondary" className="px-2 py-1 bg-white/90 text-primary shadow-sm backdrop-blur-sm">
             <span className="text-xs font-medium">Sponsored</span>
@@ -165,9 +94,9 @@ const ContentCard = ({
         <h3 className="text-white text-2xl font-extrabold leading-tight">
           {item.title}
         </h3>
-        {(item as any).sponsor && item.isAd && (
+        {item.sponsor && item.isAd && (
           <p className="text-white/80 text-sm mt-1">
-            By {(item as any).sponsor}
+            By {item.sponsor}
           </p>
         )}
       </div>
@@ -181,12 +110,28 @@ const IkeaBelt = () => {
   const isMobile = useIsMobile();
   const [focusedIndex, setFocusedIndex] = useState<number | null>(0);
   const itemRefs = useRef<(HTMLDivElement | null)[]>([]);
-  const lastHapticTime = useRef<number>(0);
   const [visibleMobileIndex, setVisibleMobileIndex] = useState(0);
   const [desktopSetIndex, setDesktopSetIndex] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
   
-  const processedItems = processBeltItems(weeklyOffers);
+  // Ad management
+  const [adSequenceIndex, setAdSequenceIndex] = useState(0);
+  const [currentAd1, setCurrentAd1] = useState(ikeaBeltSequence[0]);
+  const [currentAd2, setCurrentAd2] = useState(ikeaBeltSequence[1]);
+  
+  // Combine content items with current ads
+  const processedItems: BeltItem[] = [
+    weeklyOffers.items[0],
+    { 
+      ...currentAd1, 
+      isAd: true 
+    },
+    weeklyOffers.items[1],
+    { 
+      ...currentAd2, 
+      isAd: true 
+    }
+  ];
   
   const lastScrollY = useRef<number>(0);
   const scrollDirection = useRef<'up' | 'down'>('down');
@@ -199,6 +144,7 @@ const IkeaBelt = () => {
   const scrollEventThrottled = useRef<boolean>(false);
   const scrollLocked = useRef<boolean>(false);
   
+  // Split items for desktop view
   const firstSet = processedItems.slice(0, 4);
   const secondSet = processedItems.slice(4);
   
@@ -207,10 +153,29 @@ const IkeaBelt = () => {
     secondSet.push(processedItems[indexToAdd]);
   }
 
+  // Update ad based on scroll direction
+  const updateAds = (direction: 'up' | 'down') => {
+    const directionMapping = direction === 'down' ? 'next' : 'prev';
+    
+    // Update first ad
+    const nextAd1 = getNextAd(ikeaBeltSequence, adSequenceIndex, directionMapping);
+    setCurrentAd1(nextAd1.ad);
+    
+    // Update second ad (use a different position in sequence)
+    const nextAd2 = getNextAd(ikeaBeltSequence, (nextAd1.index + 1) % ikeaBeltSequence.length, directionMapping);
+    setCurrentAd2(nextAd2.ad);
+    
+    // Update the sequence index
+    setAdSequenceIndex(nextAd1.index);
+  };
+
   const triggerTransition = (direction: 'up' | 'down') => {
     if (isTransitioning.current || scrollLocked.current) return;
     
     isTransitioning.current = true;
+    
+    // Update the ads based on scroll direction
+    updateAds(direction);
     
     if (isMobile) {
       if (direction === 'down') {
@@ -240,8 +205,10 @@ const IkeaBelt = () => {
     }, 800);
   };
 
+  // Preload all ad images
   useEffect(() => {
-    processedItems.forEach(item => {
+    // Preload weekly content images
+    weeklyOffers.items.forEach(item => {
       if (item.image) {
         const img = new Image();
         img.src = item.image;
@@ -250,6 +217,12 @@ const IkeaBelt = () => {
           fallbackImg.src = item.fallbackSrc;
         }
       }
+    });
+    
+    // Preload all ads in the sequence
+    ikeaBeltSequence.forEach(ad => {
+      const img = new Image();
+      img.src = ad.image;
     });
   }, []);
 
@@ -338,7 +311,7 @@ const IkeaBelt = () => {
   }, [isMobile, visibleMobileIndex, triggerHaptic]);
 
   return (
-    <div className="py-8">
+    <div className="py-8" ref={beltRef}>
       <div className="mb-8">
         <div className="px-4 mb-4">
           <h2 className="text-xl font-semibold">{weeklyOffers.title}</h2>
