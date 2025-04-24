@@ -1,3 +1,4 @@
+
 import { useRef, useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import { useHapticFeedback } from '@/hooks/use-haptic';
@@ -337,19 +338,29 @@ const IkeaBelt = () => {
                 ref={containerRef}
                 className="w-full h-full relative overflow-hidden"
               >
-                {processedItems.map((item, index) => (
-                  <div 
-                    key={item.id}
-                    className={cn(
-                      "absolute inset-0 w-full h-full transition-opacity duration-[3000ms]",
-                      visibleMobileIndex === index 
-                        ? "opacity-100 z-10" 
-                        : "opacity-0 z-0"
-                    )}
-                  >
-                    <ContentCard item={item} isFocused={false} />
-                  </div>
-                ))}
+                <div 
+                  className={cn(
+                    "absolute inset-0 grid grid-cols-1 transition-opacity duration-3000",
+                    visibleMobileIndex % 2 === 0 ? "opacity-100 z-10" : "opacity-0 z-0"
+                  )}
+                >
+                  <ContentCard 
+                    item={processedItems[visibleMobileIndex]} 
+                    isFocused={false} 
+                  />
+                </div>
+                
+                <div 
+                  className={cn(
+                    "absolute inset-0 grid grid-cols-1 transition-opacity duration-3000",
+                    visibleMobileIndex % 2 === 1 ? "opacity-100 z-10" : "opacity-0 z-0"
+                  )}
+                >
+                  <ContentCard 
+                    item={processedItems[visibleMobileIndex]} 
+                    isFocused={false} 
+                  />
+                </div>
                 
                 <div className="absolute bottom-4 right-4 flex gap-1">
                   {processedItems.map((_, index) => (
