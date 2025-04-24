@@ -185,6 +185,7 @@ const TopicsBelt: React.FC = () => {
     
     lastTransitionTime.current = Date.now();
     
+    // Extended display time for smoother transitions
     setTimeout(() => {
       isTransitioning.current = false;
     }, minimumDisplayTime);
@@ -306,32 +307,35 @@ const TopicsBelt: React.FC = () => {
         {isMobile ? (
           <div className={cn(
             "relative overflow-hidden",
-            "w-full"
+            "w-full perspective-1000"
           )}>
             <AspectRatio ratio={3 / 2.5} className="w-full">
               <div 
                 ref={containerRef}
-                className="w-full h-full relative overflow-hidden perspective-1000"
+                className="w-full h-full relative overflow-hidden"
+                style={{ 
+                  perspective: '1000px',
+                  transformStyle: 'preserve-3d'
+                }}
               >
                 {processedItems.map((item, index) => (
                   <div 
                     key={item.id}
                     className={cn(
-                      "absolute inset-0 w-full h-full transition-all duration-500 transform-gpu will-change-transform",
+                      "absolute inset-0 w-full h-full will-change-transform will-change-opacity",
                       visibleMobileIndex === index 
-                        ? "opacity-100 z-10 translate-3d-0" 
+                        ? "opacity-100 z-10" 
                         : index < visibleMobileIndex
-                          ? "opacity-0 z-0 -translate-3d-y-30 scale-90" 
-                          : "opacity-0 z-0 translate-3d-y-30 scale-90"
+                          ? "opacity-0 z-0" 
+                          : "opacity-0 z-0",
+                      visibleMobileIndex === index
+                        ? index > visibleMobileIndex 
+                          ? "animate-content-enter-up"
+                          : "animate-content-enter-down"
+                        : index < visibleMobileIndex
+                          ? "animate-content-exit-up"
+                          : "animate-content-exit-down"
                     )}
-                    style={{
-                      transformStyle: 'preserve-3d',
-                      transform: visibleMobileIndex === index 
-                        ? 'translate3d(0, 0, 0) scale(1)' 
-                        : index < visibleMobileIndex
-                          ? 'translate3d(0, -30%, 0) scale(0.9)'
-                          : 'translate3d(0, 30%, 0) scale(0.9)'
-                    }}
                   >
                     <ContentCard item={item} isFocused={false} />
                   </div>
@@ -355,17 +359,23 @@ const TopicsBelt: React.FC = () => {
           </div>
         ) : (
           <div className="relative px-4">
-            <div className="relative overflow-hidden perspective-1000" style={{ height: '320px' }}>
+            <div 
+              className="relative overflow-hidden" 
+              style={{ 
+                height: '320px',
+                perspective: '1000px'
+              }}
+            >
               <div className="h-full w-full relative">
                 <div 
                   className={cn(
-                    "absolute inset-0 grid grid-cols-4 gap-4 transition-all duration-500 transform-gpu will-change-transform",
+                    "absolute inset-0 grid grid-cols-4 gap-4 will-change-transform will-change-opacity",
+                    desktopSetIndex === 0
+                      ? "animate-content-enter-down"
+                      : "animate-content-exit-up"
                   )}
                   style={{
                     transformStyle: 'preserve-3d',
-                    transform: desktopSetIndex === 0 
-                      ? 'translate3d(0, 0, 0) scale(1)' 
-                      : 'translate3d(0, -30%, 0) scale(0.9)',
                     opacity: desktopSetIndex === 0 ? 1 : 0,
                     zIndex: desktopSetIndex === 0 ? 10 : 5
                   }}
@@ -389,13 +399,13 @@ const TopicsBelt: React.FC = () => {
 
                 <div 
                   className={cn(
-                    "absolute inset-0 grid grid-cols-4 gap-4 transition-all duration-500 transform-gpu will-change-transform",
+                    "absolute inset-0 grid grid-cols-4 gap-4 will-change-transform will-change-opacity",
+                    desktopSetIndex === 1
+                      ? "animate-content-enter-up"
+                      : "animate-content-exit-down"
                   )}
                   style={{
                     transformStyle: 'preserve-3d',
-                    transform: desktopSetIndex === 1
-                      ? 'translate3d(0, 0, 0) scale(1)' 
-                      : 'translate3d(0, 30%, 0) scale(0.9)',
                     opacity: desktopSetIndex === 1 ? 1 : 0,
                     zIndex: desktopSetIndex === 1 ? 10 : 5
                   }}

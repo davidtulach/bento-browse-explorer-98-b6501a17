@@ -1,4 +1,3 @@
-
 import type { Config } from "tailwindcss";
 
 export default {
@@ -135,6 +134,54 @@ export default {
 					'0%': { backgroundPosition: '-400px 0' },
 					'100%': { backgroundPosition: '400px 0' }
 				},
+				'content-fade-up': {
+					'0%': { 
+						opacity: '0',
+						transform: 'scale(1.05) translateY(10px)',
+						filter: 'blur(4px)'
+					},
+					'100%': { 
+						opacity: '1',
+						transform: 'scale(1) translateY(0)',
+						filter: 'blur(0)'
+					}
+				},
+				'content-fade-down': {
+					'0%': { 
+						opacity: '0',
+						transform: 'scale(1.05) translateY(-10px)',
+						filter: 'blur(4px)'
+					},
+					'100%': { 
+						opacity: '1',
+						transform: 'scale(1) translateY(0)',
+						filter: 'blur(0)'
+					}
+				},
+				'content-fade-out-up': {
+					'0%': { 
+						opacity: '1',
+						transform: 'scale(1) translateY(0)',
+						filter: 'blur(0)'
+					},
+					'100%': { 
+						opacity: '0',
+						transform: 'scale(0.95) translateY(-10px)',
+						filter: 'blur(4px)'
+					}
+				},
+				'content-fade-out-down': {
+					'0%': { 
+						opacity: '1',
+						transform: 'scale(1) translateY(0)',
+						filter: 'blur(0)'
+					},
+					'100%': { 
+						opacity: '0',
+						transform: 'scale(0.95) translateY(10px)',
+						filter: 'blur(4px)'
+					}
+				}
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
@@ -146,8 +193,10 @@ export default {
 				'slide-in-right': 'slide-in-right 0.3s ease-out',
 				'slide-out-right': 'slide-out-right 0.3s ease-out',
 				'image-shimmer': 'image-shimmer 1.5s infinite linear',
-				'enter': 'fade-in 0.3s ease-out, scale-in 0.2s ease-out',
-				'exit': 'fade-out 0.3s ease-out, scale-out 0.2s ease-out',
+				'content-enter-up': 'content-fade-up 400ms cubic-bezier(0.2, 0.8, 0.2, 1)',
+				'content-enter-down': 'content-fade-down 400ms cubic-bezier(0.2, 0.8, 0.2, 1)',
+				'content-exit-up': 'content-fade-out-up 400ms cubic-bezier(0.2, 0.8, 0.2, 1)',
+				'content-exit-down': 'content-fade-out-down 400ms cubic-bezier(0.2, 0.8, 0.2, 1)'
 			}
 		}
 	},
