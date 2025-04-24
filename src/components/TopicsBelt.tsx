@@ -104,12 +104,10 @@ const TopicsBelt: React.FC = () => {
   const [desktopSetIndex, setDesktopSetIndex] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
   
-  // Ad management
   const [adSequenceIndex, setAdSequenceIndex] = useState(0);
   const [currentAd1, setCurrentAd1] = useState(topicsBeltSequence[0]);
   const [currentAd2, setCurrentAd2] = useState(topicsBeltSequence[1]);
   
-  // Combine content items with current ads
   const processedItems: BeltItem[] = [
     weeklyContentItems[0],
     { 
@@ -134,7 +132,6 @@ const TopicsBelt: React.FC = () => {
   const scrollEventThrottled = useRef<boolean>(false);
   const scrollLocked = useRef<boolean>(false);
   
-  // Split items for desktop view
   const firstSet = processedItems.slice(0, 4);
   const secondSet = processedItems.slice(4);
   
@@ -143,19 +140,15 @@ const TopicsBelt: React.FC = () => {
     secondSet.push(processedItems[indexToAdd]);
   }
 
-  // Update ad based on scroll direction
   const updateAds = (direction: 'up' | 'down') => {
     const directionMapping = direction === 'down' ? 'next' : 'prev';
     
-    // Update first ad
     const nextAd1 = getNextAd(topicsBeltSequence, adSequenceIndex, directionMapping);
     setCurrentAd1(nextAd1.ad);
     
-    // Update second ad (use a different position in sequence)
     const nextAd2 = getNextAd(topicsBeltSequence, (nextAd1.index + 1) % topicsBeltSequence.length, directionMapping);
     setCurrentAd2(nextAd2.ad);
     
-    // Update the sequence index
     setAdSequenceIndex(nextAd1.index);
   };
 
@@ -164,7 +157,6 @@ const TopicsBelt: React.FC = () => {
     
     isTransitioning.current = true;
     
-    // Update the ads based on scroll direction
     updateAds(direction);
     
     if (isMobile) {
@@ -185,7 +177,6 @@ const TopicsBelt: React.FC = () => {
     
     lastTransitionTime.current = Date.now();
     
-    // Extended display time for smoother transitions
     setTimeout(() => {
       isTransitioning.current = false;
     }, minimumDisplayTime);
@@ -196,9 +187,7 @@ const TopicsBelt: React.FC = () => {
     }, 800);
   };
 
-  // Preload all ad images
   useEffect(() => {
-    // Preload weekly content images
     weeklyContentItems.forEach(item => {
       if (item.image) {
         const img = new Image();
@@ -210,7 +199,6 @@ const TopicsBelt: React.FC = () => {
       }
     });
     
-    // Preload all ads in the sequence
     topicsBeltSequence.forEach(ad => {
       const img = new Image();
       img.src = ad.image;
@@ -305,36 +293,20 @@ const TopicsBelt: React.FC = () => {
     <div className="py-8" ref={beltRef}>
       <div className="mb-8">
         {isMobile ? (
-          <div className={cn(
-            "relative overflow-hidden",
-            "w-full perspective-1000"
-          )}>
+          <div className="relative overflow-hidden w-full">
             <AspectRatio ratio={3 / 2.5} className="w-full">
               <div 
                 ref={containerRef}
                 className="w-full h-full relative overflow-hidden"
-                style={{ 
-                  perspective: '1000px',
-                  transformStyle: 'preserve-3d'
-                }}
               >
                 {processedItems.map((item, index) => (
                   <div 
                     key={item.id}
                     className={cn(
-                      "absolute inset-0 w-full h-full will-change-transform will-change-opacity",
+                      "absolute inset-0 w-full h-full",
                       visibleMobileIndex === index 
-                        ? "opacity-100 z-10" 
-                        : index < visibleMobileIndex
-                          ? "opacity-0 z-0" 
-                          : "opacity-0 z-0",
-                      visibleMobileIndex === index
-                        ? index > visibleMobileIndex 
-                          ? "animate-content-enter-up"
-                          : "animate-content-enter-down"
-                        : index < visibleMobileIndex
-                          ? "animate-content-exit-up"
-                          : "animate-content-exit-down"
+                        ? "opacity-100 z-10 animate-blur-fade-in" 
+                        : "opacity-0 z-0 animate-blur-fade-out"
                     )}
                   >
                     <ContentCard item={item} isFocused={false} />
@@ -359,26 +331,15 @@ const TopicsBelt: React.FC = () => {
           </div>
         ) : (
           <div className="relative px-4">
-            <div 
-              className="relative overflow-hidden" 
-              style={{ 
-                height: '320px',
-                perspective: '1000px'
-              }}
-            >
+            <div className="relative overflow-hidden" style={{ height: '320px' }}>
               <div className="h-full w-full relative">
                 <div 
                   className={cn(
-                    "absolute inset-0 grid grid-cols-4 gap-4 will-change-transform will-change-opacity",
+                    "absolute inset-0 grid grid-cols-4 gap-4",
                     desktopSetIndex === 0
-                      ? "animate-content-enter-down"
-                      : "animate-content-exit-up"
+                      ? "opacity-100 z-10 animate-blur-fade-in"
+                      : "opacity-0 z-0 animate-blur-fade-out"
                   )}
-                  style={{
-                    transformStyle: 'preserve-3d',
-                    opacity: desktopSetIndex === 0 ? 1 : 0,
-                    zIndex: desktopSetIndex === 0 ? 10 : 5
-                  }}
                 >
                   {firstSet.map((item, gridIndex) => (
                     <div 
@@ -399,16 +360,11 @@ const TopicsBelt: React.FC = () => {
 
                 <div 
                   className={cn(
-                    "absolute inset-0 grid grid-cols-4 gap-4 will-change-transform will-change-opacity",
+                    "absolute inset-0 grid grid-cols-4 gap-4",
                     desktopSetIndex === 1
-                      ? "animate-content-enter-up"
-                      : "animate-content-exit-down"
+                      ? "opacity-100 z-10 animate-blur-fade-in"
+                      : "opacity-0 z-0 animate-blur-fade-out"
                   )}
-                  style={{
-                    transformStyle: 'preserve-3d',
-                    opacity: desktopSetIndex === 1 ? 1 : 0,
-                    zIndex: desktopSetIndex === 1 ? 10 : 5
-                  }}
                 >
                   {secondSet.map((item, gridIndex) => (
                     <div 

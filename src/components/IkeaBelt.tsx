@@ -102,12 +102,10 @@ const IkeaBelt = () => {
   const [desktopSetIndex, setDesktopSetIndex] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
   
-  // Ad management
   const [adSequenceIndex, setAdSequenceIndex] = useState(0);
   const [currentAd1, setCurrentAd1] = useState(ikeaBeltSequence[0]);
   const [currentAd2, setCurrentAd2] = useState(ikeaBeltSequence[1]);
   
-  // Combine content items with current ads
   const processedItems: BeltItem[] = [
     weeklyOffers.items[0],
     { 
@@ -132,7 +130,6 @@ const IkeaBelt = () => {
   const scrollEventThrottled = useRef<boolean>(false);
   const scrollLocked = useRef<boolean>(false);
   
-  // Split items for desktop view
   const firstSet = processedItems.slice(0, 4);
   const secondSet = processedItems.slice(4);
   
@@ -141,19 +138,15 @@ const IkeaBelt = () => {
     secondSet.push(processedItems[indexToAdd]);
   }
 
-  // Update ad based on scroll direction
   const updateAds = (direction: 'up' | 'down') => {
     const directionMapping = direction === 'down' ? 'next' : 'prev';
     
-    // Update first ad
     const nextAd1 = getNextAd(ikeaBeltSequence, adSequenceIndex, directionMapping);
     setCurrentAd1(nextAd1.ad);
     
-    // Update second ad (use a different position in sequence)
     const nextAd2 = getNextAd(ikeaBeltSequence, (nextAd1.index + 1) % ikeaBeltSequence.length, directionMapping);
     setCurrentAd2(nextAd2.ad);
     
-    // Update the sequence index
     setAdSequenceIndex(nextAd1.index);
   };
 
@@ -162,7 +155,6 @@ const IkeaBelt = () => {
     
     isTransitioning.current = true;
     
-    // Update the ads based on scroll direction
     updateAds(direction);
     
     if (isMobile) {
@@ -193,9 +185,7 @@ const IkeaBelt = () => {
     }, 800);
   };
 
-  // Preload all ad images
   useEffect(() => {
-    // Preload weekly content images
     weeklyOffers.items.forEach(item => {
       if (item.image) {
         const img = new Image();
@@ -207,7 +197,6 @@ const IkeaBelt = () => {
       }
     });
     
-    // Preload all ads in the sequence
     ikeaBeltSequence.forEach(ad => {
       const img = new Image();
       img.src = ad.image;
@@ -306,34 +295,21 @@ const IkeaBelt = () => {
         </div>
         
         {isMobile ? (
-          <div className={cn(
-            "relative overflow-hidden",
-            "w-full"
-          )}>
+          <div className="relative overflow-hidden w-full">
             <AspectRatio ratio={3 / 2.5} className="w-full">
               <div 
                 ref={containerRef}
-                className="w-full h-full relative overflow-hidden perspective-1000"
+                className="w-full h-full relative overflow-hidden"
               >
                 {processedItems.map((item, index) => (
                   <div 
                     key={item.id}
                     className={cn(
-                      "absolute inset-0 w-full h-full transition-all duration-500 transform-gpu will-change-transform",
+                      "absolute inset-0 w-full h-full",
                       visibleMobileIndex === index 
-                        ? "opacity-100 z-10 translate-3d-0" 
-                        : index < visibleMobileIndex
-                          ? "opacity-0 z-0 -translate-3d-y-30 scale-90" 
-                          : "opacity-0 z-0 translate-3d-y-30 scale-90"
+                        ? "opacity-100 z-10 animate-blur-fade-in" 
+                        : "opacity-0 z-0 animate-blur-fade-out"
                     )}
-                    style={{
-                      transformStyle: 'preserve-3d',
-                      transform: visibleMobileIndex === index 
-                        ? 'translate3d(0, 0, 0) scale(1)' 
-                        : index < visibleMobileIndex
-                          ? 'translate3d(0, -30%, 0) scale(0.9)'
-                          : 'translate3d(0, 30%, 0) scale(0.9)'
-                    }}
                   >
                     <ContentCard item={item} isFocused={false} />
                   </div>
@@ -357,20 +333,15 @@ const IkeaBelt = () => {
           </div>
         ) : (
           <div className="relative px-4">
-            <div className="relative overflow-hidden perspective-1000" style={{ height: '320px' }}>
+            <div className="relative overflow-hidden" style={{ height: '320px' }}>
               <div className="h-full w-full relative">
                 <div 
                   className={cn(
-                    "absolute inset-0 grid grid-cols-4 gap-4 transition-all duration-500 transform-gpu will-change-transform",
+                    "absolute inset-0 grid grid-cols-4 gap-4",
+                    desktopSetIndex === 0
+                      ? "opacity-100 z-10 animate-blur-fade-in"
+                      : "opacity-0 z-0 animate-blur-fade-out"
                   )}
-                  style={{
-                    transformStyle: 'preserve-3d',
-                    transform: desktopSetIndex === 0 
-                      ? 'translate3d(0, 0, 0) scale(1)' 
-                      : 'translate3d(0, -30%, 0) scale(0.9)',
-                    opacity: desktopSetIndex === 0 ? 1 : 0,
-                    zIndex: desktopSetIndex === 0 ? 10 : 5
-                  }}
                 >
                   {firstSet.map((item, gridIndex) => (
                     <div 
@@ -391,16 +362,11 @@ const IkeaBelt = () => {
 
                 <div 
                   className={cn(
-                    "absolute inset-0 grid grid-cols-4 gap-4 transition-all duration-500 transform-gpu will-change-transform",
+                    "absolute inset-0 grid grid-cols-4 gap-4",
+                    desktopSetIndex === 1
+                      ? "opacity-100 z-10 animate-blur-fade-in"
+                      : "opacity-0 z-0 animate-blur-fade-out"
                   )}
-                  style={{
-                    transformStyle: 'preserve-3d',
-                    transform: desktopSetIndex === 1
-                      ? 'translate3d(0, 0, 0) scale(1)' 
-                      : 'translate3d(0, 30%, 0) scale(0.9)',
-                    opacity: desktopSetIndex === 1 ? 1 : 0,
-                    zIndex: desktopSetIndex === 1 ? 10 : 5
-                  }}
                 >
                   {secondSet.map((item, gridIndex) => (
                     <div 
