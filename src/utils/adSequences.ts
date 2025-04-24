@@ -1,3 +1,4 @@
+
 export interface AdItem {
   id: number;
   title: string;
@@ -45,7 +46,7 @@ export const adPool: AdItem[] = [
   }
 ];
 
-// Predetermined sequences for each belt
+// Predetermined sequences for each belt - ensuring no duplicates in a single sequence
 export const topicsBeltSequence: AdItem[] = [
   adPool[0], // OREA
   adPool[1], // Kitchin Ketchup
@@ -73,3 +74,4 @@ export const getNextAd = (sequence: AdItem[], currentIndex: number, direction: '
   
   return { ad: sequence[newIndex], index: newIndex };
 };
+
