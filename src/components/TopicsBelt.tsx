@@ -129,7 +129,7 @@ const TopicsBelt: React.FC = () => {
   const scrollThreshold = 150;
   
   const lastTransitionTime = useRef<number>(Date.now());
-  const minimumDisplayTime = 1000;
+  const minimumDisplayTime = 1000; // 1 second minimum viewing time
   const isTransitioning = useRef<boolean>(false);
   const scrollEventThrottled = useRef<boolean>(false);
   const scrollLocked = useRef<boolean>(false);
@@ -174,16 +174,12 @@ const TopicsBelt: React.FC = () => {
     
     triggerHaptic();
     
-    lastTransitionTime.current = Date.now();
+    scrollLocked.current = true;
     
     setTimeout(() => {
       isTransitioning.current = false;
-    }, minimumDisplayTime);
-    
-    scrollLocked.current = true;
-    setTimeout(() => {
       scrollLocked.current = false;
-    }, 800);
+    }, minimumDisplayTime);
   };
 
   useEffect(() => {
@@ -236,13 +232,7 @@ const TopicsBelt: React.FC = () => {
     };
     
     window.addEventListener('scroll', handleScroll, { passive: true });
-    
-    lastScrollY.current = window.scrollY;
-    lastTransitionTime.current = Date.now();
-    
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-    };
+    return () => window.removeEventListener('scroll', handleScroll);
   }, [isMobile, triggerHaptic]);
 
   useEffect(() => {
