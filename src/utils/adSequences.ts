@@ -1,4 +1,3 @@
-
 export interface AdItem {
   id: number;
   title: string;
@@ -8,85 +7,57 @@ export interface AdItem {
 
 // Complete ad pool with all available ads
 export const adPool: AdItem[] = [
-  // Original ads
-  {
-    id: 1021,
-    title: "Viladomy Pitkovic",
-    image: "/lovable-uploads/90f118dd-41bc-482c-98b0-3763799f43e1.png",
-    sponsor: "Central Group"
-  },
-  {
-    id: 1022,
-    title: "Partners Banka",
-    image: "/lovable-uploads/ae63401e-b7d6-4f1f-817d-2c379b21bd15.png",
-    sponsor: "Partners Banka"
-  },
-  {
-    id: 1041,
-    title: "Misa Ice Cream",
-    image: "/lovable-uploads/d136c32a-fa95-4a02-ac7a-ca96bdad4f58.png",
-    sponsor: "Misa"
-  },
-  {
-    id: 1042,
-    title: "U-mai Caviar",
-    image: "/lovable-uploads/80409ac3-087c-453d-a031-d3dc5358c401.png",
-    sponsor: "U-mai"
-  },
-  // New ads
   {
     id: 2001,
-    title: "Orea Family Vacation",
-    image: "/lovable-uploads/5e135883-52db-4451-b69d-b7abc32c058d.png",
+    title: "OREA Family Vacation",
+    image: "/lovable-uploads/b90c75e1-39bb-481a-a8d7-131c0d91c858.png",
     sponsor: "Orea Hotels"
   },
   {
     id: 2002,
     title: "Kitchin Ketchup",
-    image: "/lovable-uploads/395a1055-a028-4359-9d87-650fd9c29440.png",
+    image: "/lovable-uploads/6b657181-663d-4e56-addb-92b3cf95f1d5.png",
     sponsor: "Kitchin Foods"
   },
   {
     id: 2003,
-    title: "Kitchin Premium Sauce",
-    image: "/lovable-uploads/93315171-35f2-45a1-9399-e3f088c074fc.png",
-    sponsor: "Kitchin Foods"
-  },
-  {
-    id: 2004,
     title: "BENU Pharmacy",
-    image: "/lovable-uploads/8b6e7d15-1f15-448b-9910-39864305b594.png",
+    image: "/lovable-uploads/27a390bc-227f-4546-b9a2-ade0f760ebe4.png",
     sponsor: "BENU"
   },
   {
-    id: 2005,
+    id: 2004,
     title: "Papp Udia Salmon",
-    image: "/lovable-uploads/57df0949-8906-423f-8116-7248ef4503f4.png",
+    image: "/lovable-uploads/6d4ec9ca-88b0-41e6-b3ba-6b9f8f8b583d.png",
     sponsor: "Papp Udia"
+  },
+  {
+    id: 2005,
+    title: "Yutto Popcorn",
+    image: "/lovable-uploads/060fe55a-4aa0-4999-9035-c96987d6340b.png",
+    sponsor: "Yutto"
+  },
+  {
+    id: 2006,
+    title: "Bio Yutto",
+    image: "/lovable-uploads/f00304c3-3a5c-4ea2-889b-98cd736ec664.png",
+    sponsor: "Yutto"
   }
 ];
 
 // Predetermined sequences for each belt
 export const topicsBeltSequence: AdItem[] = [
-  adPool[0], // Viladomy Pitkovic
-  adPool[4], // Orea Family Vacation
-  adPool[1], // Partners Banka
-  adPool[5], // Kitchin Ketchup
-  adPool[2], // Misa Ice Cream
-  adPool[7], // BENU Pharmacy
-  adPool[3], // U-mai Caviar
-  adPool[6]  // Kitchin Premium Sauce
+  adPool[0], // OREA
+  adPool[1], // Kitchin Ketchup
+  adPool[2], // BENU
+  adPool[3], // Papp Udia
 ];
 
 export const ikeaBeltSequence: AdItem[] = [
-  adPool[4], // Orea Family Vacation
-  adPool[0], // Viladomy Pitkovic
-  adPool[6], // Kitchin Premium Sauce
-  adPool[1], // Partners Banka
-  adPool[8], // Papp Udia Salmon
-  adPool[2], // Misa Ice Cream
-  adPool[7], // BENU Pharmacy
-  adPool[3]  // U-mai Caviar
+  adPool[4], // Yutto Popcorn
+  adPool[5], // Bio Yutto
+  adPool[2], // BENU (reused but in different sequence)
+  adPool[1], // Kitchin Ketchup (reused but in different sequence)
 ];
 
 // Helper function to get next ad from a sequence
