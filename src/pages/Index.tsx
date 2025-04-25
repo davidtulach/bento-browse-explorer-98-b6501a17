@@ -126,6 +126,7 @@ const Index = () => {
   };
 
   return (
+    // Wrap everything in a more semantic structure
     <div 
       className="min-h-screen w-full bg-gray-50 dark:bg-background flex flex-col overflow-hidden"
       onScroll={handleScroll}
@@ -133,60 +134,83 @@ const Index = () => {
     >
       <Header />
       
-      <main className={cn(
-        "flex-1 pb-20 w-full",
-        isMobile && "pt-0"
-      )}>
-        <StoryScroller />
+      <main 
+        className={cn(
+          "flex-1 pb-20 w-full",
+          isMobile && "pt-0"
+        )}
+        id="main-content"
+      >
+        <section aria-label="Featured stories" className="mb-4">
+          <StoryScroller />
+        </section>
         
-        <CategoryBelt />
+        <section aria-label="Categories" className="mb-4">
+          <CategoryBelt />
+        </section>
         
-        <PillButtonsRow buttons={pillButtons} />
+        <section aria-label="Quick filters" className="mb-4">
+          <PillButtonsRow buttons={pillButtons} />
+        </section>
         
-        <div className="py-2">
+        <div className="py-2" role="separator">
           <div className="h-[1px] bg-gradient-to-r from-transparent via-gray-200 dark:via-gray-700 to-transparent" />
         </div>
         
-        <IkeaBelt />
+        <section aria-label="Weekly topics" className="mb-4">
+          <IkeaBelt />
+        </section>
         
-        <div className="py-2">
+        <div className="py-2" role="separator">
           <div className="h-[1px] bg-gradient-to-r from-transparent via-gray-200 dark:via-gray-700 to-transparent" />
         </div>
         
-        <BrandsBelt />
+        <section aria-label="Brand spotlight" className="mb-4">
+          <BrandsBelt />
+        </section>
         
-        <div className="py-2">
+        <div className="py-2" role="separator">
           <div className="h-[1px] bg-gradient-to-r from-transparent via-gray-200 dark:via-gray-700 to-transparent" />
         </div>
         
-        <PinterestGrid />
+        <section aria-label="Inspiration gallery" className="mb-4">
+          <PinterestGrid />
+        </section>
         
-        <div className="py-2">
+        <div className="py-2" role="separator">
           <div className="h-[1px] bg-gradient-to-r from-transparent via-gray-200 dark:via-gray-700 to-transparent" />
         </div>
         
-        <TopicsBelt />
+        <section aria-label="Featured topics" className="mb-4">
+          <TopicsBelt />
+        </section>
         
-        <div className="py-2">
+        <div className="py-2" role="separator">
           <div className="h-[1px] bg-gradient-to-r from-transparent via-gray-200 dark:via-gray-700 to-transparent" />
         </div>
         
-        <PriceHitsBelt />
+        <section aria-label="Price hits" className="mb-4">
+          <PriceHitsBelt />
+        </section>
         
-        <div className="py-2">
+        <div className="py-2" role="separator">
           <div className="h-[1px] bg-gradient-to-r from-transparent via-gray-200 dark:via-gray-700 to-transparent" />
         </div>
         
-        <ShoppableImage />
+        <section aria-label="Shoppable content" className="mb-4">
+          <ShoppableImage />
+        </section>
         
-        <div className="py-2">
+        <div className="py-2" role="separator">
           <div className="h-[1px] bg-gradient-to-r from-transparent via-gray-200 dark:via-gray-700 to-transparent" />
         </div>
         
-        <DiscountCode 
-          code="XHAU8254" 
-          description="Your unique discount code for free delivery:" 
-        />
+        <section aria-label="Discount code" className="mb-4">
+          <DiscountCode 
+            code="XHAU8254" 
+            description="Your unique discount code for free delivery:" 
+          />
+        </section>
       </main>
       
       {!isAtBottom && (

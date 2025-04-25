@@ -1,7 +1,9 @@
 
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { cn } from '@/lib/utils';
 import CategoryContent from './CategoryContent';
+import { getOnKeyUpCallback } from '@/utils/accessibility';
+import useFocusTrap from '@/hooks/use-focus-trap';
 
 interface DesktopCategoryOverlayProps {
   isOpen: boolean;
@@ -16,6 +18,18 @@ const DesktopCategoryOverlay: React.FC<DesktopCategoryOverlayProps> = ({
   category, 
   position 
 }) => {
+  const containerRef = useFocusTrap<HTMLDivElement>(isOpen);
+  const previousFocusRef = useRef<HTMLElement | null>(null);
+
+  // Store the previously focused element to return focus when closing
+  useEffect(() => {
+    if (isOpen) {
+      previousFocusRef.current = document.activeElement as HTMLElement;
+    } else if (previousFocusRef.current) {
+      previousFocusRef.current.focus();
+    }
+  }, [isOpen]);
+
   return (
     <div 
       className={cn(
@@ -25,11 +39,21 @@ const DesktopCategoryOverlay: React.FC<DesktopCategoryOverlayProps> = ({
       onClick={(e) => {
         if (e.target === e.currentTarget) onClose();
       }}
+      onKeyDown={(e) => {
+        if (e.key === 'Escape') {
+          onClose();
+        }
+      }}
       style={{
         top: position?.top || 0
       }}
+      role="dialog"
+      aria-modal="true"
+      aria-label={`${category} category menu`}
+      data-category-overlay
     >
       <div 
+        ref={containerRef}
         className={cn(
           "absolute left-0 bg-white dark:bg-gray-900 rounded-lg shadow-xl",
           "border border-gray-200 dark:border-gray-700 transition-all duration-200 overflow-hidden w-full",

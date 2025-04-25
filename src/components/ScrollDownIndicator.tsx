@@ -1,5 +1,6 @@
 
 import { useEffect, useState, useRef } from 'react';
+import { getOnKeyUpCallback } from '@/utils/accessibility';
 
 // Add declaration for dotlottie-player custom element
 declare global {
@@ -62,8 +63,12 @@ const ScrollDownIndicator = ({ show, onClick }: ScrollDownIndicatorProps) => {
         show ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
       }`}
       onClick={onClick}
+      onKeyDown={onClick ? getOnKeyUpCallback(onClick) : undefined}
+      role="button"
+      tabIndex={0}
+      aria-label="Scroll down to see your unique discount"
     >
-      {/* Removed the background circle, now just rendering the player directly */}
+      {/* Animation player with aria-hidden since it's decorative */}
       <dotlottie-player 
         src="https://lottie.host/85dd3c9d-bf13-46b8-97cf-2e73908d76c2/EMjP9SQVy4.lottie" 
         background="transparent" 
@@ -71,6 +76,7 @@ const ScrollDownIndicator = ({ show, onClick }: ScrollDownIndicatorProps) => {
         style={{ width: '56px', height: '56px' }} 
         loop 
         autoplay
+        aria-hidden="true"
       ></dotlottie-player>
       <p className="text-xs bg-black text-white px-4 py-1.5 rounded-full font-semibold shadow-sm cursor-pointer text-center whitespace-nowrap min-w-[200px]">
         Scroll for your unique discount
